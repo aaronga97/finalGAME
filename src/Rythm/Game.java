@@ -24,8 +24,14 @@ public class Game implements Runnable {
     private int width;              // width of the window
     private int height;             // height of the window
     private Thread thread;          // thread to create the game
-    private int running;        // to set the game
-    private Player player;          // to use a player
+    private int running;            // to set the game
+    private Player player;          // to use a player    
+    private int unit;               // the game's metric units
+    private double bpm;             // the beats per minute
+    private int timeCounter;        // keeps track of the seconds
+    private int beat;               // keeps track of the current beat (1-4)
+    private double timeBetweenBeat; // keeps how many seconds are between beats
+    private boolean jump;           // checks if there is a change in beat
     private KeyManager keyManager;  // to manage the keyboard
     private ArrayList<Enemy> enemies; // to store enemies
     private ArrayList<Proyectile> proyectiles;
@@ -47,6 +53,9 @@ public class Game implements Runnable {
         running = -1;
         canShoot = true;
         shootCounter = 0;
+        unit = 64;
+        bpm = 120;
+        beat = 1;
     }
 
     /**
@@ -67,8 +76,92 @@ public class Game implements Runnable {
         return height;
     }
 
+    /**
+     * returns <player> player </player> object
+     * @return player
+     */
     public Player getPlayer() {
         return player;
+    }
+
+    /**
+     * returns <int> unit </int> value
+     * @return unit
+     */
+    public int getUnit() {
+        return unit;
+    }
+
+    /**
+     * returns <boolean> jump </boolean> value
+     * @return jump
+     */
+    public boolean isJump() {
+        return jump;
+    }
+
+    /**
+     * sets <boolean> jump </boolean> value
+     * @param jump 
+     */
+    public void setJump(boolean jump) {
+        this.jump = jump;
+    }
+    
+    /**
+     * returns <double> bpm </double> value
+     * @return bpm
+     */
+    public double getBpm() {
+        return bpm;
+    }
+
+    /**
+     * returns <int> timeCounter </int> value
+     * @return timeCounter
+     */
+    public int getTimeCounter() {
+        return timeCounter;
+    }
+
+    /**
+     * sets <int> timeCounter </int> value
+     * @param timeCounter 
+     */
+    public void setTimeCounter(int timeCounter) {
+        this.timeCounter = timeCounter;
+    }
+
+    /**
+     * return <double> timeBetweenBeat </double> value
+     * @return timeBetweenBeat
+     */
+    public double getTimeBetweenBeat() {
+        return timeBetweenBeat;
+    }
+
+    /**
+     * sets <double> timeBetweenBeat </double> value
+     * @param timeBetweenBeat 
+     */
+    public void setTimeBetweenBeat(double timeBetweenBeat) {
+        this.timeBetweenBeat = timeBetweenBeat;
+    }
+
+    /**
+     * returns <int> beat </int> value
+     * @return beat
+     */
+    public int getBeat() {
+        return beat;
+    }
+
+    /**
+     * sets <int> beat </int> value
+     * @param beat 
+     */
+    public void setBeat(int beat) {
+        this.beat = beat;
     }
 
     public ArrayList<Enemy> getEnemies() {
@@ -85,8 +178,8 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-        Assets.backgroundMusic.play();
-        player = new Player(getWidth() / 2 - 50, getHeight() - 80, 120, 80, this);
+        //Assets.backgroundMusic.play();
+        player = new Player(getWidth() - getWidth(), getHeight() - 80, 120, 80, this);
         
         enemies = new ArrayList<Enemy>();
         proyectiles = new ArrayList<Proyectile>();
@@ -102,9 +195,9 @@ public class Game implements Runnable {
 
     @Override
     public void run() {
-        init();
+        init(); 
         // frames per second
-        int fps = 60;
+        double fps = 60;
         // time for each tick in nano segs
         double timeTick = 1000000000 / fps;
         // initializing delta
@@ -121,8 +214,19 @@ public class Game implements Runnable {
             // updating the last time
             lastTime = now;
 
-            // if delta is positive we tick the game
+            
+            double jumpsPerSec = getBpm() / 60;
+            setTimeBetweenBeat(fps / jumpsPerSec);
+            //gets how many pixels the player must move each frame
+            player.setPixelsToMoveX(player.getxDistance() / (int)(getTimeBetweenBeat()));
+            player.setPixelsToMoveY(player.getyDistance() / (int)((getTimeBetweenBeat()) / 2));
+            // if delta is positive we tick the game 
             if (delta >= 1) {
+                setTimeCounter(getTimeCounter() + 1);
+                if(getTimeCounter() == getTimeBetweenBeat()){
+                    jump = true;
+                    setTimeCounter(0);
+                }
                 tick();
                 render();
                 delta--;
@@ -138,8 +242,7 @@ public class Game implements Runnable {
 
     private void tick() {
         keyManager.tick();
-        
-        
+        player.tick();
     }
 
     private void render() {
@@ -155,6 +258,8 @@ public class Game implements Runnable {
             display.getCanvas().createBufferStrategy(3);
         } else {
             g = bs.getDrawGraphics();
+            g.drawImage(Assets.background, 0, 0, width, height, null);
+            player.render(g);
             bs.show();
             g.dispose();
         }

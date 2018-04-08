@@ -22,13 +22,13 @@ public class Assets {
      * initializing the images of the game
      */
     public static void init() {
-        background = ImageLoader.loadImage("/images/space.jpeg");
+        background = ImageLoader.loadImage("/images/background.jpg");
         
-        player = ImageLoader.loadImage("/images/chef.png");
+        //player = ImageLoader.loadImage("/images/chef.png");
         
-        enemy = ImageLoader.loadImage("/images/client.png");
+        //enemy = ImageLoader.loadImage("/images/client.png");
         
-        backgroundMusic = new SoundClip("/Sounds/music.wav");
-        backgroundMusic.setLooping(true);
+        //backgroundMusic = new SoundClip("/Sounds/music.wav");
+        //backgroundMusic.setLooping(true);
     }
 }
