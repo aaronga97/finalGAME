@@ -1,0 +1,26 @@
+#!/bin/bash
+#by A4RON
+cat << "EOF"
+ _____  _  _     _   _        _         ______               
+|  __ \(_)| |   | | | |      | |        | ___ \              
+| |  \/ _ | |_  | |_| |  ___ | | _ __   | |_/ /  ___   _   _ 
+| | __ | || __| |  _  | / _ \| || '_ \  | ___ \ / _ \ | | | |
+| |_\ \| || |_  | | | ||  __/| || |_) | | |_/ /| (_) || |_| |
+ \____/|_| \__| \_| |_/ \___||_|| .__/  \____/  \___/  \__, |
+                                | |                     __/ |
+                                |_|                    |___/ 
+EOF
+echo -e "\033[31m by A4RON\033[0m"
+read -p "Which branch will you push: " branchYouWant
+git checkout $branchYouWAnt
+git status
+git add .
+read -p "Commit message: " message
+git commit -m "$message"
+git fetch
+git rebase origin/master
+echo -e "\033[31m Fix them conflicts boy...\033[0m"
+read -n 1 -s -r -p "Press any key to continue"
+git checkout master
+git merge $branchYouWant
+git push

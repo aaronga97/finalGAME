@@ -18,6 +18,7 @@ public class Player extends Item {
     private int direction;      //direction of the player
     private int distanceX;      //distance to travel in X in one beat
     private int distanceY;      //distance to travel in Y in one beat
+    private boolean init;
   
     public Player(int x, int y, int width, int height, Game game) {
         super(x, y, width, height);
@@ -25,6 +26,7 @@ public class Player extends Item {
         direction = 1;
         distanceX = 0;
         distanceY = game.getHeight() - getHeight();
+        init = false;
     }
 
     /**
@@ -61,6 +63,14 @@ public class Player extends Item {
         this.distanceY = distanceY;
     }
 
+    public boolean isInit() {
+        return init;
+    }
+
+    public void setInit(boolean init) {
+        this.init = init;
+    }
+
     @Override
     public void tick() {
         //changes the players direction depending on the key pressed
@@ -86,14 +96,20 @@ public class Player extends Item {
             }
         }
         
+        if(!isInit()){
+            setDistanceX(((getX() + (game.getUnit() * 2 * getDirection()))- getX())/(int)game.getTimeBetweenBeat());
+            setDistanceY((getY() - (getY() - game.getUnit()))/((int)game.getTimeBetweenBeat()/2));
+        }
         //moves the player between beats
         //setX(getX() + getDistanceX());
         // here, half of the jump, the player goes up and the other half goes down
         if (game.getTimeCounter() < game.getTimeBetweenBeat() / 2) {
-            setY(getY() - getDistanceY());
-        } else {
+            setY(getY() - getDistanceY()); 
+        } 
+        else {
             setY(getY() + getDistanceY());
         }
+        
     }
 
     @Override

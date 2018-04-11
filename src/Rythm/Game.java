@@ -40,6 +40,7 @@ public class Game implements Runnable {
     private boolean canShoot;
     private int shootCounter;
 
+    private SoundClip movNar;
     Camera cam;                     //camera that follows player
 
     /**
@@ -53,6 +54,15 @@ public class Game implements Runnable {
         this.title = title;
         this.width = width;
         this.height = height;
+        
+        //1)Carga los clips de sonido
+        //2)Activa la repetición del clip
+        //3)Reproduce el clip
+        //Checking script
+        movNar = new SoundClip("/Audio/movNaranja.wav");
+        movNar.setLooping(true);
+        movNar.play();
+        
         keyManager = new KeyManager();
         running = -1;
         canShoot = true;
@@ -61,7 +71,7 @@ public class Game implements Runnable {
         bpm = 120;
         beat = 1;
     }
-
+//test 
     /**
      * To get the width of the game window
      *
@@ -265,7 +275,8 @@ public class Game implements Runnable {
         // restart the counter
         if (getTimeCounter() == getTimeBetweenBeat()) {
             setJump(true);
-            //System.out.println(beat);
+
+            player.setInit(true);
             setBeat(getBeat() + 1);
             setTimeCounter(0);
         }
@@ -293,10 +304,13 @@ public class Game implements Runnable {
             //Everything in between these 2 functions will be affected by camera
             g2d.translate(cam.getX(), cam.getY()); //Begin of cam
 
-            g.drawImage(Assets.background, 0, 0, width*10, height, null);
-            player.render(g);
-            bar.render(g);
+            
+                g.drawImage(Assets.background, -700, 0, width*10, height, null);
+                player.render(g);
+                bar.render(g);
+            
             g2d.translate(cam.getX(), cam.getY()); //End of cam
+
             //////////////////////////////////////////////////////////////////
             bs.show();
             g.dispose();
