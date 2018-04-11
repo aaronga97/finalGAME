@@ -178,6 +178,10 @@ public class Game implements Runnable {
     public void setBeat(int beat) {
         this.beat = beat;
     }
+
+    public Camera getCam() {
+        return cam;
+    }
     
     public ArrayList<Enemy> getEnemies() {
         return enemies;
@@ -187,9 +191,7 @@ public class Game implements Runnable {
         return proyectiles;
     }
 
-    public Camera getCam() {
-        return cam;
-    }
+   
 
     /**
      * initializing the display window of the game
@@ -200,9 +202,10 @@ public class Game implements Runnable {
 
         //Initialize new camera in the corner.
         cam = new Camera(0, 0);
-
+        bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - getHeight()/8, 20, 60, this);
         //Assets.backgroundMusic.play();
-        player = new Player(getWidth()/2, (3*getHeight()/4) - 80, 120, 80, this);
+
+        player = new Player(getWidth() - getWidth(), getHeight() - getHeight()/4 - 20, 120, 80, this);
 
         bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
         
@@ -302,9 +305,8 @@ public class Game implements Runnable {
 
             ////DRAW HERE
             //Everything in between these 2 functions will be affected by camera
-            g2d.translate(cam.getX(), cam.getY()); //Begin of cam
 
-            
+            g2d.translate(cam.getX(), cam.getY()); //Begin of cam            
                 g.drawImage(Assets.background, -700, 0, width*10, height, null);
                 player.render(g);
                 bar.render(g);

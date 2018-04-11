@@ -24,9 +24,8 @@ public class Bar extends Item{
     @Override
     public void tick() {
         if(!game.isJump()) {
-            setX(getX() + 2 + (game.getUnit()*2)/(int) game.getTimeBetweenBeat());  //+ (game.getUnit()*2)/(int) game.getTimeBetweenBeat()
-            //int tempX = getX() - (game.getWidth()/2 - 20 - game.getUnit() - (int) game.getCam().getX());
-            //setX(1);
+
+            setX(getX() + game.getPlayer().getDistanceX() + (game.getUnit()*2)/(int) game.getTimeBetweenBeat());  
         }
         else {
             setX(game.getWidth()/2 - 20 - game.getUnit() - (int) game.getCam().getX());

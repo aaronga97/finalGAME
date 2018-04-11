@@ -101,7 +101,7 @@ public class Player extends Item {
             setDistanceY((getY() - (getY() - game.getUnit()))/((int)game.getTimeBetweenBeat()/2));
         }
         //moves the player between beats
-        //setX(getX() + getDistanceX());
+        setX(getX() + getDistanceX());
         // here, half of the jump, the player goes up and the other half goes down
         if (game.getTimeCounter() < game.getTimeBetweenBeat() / 2) {
             setY(getY() - getDistanceY()); 

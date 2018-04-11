@@ -17,8 +17,11 @@ public class Camera {
         this.y = y;
     }
     
+    
     public void tick(Player player){
-        x = -player.getX() + 1280/2; //1280/2 = gamewidth/2
+
+        setX(-player.getX() + 1280/2); //1280/2 = gamewidth/2
+
     }
     
     /**
@@ -51,7 +54,5 @@ public class Camera {
      */
     public void setY(float y) {
         this.y = y;
-    }
-    
-    
+    } 
 }
