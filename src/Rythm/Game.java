@@ -210,7 +210,7 @@ public class Game implements Runnable {
     public void run() {
         init();
         // frames per second
-        double fps = 144;
+        double fps = 60;
         // time for each tick in nano segs
         double timeTick = 1000000000 / fps;
         // initializing delta
