@@ -38,7 +38,7 @@ public class Game implements Runnable {
     private ArrayList<Proyectile> proyectiles;
     private boolean canShoot;
     private int shootCounter;
-    
+
     Camera cam;                     //camera that follows player
 
     /**
@@ -81,6 +81,7 @@ public class Game implements Runnable {
 
     /**
      * returns <player> player </player> object
+     *
      * @return player
      */
     public Player getPlayer() {
@@ -89,6 +90,7 @@ public class Game implements Runnable {
 
     /**
      * returns <int> unit </int> value
+     *
      * @return unit
      */
     public int getUnit() {
@@ -97,6 +99,7 @@ public class Game implements Runnable {
 
     /**
      * returns <boolean> jump </boolean> value
+     *
      * @return jump
      */
     public boolean isJump() {
@@ -105,14 +108,16 @@ public class Game implements Runnable {
 
     /**
      * sets <boolean> jump </boolean> value
-     * @param jump 
+     *
+     * @param jump
      */
     public void setJump(boolean jump) {
         this.jump = jump;
     }
-    
+
     /**
      * returns <double> bpm </double> value
+     *
      * @return bpm
      */
     public double getBpm() {
@@ -121,6 +126,7 @@ public class Game implements Runnable {
 
     /**
      * returns <int> timeCounter </int> value
+     *
      * @return timeCounter
      */
     public int getTimeCounter() {
@@ -129,7 +135,8 @@ public class Game implements Runnable {
 
     /**
      * sets <int> timeCounter </int> value
-     * @param timeCounter 
+     *
+     * @param timeCounter
      */
     public void setTimeCounter(int timeCounter) {
         this.timeCounter = timeCounter;
@@ -137,6 +144,7 @@ public class Game implements Runnable {
 
     /**
      * return <double> timeBetweenBeat </double> value
+     *
      * @return timeBetweenBeat
      */
     public double getTimeBetweenBeat() {
@@ -145,28 +153,21 @@ public class Game implements Runnable {
 
     /**
      * sets <double> timeBetweenBeat </double> value
-     * @param timeBetweenBeat 
+     *
+     * @param timeBetweenBeat
      */
     public void setTimeBetweenBeat(double timeBetweenBeat) {
         this.timeBetweenBeat = timeBetweenBeat;
     }
 
-    /**
-     * returns <int> beat </int> value
-     * @return beat
-     */
     public int getBeat() {
         return beat;
     }
 
-    /**
-     * sets <int> beat </int> value
-     * @param beat 
-     */
     public void setBeat(int beat) {
         this.beat = beat;
     }
-
+    
     public ArrayList<Enemy> getEnemies() {
         return enemies;
     }
@@ -181,28 +182,23 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-        
+
         //Initialize new camera in the corner.
-        cam = new Camera(0,0);
+        cam = new Camera(0, 0);
 
         //Assets.backgroundMusic.play();
         player = new Player(getWidth() - getWidth(), getHeight() - 80, 120, 80, this);
-        
+
         enemies = new ArrayList<Enemy>();
         proyectiles = new ArrayList<Proyectile>();
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 5; j++) {
-                
-            }
-        }
-        
+
         display.getJframe().addKeyListener(keyManager);
 
     }
 
     @Override
     public void run() {
-        init(); 
+        init();
         // frames per second
         double fps = 60;
         // time for each tick in nano segs
@@ -213,6 +209,12 @@ public class Game implements Runnable {
         long now;
         // initializing last time to the computer time in nanosecs
         long lastTime = System.nanoTime();
+
+        // number of jumps per second
+        double jumpsPerSec = getBpm() / 60;
+        // determines how many frames/ticks pass after each beat
+        setTimeBetweenBeat(fps / jumpsPerSec);
+        
         while (running == 0) {
             // setting the time now to the actual time
             now = System.nanoTime();
@@ -221,19 +223,9 @@ public class Game implements Runnable {
             // updating the last time
             lastTime = now;
 
-            
-            double jumpsPerSec = getBpm() / 60;
-            setTimeBetweenBeat(fps / jumpsPerSec);
-            //gets how many pixels the player must move each frame
-            player.setPixelsToMoveX(player.getxDistance() / (int)(getTimeBetweenBeat()));
-            player.setPixelsToMoveY(player.getyDistance() / (int)((getTimeBetweenBeat()) / 2));
             // if delta is positive we tick the game 
             if (delta >= 1) {
-                setTimeCounter(getTimeCounter() + 1);
-                if(getTimeCounter() == getTimeBetweenBeat()){
-                    jump = true;
-                    setTimeCounter(0);
-                }
+
                 tick();
                 render();
                 delta--;
@@ -251,6 +243,24 @@ public class Game implements Runnable {
         keyManager.tick();
         player.tick();
         cam.tick(player);
+
+        // if jump was set to true on the previous tick, make it false
+        if(isJump()) {
+            setJump(false);
+        }
+        
+        // a counter for ticks
+        setTimeCounter(getTimeCounter() + 1);
+        // when the counter gets to the number of ticks that should pass each beat
+        // start a new "jumping sequence"
+        // add 1 to the beat to identify between normal and special jump
+        // restart the counter
+        if (getTimeCounter() == getTimeBetweenBeat()) {
+            setJump(true);
+            setBeat(getBeat() + 1);
+            setTimeCounter(0);
+        }
+        
     }
 
     private void render() {
@@ -267,17 +277,16 @@ public class Game implements Runnable {
         } else {
             g = bs.getDrawGraphics();
             //Turn g to g2d inorder to use translate function for camera
-            Graphics2D g2d = (Graphics2D) g;          
+            Graphics2D g2d = (Graphics2D) g;
             //////////////////////////////////////////////////////////////////
-            
-            
+
             ////DRAW HERE
             //Everything in between these 2 functions will be affected by camera
             g2d.translate(cam.getX(), cam.getY()); //Begin of cam
-            
-                g.drawImage(Assets.background, 0, 0, width, height, null);
-                player.render(g);
-            
+
+            g.drawImage(Assets.background, 0, 0, width, height, null);
+            player.render(g);
+
             g2d.translate(cam.getX(), cam.getY()); //End of cam
             //////////////////////////////////////////////////////////////////
             bs.show();
