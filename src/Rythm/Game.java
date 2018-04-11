@@ -209,7 +209,7 @@ public class Game implements Runnable {
     public void run() {
         init();
         // frames per second
-        double fps = 60;
+        double fps = 144;
         // time for each tick in nano segs
         double timeTick = 1000000000 / fps;
         // initializing delta
@@ -266,6 +266,7 @@ public class Game implements Runnable {
         // restart the counter
         if (getTimeCounter() == getTimeBetweenBeat()) {
             setJump(true);
+            player.setInit(true);
             setBeat(getBeat() + 1);
             setTimeCounter(0);
         }
@@ -297,6 +298,7 @@ public class Game implements Runnable {
                 player.render(g);
             
             g2d.translate(cam.getX(), cam.getY()); //End of cam
+
             //////////////////////////////////////////////////////////////////
             bs.show();
             g.dispose();
