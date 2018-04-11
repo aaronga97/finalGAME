@@ -70,7 +70,7 @@ public class Game implements Runnable {
         bpm = 120;
         beat = 1;
     }
-
+//test 
     /**
      * To get the width of the game window
      *
