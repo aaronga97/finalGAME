@@ -38,6 +38,7 @@ public class Game implements Runnable {
     private ArrayList<Proyectile> proyectiles;
     private boolean canShoot;
     private int shootCounter;
+    private Bar bar;
 
     private SoundClip movNar;
     Camera cam;                     //camera that follows player
@@ -177,6 +178,10 @@ public class Game implements Runnable {
     public void setBeat(int beat) {
         this.beat = beat;
     }
+
+    public Camera getCam() {
+        return cam;
+    }
     
     public ArrayList<Enemy> getEnemies() {
         return enemies;
@@ -195,9 +200,9 @@ public class Game implements Runnable {
 
         //Initialize new camera in the corner.
         cam = new Camera(0, 0);
-
+        bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - getHeight()/8, 20, 60, this);
         //Assets.backgroundMusic.play();
-        player = new Player(getWidth() - getWidth(), getHeight() - 80, 120, 80, this);
+        player = new Player(getWidth() - getWidth(), getHeight() - getHeight()/4, 120, 80, this);
 
         enemies = new ArrayList<Enemy>();
         proyectiles = new ArrayList<Proyectile>();
@@ -253,6 +258,7 @@ public class Game implements Runnable {
         keyManager.tick();
         player.tick();
         cam.tick(player);
+        bar.tick();
 
         // if jump was set to true on the previous tick, make it false
         if(isJump()) {
@@ -293,10 +299,10 @@ public class Game implements Runnable {
 
             ////DRAW HERE
             //Everything in between these 2 functions will be affected by camera
-            g2d.translate(cam.getX(), cam.getY()); //Begin of cam
-            
+            g2d.translate(cam.getX(), cam.getY()); //Begin of cam            
                 g.drawImage(Assets.background, -700, 0, width*10, height, null);
                 player.render(g);
+                bar.render(g);
             
             g2d.translate(cam.getX(), cam.getY()); //End of cam
 
