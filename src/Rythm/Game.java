@@ -57,6 +57,7 @@ public class Game implements Runnable {
         //1)Carga los clips de sonido
         //2)Activa la repetición del clip
         //3)Reproduce el clip
+        //Checking script
         movNar = new SoundClip("/Audio/movNaranja.wav");
         movNar.setLooping(true);
         movNar.play();
