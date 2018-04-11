@@ -283,10 +283,10 @@ public class Game implements Runnable {
             ////DRAW HERE
             //Everything in between these 2 functions will be affected by camera
             g2d.translate(cam.getX(), cam.getY()); //Begin of cam
-
-            g.drawImage(Assets.background, 0, 0, width, height, null);
-            player.render(g);
-
+            
+                g.drawImage(Assets.background, -700, 0, width*10, height, null);
+                player.render(g);
+            
             g2d.translate(cam.getX(), cam.getY()); //End of cam
             //////////////////////////////////////////////////////////////////
             bs.show();

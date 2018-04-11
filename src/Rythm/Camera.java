@@ -18,7 +18,7 @@ public class Camera {
     }
     
     public void tick(Player player){
-        x-=2;
+        x = -player.getX() + 1280/2; //1280/2 = gamewidth/2
     }
     
     /**
