@@ -7,6 +7,7 @@ package Rythm;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -37,6 +38,8 @@ public class Game implements Runnable {
     private ArrayList<Proyectile> proyectiles;
     private boolean canShoot;
     private int shootCounter;
+    
+    Camera cam;                     //camera that follows player
 
     /**
      * to create title, width and height and set the game is still not running
@@ -178,6 +181,10 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
+        
+        //Initialize new camera in the corner.
+        cam = new Camera(0,0);
+
         //Assets.backgroundMusic.play();
         player = new Player(getWidth() - getWidth(), getHeight() - 80, 120, 80, this);
         
@@ -243,6 +250,7 @@ public class Game implements Runnable {
     private void tick() {
         keyManager.tick();
         player.tick();
+        cam.tick(player);
     }
 
     private void render() {
@@ -258,8 +266,20 @@ public class Game implements Runnable {
             display.getCanvas().createBufferStrategy(3);
         } else {
             g = bs.getDrawGraphics();
-            g.drawImage(Assets.background, 0, 0, width, height, null);
-            player.render(g);
+            //Turn g to g2d inorder to use translate function for camera
+            Graphics2D g2d = (Graphics2D) g;          
+            //////////////////////////////////////////////////////////////////
+            
+            
+            ////DRAW HERE
+            //Everything in between these 2 functions will be affected by camera
+            g2d.translate(cam.getX(), cam.getY()); //Begin of cam
+            
+                g.drawImage(Assets.background, 0, 0, width, height, null);
+                player.render(g);
+            
+            g2d.translate(cam.getX(), cam.getY()); //End of cam
+            //////////////////////////////////////////////////////////////////
             bs.show();
             g.dispose();
         }
