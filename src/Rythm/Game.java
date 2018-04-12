@@ -295,7 +295,10 @@ public class Game implements Runnable {
                 proyectiles.add(new Proyectile(player.getX(),
                 player.getY()+player.getHeight()/2, 20, 20,player.getDirection(), this));
 
-            }
+
+        }
+            // getting every enemy bullet by using iterator 
+
             Iterator itr = proyectiles.iterator();
             while (itr.hasNext()) {
                 //getting specific enemy
@@ -303,12 +306,13 @@ public class Game implements Runnable {
                 //moving the enemy
                 bullet.tick();
                 //if the enemy is out of the screen
-                
+   
                 if (bullet.getX() >= player.getX()+650) {
                     // re set y position
                     proyectiles.remove(bullet);
                     itr = proyectiles.iterator();
                 } else if(bullet.getX() <= player.getX()-650){
+
                     //if (bullet.intersects(player)) {
                     //    proyectiles.remove(bullet);
                     //    itr = proyectiles.iterator();
@@ -316,6 +320,7 @@ public class Game implements Runnable {
                     proyectiles.remove(bullet);
                     itr = proyectiles.iterator();
                }
+
                 
             }
         
