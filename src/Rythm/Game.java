@@ -205,7 +205,7 @@ public class Game implements Runnable {
         bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - getHeight()/8, 20, 60, this);
         //Assets.backgroundMusic.play();
 
-        player = new Player(getWidth() - getWidth(), getHeight() - getHeight()/4 - 20, 120, 80, this);
+        player = new Player(getWidth() - getWidth(), getHeight() - getHeight()/4 - 20, 64, 64, this);
 
         bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
         
