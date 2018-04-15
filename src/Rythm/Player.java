@@ -18,7 +18,10 @@ public class Player extends Item {
     private int direction;      //direction of the player
     private int distanceX;      //distance to travel in X in one beat
     private int distanceY;      //distance to travel in Y in one beat
-    private boolean init;
+    private int distanceToFloor; //distance from the player to the floor
+    private int floor;           //location of the floor
+    private boolean onPlataform; //tells if the player is touching a plataform
+    private boolean init;        //tells if the player is making the first jump
   
     public Player(int x, int y, int width, int height, Game game) {
         super(x, y, width, height);
@@ -26,7 +29,9 @@ public class Player extends Item {
         direction = 1;
         distanceX = 0;
         distanceY = game.getHeight() - getHeight();
+        floor = y;
         init = false;
+        onPlataform = false;
     }
 
     /**
@@ -47,26 +52,92 @@ public class Player extends Item {
         this.direction = direction;
     }
 
+    /**
+     * returns <int> distanceX </int> value
+     * 
+     * @return distanceX
+     */
     public int getDistanceX() {
         return distanceX;
     }
 
+    /**
+     * sets <int> distanceX </int> value
+     * 
+     * @param distanceX 
+     */
     public void setDistanceX(int distanceX) {
         this.distanceX = distanceX;
     }
 
+    /**
+     * returns <int> distanceY </int> value
+     * 
+     * @return distanceY
+     */
     public int getDistanceY() {
         return distanceY;
     }
 
+    /**
+     * sets <int> distanceY </int> value
+     * 
+     * @param distanceY 
+     */
     public void setDistanceY(int distanceY) {
         this.distanceY = distanceY;
     }
 
+    /**
+     * returns <int> distanceToFloor </int> value
+     * 
+     * @return distanceToFloor
+     */
+    public int getDistanceToFloor() {
+        return distanceToFloor;
+    }
+
+    /**
+     * sets <int> distanceToFloor </int> value
+     * 
+     * @param distanceToFloor 
+     */
+    public void setDistanceToFloor(int distanceToFloor) {
+        this.distanceToFloor = distanceToFloor;
+    }
+
+    /**
+     * returns <boolean> onPlataform </boolean> value 
+     * 
+     * @return onPlataform
+     */
+    public boolean isOnPlataform() {
+        return onPlataform;
+    }
+
+    /**
+     * sets <boolean> onPlataform </boolean> value
+     * 
+     * @param onPlataform 
+     */
+    public void setOnPlataform(boolean onPlataform) {
+        this.onPlataform = onPlataform;
+    }
+    
+    /**
+     * returns <boolean> init </boolean> value
+     * 
+     * @return init
+     */
     public boolean isInit() {
         return init;
     }
-
+    
+    /**
+     * sets <boolean> init </boolean> value
+     * 
+     * @param init 
+     */
     public void setInit(boolean init) {
         this.init = init;
     }
@@ -94,11 +165,14 @@ public class Player extends Item {
                 setDistanceX(((getX() + (game.getUnit() * 3 * getDirection()))- getX())/(int)game.getTimeBetweenBeat());
                 setDistanceY((getY() - (getY() - (game.getUnit() * 2)))/((int)game.getTimeBetweenBeat()/2));
             }
+            //calculate the distance that is between the player and the floor
+            setDistanceToFloor((floor - (getY() - (getDistanceY() * ((int)game.getTimeBetweenBeat()/2)))) / ((int)game.getTimeBetweenBeat()/2));
         }
         
         if(!isInit()){
             setDistanceX(((getX() + (game.getUnit() * 2 * getDirection()))- getX())/(int)game.getTimeBetweenBeat());
             setDistanceY((getY() - (getY() - game.getUnit()))/((int)game.getTimeBetweenBeat()/2));
+            setDistanceToFloor((floor - (getY() - (getDistanceY() * ((int)game.getTimeBetweenBeat()/2)))) / ((int)game.getTimeBetweenBeat()/2));
         }
         //moves the player between beats
         setX(getX() + getDistanceX());
@@ -107,9 +181,9 @@ public class Player extends Item {
             setY(getY() - getDistanceY()); 
         } 
         else {
-            setY(getY() + getDistanceY());
+            setOnPlataform(false);
+            setY(getY() + getDistanceToFloor());
         }
-        
     }
 
     @Override

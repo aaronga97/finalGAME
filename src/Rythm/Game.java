@@ -35,6 +35,7 @@ public class Game implements Runnable {
     private boolean jump;           // checks if there is a change in beat
     private Bar bar;                // the beat bar that will help the user keep rythm visually
     private KeyManager keyManager;  // to manage the keyboard
+    private Plataform plataform;
     private ArrayList<Enemy> enemies; // to store enemies
     private ArrayList<Proyectile> proyectiles;
     private boolean canShoot;
@@ -206,6 +207,7 @@ public class Game implements Runnable {
         //Assets.backgroundMusic.play();
 
         player = new Player(getWidth() - getWidth(), getHeight() - getHeight()/4 - 20, 64, 64, this);
+        plataform = new Plataform(500, 500, 10000, 40);
 
         bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
         
@@ -264,7 +266,11 @@ public class Game implements Runnable {
         player.tick();
         cam.tick(player);
         bar.tick();
-
+        
+        if(player.intersects(plataform) && !player.isOnPlataform()){
+            player.setDistanceToFloor(0);
+            player.setOnPlataform(true);
+        }
         // if jump was set to true on the previous tick, make it false
         if(isJump()) {
             setJump(false);
@@ -310,6 +316,7 @@ public class Game implements Runnable {
                 g.drawImage(Assets.background, -700, 0, width*10, height, null);
                 player.render(g);
                 bar.render(g);
+                plataform.render(g);
             
             g2d.translate(cam.getX(), cam.getY()); //End of cam
 
