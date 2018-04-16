@@ -306,22 +306,16 @@ public class Game implements Runnable {
                 //moving the enemy
                 bullet.tick();
                 //if the enemy is out of the screen
-   
+
                 if (bullet.getX() >= player.getX()+650) {
                     // re set y position
                     proyectiles.remove(bullet);
                     itr = proyectiles.iterator();
                 } else if(bullet.getX() <= player.getX()-650){
-
-                    //if (bullet.intersects(player)) {
-                    //    proyectiles.remove(bullet);
-                    //    itr = proyectiles.iterator();
-                    //}
                     proyectiles.remove(bullet);
                     itr = proyectiles.iterator();
                }
 
-                
             }
         
     }
