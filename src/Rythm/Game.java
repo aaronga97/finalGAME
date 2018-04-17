@@ -41,7 +41,7 @@ public class Game implements Runnable {
     private boolean canShoot;
     private int shootCounter;
 
-    private SoundClip movNar;
+    private SoundClip testTrack;
     Camera cam;                     //camera that follows player
 
     /**
@@ -60,9 +60,9 @@ public class Game implements Runnable {
         //2)Activa la repetición del clip
         //3)Reproduce el clip
         //Checking script
-        movNar = new SoundClip("/Audio/movNaranja.wav");
-        movNar.setLooping(true);
-        movNar.play();
+        testTrack = new SoundClip("/Audio/testTrack.wav");
+        testTrack.setLooping(true);
+        testTrack.play();
         
         keyManager = new KeyManager();
         running = -1;
