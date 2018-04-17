@@ -18,28 +18,30 @@ public class Proyectile extends Item{
     private int direction;
     private int type;
     
-    public Proyectile(int x, int y, int width, int height, int direction, int type, Game game) {
+    public Proyectile(int x, int y, int width, int height, int direction, Game game) {
         super(x, y, width, height);
         this.game = game;
         this.direction = direction;
-        this.type = type;
     }
 
     public int getDirection() {
         return direction;
     }
 
-    public int getType() {
-        return type;
-    }
-
     @Override
     public void tick() {
-        
+        if(direction==1){
+            setX(getX()+15);
+        }
+        if(direction==-1){
+            setX(getX()-15);
+        }
     }
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.enemy, getX(), getY(), getWidth(), getHeight(), null);
+        //        g.drawImage(Assets.enemy, getX(), getY(), getWidth(), getHeight(), null);
+        g.setColor(Color.red);
+        g.fillRect(getX(), getY(), getWidth(), getHeight());
     }
 }

@@ -289,6 +289,34 @@ public class Game implements Runnable {
             setBeat(getBeat() + 1);
             setTimeCounter(0);
         }
+
+            //creates bullet if necessary, only one in screen
+            if (keyManager.isSpace() && proyectiles.size() == 0) {
+                proyectiles.add(new Proyectile(player.getX(),
+                player.getY()+player.getHeight()/2, 20, 20,player.getDirection(), this));
+
+
+        }
+            // getting every enemy bullet by using iterator 
+
+            Iterator itr = proyectiles.iterator();
+            while (itr.hasNext()) {
+                //getting specific enemy
+                Proyectile bullet = (Proyectile) itr.next();
+                //moving the enemy
+                bullet.tick();
+                //if the enemy is out of the screen
+
+                if (bullet.getX() >= player.getX()+650) {
+                    // re set y position
+                    proyectiles.remove(bullet);
+                    itr = proyectiles.iterator();
+                } else if(bullet.getX() <= player.getX()-650){
+                    proyectiles.remove(bullet);
+                    itr = proyectiles.iterator();
+               }
+
+            }
         
     }
 
@@ -311,10 +339,15 @@ public class Game implements Runnable {
 
             ////DRAW HERE
             //Everything in between these 2 functions will be affected by camera
-
+ 
             g2d.translate(cam.getX(), cam.getY()); //Begin of cam            
                 g.drawImage(Assets.background, -700, 0, width*10, height, null);
                 player.render(g);
+                Iterator itr = proyectiles.iterator();
+                while (itr.hasNext()) {
+                    Proyectile bullet = (Proyectile) itr.next();
+                    bullet.render(g);
+                }
                 bar.render(g);
                 plataform.render(g);
             
