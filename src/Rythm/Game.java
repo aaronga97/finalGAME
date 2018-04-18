@@ -41,6 +41,7 @@ public class Game implements Runnable {
     private ArrayList<Proyectile> proyectiles;
     private boolean canShoot;
     private int shootCounter;
+    private int score;              //Keeps track of player score
 
     private SoundClip testTrack;
     Camera cam;                     //camera that follows player
@@ -66,6 +67,7 @@ public class Game implements Runnable {
         testTrack.play();
         
         keyManager = new KeyManager();
+        score = 0;
         running = -1;
         canShoot = true;
         shootCounter = 0;
@@ -304,34 +306,41 @@ public class Game implements Runnable {
             setBeat(getBeat() + 1);
             setTimeCounter(0);
         }
-
-            //creates bullet if necessary, only one in screen
-            if (keyManager.isSpace() && proyectiles.size() == 0) {
-                proyectiles.add(new Proyectile(player.getX(),
-                player.getY()+player.getHeight()/2, 20, 20,player.getDirection(), this));
-
-
+            
+        //BULLETS
+        //creates bullet if necessary, only one in screen
+        if (keyManager.isSpace() && proyectiles.size() == 0) {
+            proyectiles.add(new Proyectile(player.getX(),
+            player.getY()+player.getHeight()/2, 20, 20,player.getDirection(), this));
         }
-            // getting every enemy bullet by using iterator 
-
-            Iterator itr = proyectiles.iterator();
-            while (itr.hasNext()) {
-                //getting specific enemy
-                Proyectile bullet = (Proyectile) itr.next();
-                //moving the enemy
-                bullet.tick();
-                //if the enemy is out of the screen
-
-                if (bullet.getX() >= player.getX()+650) {
-                    // re set y position
-                    proyectiles.remove(bullet);
+        
+        //tick every bullet
+        Iterator itr = proyectiles.iterator();
+        while (itr.hasNext()) {
+            Proyectile p = (Proyectile) itr.next();
+            p.tick();
+            //if the enemy is out of the screen delete it
+            if(p.getX() >= player.getX()+650 || p.getX() <= player.getX()-650){
+                proyectiles.remove(p);
+                itr = proyectiles.iterator();
+            }  
+            
+            //Delete enemy and bullet if they intersect
+            Iterator itr2 = enemies.iterator();
+            //Itera todos los enemigos
+            while(itr2.hasNext()){
+                Enemy ene = (Enemy) itr2.next();
+                //Si interesecta borra los 2, y reseta ambos iteradores dsps de borrar y add 10 to score
+                if(p.intersects(ene)){
+                    proyectiles.remove(p);
+                    enemies.remove(ene);
                     itr = proyectiles.iterator();
-                } else if(bullet.getX() <= player.getX()-650){
-                    proyectiles.remove(bullet);
-                    itr = proyectiles.iterator();
-               }
-
+                    itr2 = enemies.iterator();
+                    score += 10;
+                }
             }
+        }
+            
         
     }
 
