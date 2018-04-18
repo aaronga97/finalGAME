@@ -41,6 +41,7 @@ public class Game implements Runnable {
     private ArrayList<Enemy> enemies; // to store enemies
     private ArrayList<Enemy> poweredEnemies; // to store enemies
     private Enemy enemy;            //to test enemy addition
+
     private ArrayList<Proyectile> proyectiles;
     private boolean canShoot;
     private int shootCounter;
@@ -246,7 +247,7 @@ public class Game implements Runnable {
         //bar = new Bar(getWidth()/2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - getHeight()/8, 20, 60, this);
         //Assets.backgroundMusic.play();
 
-        player = new Player(0, getHeight() - getHeight()/4 - 20, 64, 64, this);
+
         //Create enemies array list
         enemies = new ArrayList<Enemy>();
         for(int i = 0; i < enemyNumbers; ++i){
@@ -260,6 +261,9 @@ public class Game implements Runnable {
         }
         
 
+        player = new Player(0, getHeight() - getHeight()/4 - 64, 64, 64, this);
+
+
         //tutorial 1
         level = new ArrayList<Platform>();
         lava = new Lava(0,0,0,0);
@@ -270,6 +274,8 @@ public class Game implements Runnable {
         bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
         
         proyectiles = new ArrayList<Proyectile>();
+        
+        
 
         display.getJframe().addKeyListener(keyManager);
 
