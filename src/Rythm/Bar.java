@@ -36,6 +36,7 @@ public class Bar extends Item{
     public void render(Graphics g) {
         g.setColor(Color.black);
         g.fillRect(getX(), getY(), getWidth(), getHeight());
+        
     }
     
    
