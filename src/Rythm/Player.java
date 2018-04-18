@@ -157,12 +157,12 @@ public class Player extends Item {
         if (game.isJump()) {
             if (game.getBeat() % 4 != 0) {
                 //The distance between jumps is calculated and then divided by the number of frames/ticks per jump to get the distance to move each tick
-                setDistanceX(((getX() + (game.getUnit() * 2 * getDirection()))- getX())/(int)game.getTimeBetweenBeat());
+                setDistanceX(((game.getUnit() * 2 * getDirection()))/(int)game.getTimeBetweenBeat());
                 setDistanceY((getY() - (getY() - game.getUnit()))/((int)game.getTimeBetweenBeat()/2));
             }
             else {
                 //The distance between jumps is calculated and then divided by the number of frames/ticks per jump to get the distance to move each tick
-                setDistanceX(((getX() + (game.getUnit() * 3 * getDirection()))- getX())/(int)game.getTimeBetweenBeat());
+                setDistanceX(((game.getUnit() * 3 * getDirection()))/(int)game.getTimeBetweenBeat());
                 setDistanceY((getY() - (getY() - (game.getUnit() * 2)))/((int)game.getTimeBetweenBeat()/2));
             }
             //calculate the distance that is between the player and the floor
@@ -170,7 +170,7 @@ public class Player extends Item {
         }
         
         if(!isInit()){
-            setDistanceX(((getX() + (game.getUnit() * 2 * getDirection()))- getX())/(int)game.getTimeBetweenBeat());
+            setDistanceX(((game.getUnit() * 2 * getDirection()))/(int)game.getTimeBetweenBeat());
             setDistanceY((getY() - (getY() - game.getUnit()))/((int)game.getTimeBetweenBeat()/2));
             setDistanceToFloor((floor - (getY() - (getDistanceY() * ((int)game.getTimeBetweenBeat()/2)))) / ((int)game.getTimeBetweenBeat()/2));
         }

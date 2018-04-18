@@ -37,6 +37,7 @@ public class Game implements Runnable {
     private KeyManager keyManager;  // to manage the keyboard
     private Plataform plataform;
     private ArrayList<Enemy> enemies; // to store enemies
+    private Enemy enemy;            //to test enemy addition
     private ArrayList<Proyectile> proyectiles;
     private boolean canShoot;
     private int shootCounter;
@@ -206,12 +207,20 @@ public class Game implements Runnable {
         bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - getHeight()/8, 20, 60, this);
         //Assets.backgroundMusic.play();
 
-        player = new Player(getWidth() - getWidth(), getHeight() - getHeight()/4 - 20, 64, 64, this);
+        player = new Player(0, getHeight() - getHeight()/4 - 20, 64, 64, this);
+
+        //Create enemies array list
+        enemies = new ArrayList<Enemy>();
+        for(int i = 0; i < 10; ++i){
+            //Generate enemies randomly inside a range of 1k pixels for each enemy
+            int ex = (int) (Math.random() * 1000 + i * 1000);
+            enemies.add(new Enemy(ex, getHeight() - getHeight()/4 - 90, 64, 64, this));
+        }
+
         plataform = new Plataform(500, 500, 10000, 40);
 
         bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
         
-        enemies = new ArrayList<Enemy>();
         proyectiles = new ArrayList<Proyectile>();
 
         display.getJframe().addKeyListener(keyManager);
@@ -264,6 +273,12 @@ public class Game implements Runnable {
     private void tick() {
         keyManager.tick();
         player.tick();
+
+        //tick enemies
+        for(Enemy e : enemies){
+            e.tick();
+        }
+
         cam.tick(player);
         bar.tick();
         
@@ -343,6 +358,10 @@ public class Game implements Runnable {
             g2d.translate(cam.getX(), cam.getY()); //Begin of cam            
                 g.drawImage(Assets.background, -700, 0, width*10, height, null);
                 player.render(g);
+
+                for(Enemy e : enemies)
+                    e.render(g);
+
                 Iterator itr = proyectiles.iterator();
                 while (itr.hasNext()) {
                     Proyectile bullet = (Proyectile) itr.next();
