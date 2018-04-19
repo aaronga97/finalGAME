@@ -271,6 +271,20 @@ public class Game implements Runnable {
     public KeyManager getKeyManager() {
         return keyManager;
     }
+    /**
+    * Make enemy chase player && change zombie direction animation
+    **/
+    public void makeEnemyChase(Player p, Enemy ene){
+        int speedFollow = 3;
+        
+        //Si el enemigo está a la mitad de distancia del jugador (en la pantalla masomenos), siguelo
+        if(player.getX() - ene.getX() <= getWidth()/2){
+            if(player.getX() > ene.getX()) ene.setX(ene.getX() + speedFollow);
+            else if (player.getX() < ene.getX()) ene.setX(ene.getX() - speedFollow); 
+            else if(player.getY() > ene.getY()) ene.setY(ene.getY() + speedFollow);
+            else if (player.getY() < ene.getY()) ene.setY(ene.getY() - speedFollow);
+        }
+    }
 
     private void tick() {
         keyManager.tick();
@@ -279,6 +293,7 @@ public class Game implements Runnable {
         //tick enemies
         for(Enemy e : enemies){
             e.tick();
+            makeEnemyChase(player, e);
         }
 
         cam.tick(player);
