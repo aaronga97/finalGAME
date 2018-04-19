@@ -37,11 +37,13 @@ public class Game implements Runnable {
     private KeyManager keyManager;  // to manage the keyboard
     private Plataform plataform;
     private ArrayList<Enemy> enemies; // to store enemies
+    private ArrayList<Enemy> poweredEnemies; // to store enemies
     private Enemy enemy;            //to test enemy addition
     private ArrayList<Proyectile> proyectiles;
     private boolean canShoot;
     private int shootCounter;
     private int score;              //Keeps track of player score
+    private int enemyNumbers = 30;  
 
     private SoundClip testTrack;
     Camera cam;                     //camera that follows player
@@ -62,7 +64,7 @@ public class Game implements Runnable {
         //2)Activa la repetición del clip
         //3)Reproduce el clip
         //Checking script
-        testTrack = new SoundClip("/Audio/testTrack.wav");
+        testTrack = new SoundClip("/Audio/movNaranja.wav");
         testTrack.setLooping(true);
         testTrack.play();
         
@@ -213,11 +215,16 @@ public class Game implements Runnable {
 
         //Create enemies array list
         enemies = new ArrayList<Enemy>();
-        for(int i = 0; i < 10; ++i){
+        for(int i = 0; i < enemyNumbers; ++i){
             //Generate enemies randomly inside a range of 1k pixels for each enemy
             int ex = (int) (Math.random() * 1000 + i * 1000);
-            enemies.add(new Enemy(ex, getHeight() - getHeight()/4 - 90, 64, 64, this));
+            enemies.add(new Enemy(ex, getHeight() - getHeight()/4 - 90, 64, 64, this, 64));
+            if(i % 3 == 0){
+                ex = (int) (Math.random() * 1000 + i * 1000);
+                enemies.add(new Enemy(ex, getHeight() - getHeight()/4 - 90, 64, 64, this, 64*4));
+            }
         }
+        
 
         plataform = new Plataform(500, 500, 10000, 40);
 
@@ -271,6 +278,7 @@ public class Game implements Runnable {
     public KeyManager getKeyManager() {
         return keyManager;
     }
+    
     /**
     * Make enemy chase player && change zombie direction animation
     **/

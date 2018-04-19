@@ -22,8 +22,9 @@ public class Enemy extends Item{
     private int floor;                  //location of the floor
     private boolean onPlataform;        //tells if the player is touching a plataform
     private boolean init;               //tells if the player is making the first jump
+    private int unit;                   //tells the enemy how much to jump
 
-    public Enemy(int x, int y, int width, int height, Game game) {
+    public Enemy(int x, int y, int width, int height, Game game, int unit) {
         super(x, y, width, height);
         this.game = game;
         direction = 1;
@@ -32,6 +33,7 @@ public class Enemy extends Item{
         floor = y;
         init = false;
         onPlataform = false;
+        this.unit = unit;
     }
 
     /**
@@ -149,18 +151,18 @@ public class Enemy extends Item{
         if(game.isJump()){
             if (game.getBeat() % 4 != 0) {
                 //The distance between jumps is calculated and then divided by the number of frames/ticks per jump to get the distance to move each tick
-                setDistanceY((getY() - (getY() - game.getUnit()))/((int)game.getTimeBetweenBeat()/2));
+                setDistanceY((getY() - (getY() - unit))/((int)game.getTimeBetweenBeat()/2));
             }
             else {
                 //The distance between jumps is calculated and then divided by the number of frames/ticks per jump to get the distance to move each tick
-                setDistanceY((getY() - (getY() - (game.getUnit() * 2)))/((int)game.getTimeBetweenBeat()/2));
+                setDistanceY((getY() - (getY() - (unit * 2)))/((int)game.getTimeBetweenBeat()/2));
             }
             //calculate the distance that is between the player and the floor
             setDistanceToFloor((floor - (getY() - (getDistanceY() * ((int)game.getTimeBetweenBeat()/2)))) / ((int)game.getTimeBetweenBeat()/2));
         }
 
         if(!isInit()){
-            setDistanceY((getY() - (getY() - game.getUnit()))/((int)game.getTimeBetweenBeat()/2));
+            setDistanceY((getY() - (getY() - unit))/((int)game.getTimeBetweenBeat()/2));
             setDistanceToFloor((floor - (getY() - (getDistanceY() * ((int)game.getTimeBetweenBeat()/2)))) / ((int)game.getTimeBetweenBeat()/2));
         }
         
@@ -176,7 +178,13 @@ public class Enemy extends Item{
 
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.yellow);
-        g.fillRect(getX(), getY(), 40, 40);
+        if(unit == 64){
+            g.setColor(Color.yellow);
+            g.fillRect(getX(), getY(), 40, 40);
+        }else
+         if(unit == 64*4){
+            g.setColor(Color.gray);
+            g.fillRect(getX(), getY(), 30, 30);
+         }
     }
 }
