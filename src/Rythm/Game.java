@@ -35,7 +35,7 @@ public class Game implements Runnable {
     private boolean jump;           // checks if there is a change in beat
     private Bar bar;                // the beat bar that will help the user keep rythm visually
     private KeyManager keyManager;  // to manage the keyboard
-    private Plataform plataform;
+    private Platform platform;
     private ArrayList<Enemy> enemies; // to store enemies
     private ArrayList<Enemy> poweredEnemies; // to store enemies
     private Enemy enemy;            //to test enemy addition
@@ -226,7 +226,7 @@ public class Game implements Runnable {
         }
         
 
-        plataform = new Plataform(500, 500, 10000, 40);
+        platform = new Platform(500, 500, 10000, 40);
 
         bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
         
@@ -307,9 +307,18 @@ public class Game implements Runnable {
         cam.tick(player);
         bar.tick();
         
-        if(player.intersects(plataform) && !player.isOnPlataform()){
-            player.setDistanceToFloor(0);
-            player.setOnPlataform(true);
+        if(player.intersects(platform)){
+            if(!player.isOnPlataform()){ 
+                if(player.getX() + player.getWidth() > platform.getX() + player.getDistanceX() &&
+                        player.getX() <  platform.getWidth() + platform.getX() - 8){
+                    player.setDistanceToFloor(0);
+                    player.setOnPlataform(true);
+                }
+                else{
+                    player.setDirection(player.getDirection() * -1);
+                    player.setDistanceX(player.getDistanceX()*player.getDirection());    
+                }
+            } 
         }
         // if jump was set to true on the previous tick, make it false
         if(isJump()) {
@@ -400,8 +409,7 @@ public class Game implements Runnable {
                     bullet.render(g);
                 }
                 bar.render(g);
-                plataform.render(g);
-            
+                platform.render(g);
             g2d.translate(cam.getX(), cam.getY()); //End of cam
 
             //////////////////////////////////////////////////////////////////

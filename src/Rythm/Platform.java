@@ -12,9 +12,9 @@ import java.awt.Graphics;
  *
  * @author Usuario1
  */
-public class Plataform extends Item{
+public class Platform extends Item{
     
-    Plataform(int x, int y, int width, int height){
+    Platform(int x, int y, int width, int height){
         super(x, y, width, height);
     }
 
