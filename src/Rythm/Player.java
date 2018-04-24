@@ -107,6 +107,14 @@ public class Player extends Item {
     }
 
     /**
+     * returns <int> floor </int> value
+     * @return 
+     */
+    public int getFloor() {
+        return floor;
+    }
+
+    /**
      * returns <boolean> onPlataform </boolean> value 
      * 
      * @return onPlataform
@@ -166,13 +174,13 @@ public class Player extends Item {
                 setDistanceY((getY() - (getY() - (game.getUnit() * 2)))/((int)game.getTimeBetweenBeat()/2));
             }
             //calculate the distance that is between the player and the floor
-            setDistanceToFloor((floor - (getY() - (getDistanceY() * ((int)game.getTimeBetweenBeat()/2)))) / ((int)game.getTimeBetweenBeat()/2));
+            setDistanceToFloor((getFloor()- (getY() - (getDistanceY() * ((int)game.getTimeBetweenBeat()/2)))) / ((int)game.getTimeBetweenBeat()/2));
         }
         
         if(!isInit()){
             setDistanceX(((game.getUnit() * 2 * getDirection()))/(int)game.getTimeBetweenBeat());
             setDistanceY((getY() - (getY() - game.getUnit()))/((int)game.getTimeBetweenBeat()/2));
-            setDistanceToFloor((floor - (getY() - (getDistanceY() * ((int)game.getTimeBetweenBeat()/2)))) / ((int)game.getTimeBetweenBeat()/2));
+            setDistanceToFloor((getFloor() - (getY() - (getDistanceY() * ((int)game.getTimeBetweenBeat()/2)))) / ((int)game.getTimeBetweenBeat()/2));
         }
         //moves the player between beats
         setX(getX() + getDistanceX());
