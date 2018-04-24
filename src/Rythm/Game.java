@@ -313,18 +313,21 @@ public class Game implements Runnable {
         cam.tick(player);
         bar.tick();
         
-        if(player.intersects(platform)){
-            if(!player.isOnPlataform()){ 
-                if(player.getX() + player.getWidth() > platform.getX() + player.getDistanceX() &&
-                        player.getX() <  platform.getWidth() + platform.getX() - 8){
-                    player.setDistanceToFloor(0);
-                    player.setOnPlataform(true);
-                }
-                else{
-                    player.setDirection(player.getDirection() * -1);
-                    player.setDistanceX(player.getDistanceX()*player.getDirection());    
-                }
-            } 
+        //checks all platforms for collisions
+        for(Platform p : level){
+            if(player.intersects(p)){
+                if(!player.isOnPlataform()){ 
+                    if(player.getX() + player.getWidth() > p.getX() + player.getDistanceX() /*&&
+                            player.getX() <  p.getWidth() + p.getX() - 8*/){
+                        player.setDistanceToFloor(0);
+                        player.setOnPlataform(true);
+                    }
+                    else{
+                        player.setDirection(player.getDirection() * -1);
+                        player.setDistanceX(player.getDistanceX()*player.getDirection());    
+                    }
+                } 
+            }
         }
         // if jump was set to true on the previous tick, make it false
         if(isJump()) {
