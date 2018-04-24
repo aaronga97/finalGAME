@@ -50,6 +50,7 @@ public class Game implements Runnable {
     private ArrayList<Platform> level;
     private Lava lava;
     Camera cam;
+    private End end;
 
     /**
      * to create title, width and height and set the game is still not running
@@ -69,7 +70,7 @@ public class Game implements Runnable {
         //Checking script
         testTrack = new SoundClip("/Audio/movNaranja.wav");
         testTrack.setLooping(true);
-        testTrack.play();
+        //testTrack.play();
         
         keyManager = new KeyManager();
         score = 0;
@@ -200,8 +201,39 @@ public class Game implements Runnable {
         return proyectiles;
     }
 
+   public void level1(){
+       //nivel 1
+        for(int iX=0;iX<20;iX++){
+            level.add(new Platform(500+500*iX,500,400,40));
+        }
+        lava = new Lava(550,550,10000,40);
+        player.setX(0);
+        //falta endgoal
+   }
    
+   public void clearLevel(){
+        Iterator itr = level.iterator();
+        while (itr.hasNext()) {
+            Platform p = (Platform) itr.next();
+            //if the enemy is out of the screen delete it
+            level.remove(p);
+            itr = level.iterator();
+        }
+        
+        //Delete enemy and bullet if they intersect
+        Iterator itr2 = enemies.iterator();
+            //Itera todos los enemigos
+            while(itr2.hasNext()){
+                Enemy ene = (Enemy) itr2.next();
+                //Si interesecta borra los 2, y reseta ambos iteradores dsps de borrar y add 10 to score
+                enemies.remove(ene);
+                itr2 = enemies.iterator();
+            }
+        end.setX(-5000);
+        end.setY(5000);
+   }
 
+   
     /**
      * initializing the display window of the game
      */
@@ -229,15 +261,12 @@ public class Game implements Runnable {
         
 
         //tutorial 1
-        //plataform = new Plataform(500, 500, 10000, 40);
-        
-        //nivel 1
         level = new ArrayList<Platform>();
-        bar = new Bar(getWidth()/2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
-        for(int iX=0;iX<20;iX++){
-            level.add(new Platform(500+500*iX,500,400,40));
-        }
-        lava = new Lava(550,550,10000,40);
+        lava = new Lava(0,0,0,0);
+        level.add(new Platform(500, 500, 3000, 40));
+        end = new End(3400,400,100,100,0);
+        //bar = new Bar(getWidth()/2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
+        
         bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
         
         proyectiles = new ArrayList<Proyectile>();
@@ -341,6 +370,16 @@ public class Game implements Runnable {
             player.setX(0);
         }
         
+        if(player.intersects(end)){
+            int levelNum = end.getLevel();
+            if(levelNum==0){
+                clearLevel();
+                level1();
+            }
+        }
+        
+        
+        
         // a counter for ticks
         setTimeCounter(getTimeCounter() + 1);
         // when the counter gets to the number of ticks that should pass each beat
@@ -357,11 +396,10 @@ public class Game implements Runnable {
             
         //BULLETS
         //creates bullet if necessary, only one in screen
-        if (keyManager.isSpace() && proyectiles.size() == 0) {
+        if (keyManager.isSpace()) {
             proyectiles.add(new Proyectile(player.getX(),
             player.getY()+player.getHeight()/2, 20, 20,player.getDirection(), this));
         }
-        
         //tick every bullet
         Iterator itr = proyectiles.iterator();
         while (itr.hasNext()) {
@@ -388,20 +426,6 @@ public class Game implements Runnable {
                 }
             }
         }
-        
-        //tick every bullet
-        itr = level.iterator();
-        while (itr.hasNext()) {
-            Platform p = (Platform) itr.next();
-            
-            if(player.intersects(p) && !player.isOnPlataform()){
-            player.setDistanceToFloor(0);
-            player.setOnPlataform(true);
-        } 
-            
-          
-        }
-            
         
     }
 
@@ -432,6 +456,7 @@ public class Game implements Runnable {
                 g.drawImage(Assets.background, -700, 0, width*10, height, null);
                 player.render(g);
                 lava.render(g);
+                end.render(g);
                 for(Enemy e : enemies)
                     e.render(g);
 
