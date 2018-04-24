@@ -48,7 +48,8 @@ public class Game implements Runnable {
     private int enemyNumbers = 30;  
     private SoundClip testTrack;
     private ArrayList<Platform> level;
-    Camera cam;                     //camera that follows player
+    private Lava lava;
+    Camera cam;
 
     /**
      * to create title, width and height and set the game is still not running
@@ -214,7 +215,6 @@ public class Game implements Runnable {
         //Assets.backgroundMusic.play();
 
         player = new Player(0, getHeight() - getHeight()/4 - 20, 64, 64, this);
-
         //Create enemies array list
         enemies = new ArrayList<Enemy>();
         for(int i = 0; i < enemyNumbers; ++i){
@@ -228,14 +228,16 @@ public class Game implements Runnable {
         }
         
 
-        
+        //tutorial 1
         //plataform = new Plataform(500, 500, 10000, 40);
+        
+        //nivel 1
         level = new ArrayList<Platform>();
         bar = new Bar(getWidth()/2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
         for(int iX=0;iX<20;iX++){
-            level.add(new Platform(500+50*iX,500,40,40));
+            level.add(new Platform(500+500*iX,500,400,40));
         }
-        
+        lava = new Lava(550,550,10000,40);
         bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
         
         proyectiles = new ArrayList<Proyectile>();
@@ -289,6 +291,7 @@ public class Game implements Runnable {
     /**
     * Make enemy chase player && change zombie direction animation
     **/
+    /*
     public void makeEnemyChase(Player p, Enemy ene){
         int speedFollow = 3;
         
@@ -300,17 +303,16 @@ public class Game implements Runnable {
             else if (player.getY() < ene.getY()) ene.setY(ene.getY() - speedFollow);
         }
     }
-
+*/
     private void tick() {
         keyManager.tick();
         player.tick();
 
         //tick enemies
         for(Enemy e : enemies){
-            e.tick();
-            makeEnemyChase(player, e);
+            //e.tick();
+           //  makeEnemyChase(player, e);
         }
-
         cam.tick(player);
         bar.tick();
         
@@ -333,6 +335,10 @@ public class Game implements Runnable {
         // if jump was set to true on the previous tick, make it false
         if(isJump()) {
             setJump(false);
+        }
+        //if the player touches the lava
+        if(player.intersects(lava)){
+            player.setX(0);
         }
         
         // a counter for ticks
@@ -382,6 +388,19 @@ public class Game implements Runnable {
                 }
             }
         }
+        
+        //tick every bullet
+        itr = level.iterator();
+        while (itr.hasNext()) {
+            Platform p = (Platform) itr.next();
+            
+            if(player.intersects(p) && !player.isOnPlataform()){
+            player.setDistanceToFloor(0);
+            player.setOnPlataform(true);
+        } 
+            
+          
+        }
             
         
     }
@@ -412,7 +431,7 @@ public class Game implements Runnable {
             g2d.translate(cam.getX(), cam.getY()); //Begin of cam            
                 g.drawImage(Assets.background, -700, 0, width*10, height, null);
                 player.render(g);
-
+                lava.render(g);
                 for(Enemy e : enemies)
                     e.render(g);
 
