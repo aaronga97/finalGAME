@@ -14,21 +14,35 @@ import java.awt.Graphics;
  */
 public class Bar extends Item{
     private Game game;
-    
+    private int counter;
     public Bar(int x, int y, int width, int height, Game game) {
         super(x, y, width, height);
         this.game = game;
+        counter = 0;
     }
 
     
     @Override
     public void tick() {
+        if(counter != 4){
+            height = 20;
+            y = game.getHeight() - 30 - (game.getHeight()/8)+20;
+        }else{
+            height = 60;
+            y = game.getHeight() - 30 - (game.getHeight()/8);
+        }
         if(!game.isJump()) {
-
+            
             setX(getX() + game.getPlayer().getDistanceX() + (game.getUnit()*2)/(int) game.getTimeBetweenBeat());  
         }
         else {
             setX(game.getWidth()/2 - 20 - game.getUnit() - (int) game.getCam().getX());
+            if(counter!=4){
+                counter++;
+            }else{
+                counter = 1;
+            }
+            
         }
     }
 

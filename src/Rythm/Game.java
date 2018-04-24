@@ -19,7 +19,9 @@ import java.util.Iterator;
 public class Game implements Runnable {
 
     private BufferStrategy bs;      // to have several buffers when displaying
+    private BufferStrategy bh;
     private Graphics g;             // to paint objects
+    private Graphics h;             //to paint objects
     private Display display;        // to display in the game
     private String title;           // title of the window
     private int width;              // width of the window
@@ -44,8 +46,8 @@ public class Game implements Runnable {
     private int shootCounter;
     private int score;              //Keeps track of player score
     private int enemyNumbers = 30;  
-
     private SoundClip testTrack;
+    private ArrayList<Platform> level;
     Camera cam;                     //camera that follows player
 
     /**
@@ -95,7 +97,7 @@ public class Game implements Runnable {
     public int getHeight() {
         return height;
     }
-
+   
     /**
      * returns <player> player </player> object
      *
@@ -208,7 +210,7 @@ public class Game implements Runnable {
 
         //Initialize new camera in the corner.
         cam = new Camera(0, 0);
-        bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - getHeight()/8, 20, 60, this);
+        //bar = new Bar(getWidth()/2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - getHeight()/8, 20, 60, this);
         //Assets.backgroundMusic.play();
 
         player = new Player(0, getHeight() - getHeight()/4 - 20, 64, 64, this);
@@ -226,8 +228,14 @@ public class Game implements Runnable {
         }
         
 
-        platform = new Platform(500, 500, 10000, 40);
-
+        
+        //plataform = new Plataform(500, 500, 10000, 40);
+        level = new ArrayList<Platform>();
+        bar = new Bar(getWidth()/2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
+        for(int iX=0;iX<20;iX++){
+            level.add(new Platform(500+50*iX,500,40,40));
+        }
+        
         bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
         
         proyectiles = new ArrayList<Proyectile>();
@@ -249,7 +257,6 @@ public class Game implements Runnable {
         long now;
         // initializing last time to the computer time in nanosecs
         long lastTime = System.nanoTime();
-
         // number of jumps per second
         double jumpsPerSec = getBpm() / 60;
         // determines how many frames/ticks pass after each beat
@@ -379,6 +386,7 @@ public class Game implements Runnable {
     private void render() {
         // get the buffer strategy from the display
         bs = display.getCanvas().getBufferStrategy();
+       // bh = display.getCanvas2().getBufferStrategy();
         /* if it is null, we define one with 3 buffers to display images of
         the game, if not null, then we display every image of the game but
         after clearing the Rectanlge, getting the graphic object from the 
@@ -389,13 +397,15 @@ public class Game implements Runnable {
             display.getCanvas().createBufferStrategy(3);
         } else {
             g = bs.getDrawGraphics();
+            //h = bh.getDrawGraphics();
             //Turn g to g2d inorder to use translate function for camera
             Graphics2D g2d = (Graphics2D) g;
             //////////////////////////////////////////////////////////////////
 
             ////DRAW HERE
             //Everything in between these 2 functions will be affected by camera
- 
+            //h.drawRect(20, 20, 20, 20);
+           // h.fillRect(20, 20, 20, 20);
             g2d.translate(cam.getX(), cam.getY()); //Begin of cam            
                 g.drawImage(Assets.background, -700, 0, width*10, height, null);
                 player.render(g);
@@ -409,9 +419,15 @@ public class Game implements Runnable {
                     bullet.render(g);
                 }
                 bar.render(g);
-                platform.render(g);
+                itr = level.iterator();
+                while (itr.hasNext()) {
+                    Platform level = (Platform) itr.next();
+                    level.render(g);
+                }
+                g.drawRect(getWidth()/2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - getHeight()/8-35,unit*2+30,70);
+                g.drawRect(getWidth()/2 - 20 - getUnit() - (int) getCam().getX()+getUnit()*2-10, getHeight() - getHeight()/8-35,40,70);
+                
             g2d.translate(cam.getX(), cam.getY()); //End of cam
-
             //////////////////////////////////////////////////////////////////
             bs.show();
             g.dispose();
