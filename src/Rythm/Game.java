@@ -37,7 +37,8 @@ public class Game implements Runnable {
     private boolean jump;           // checks if there is a change in beat
     private Bar bar;                // the beat bar that will help the user keep rythm visually
     private KeyManager keyManager;  // to manage the keyboard
-    private Platform platform;
+    private Platform leftBorder;    // the left border of the game zone
+    private Platform rightBorder;   // the right border of the game zone 
     private ArrayList<Enemy> enemies; // to store enemies
     private ArrayList<Enemy> poweredEnemies; // to store enemies
     private Enemy enemy;            //to test enemy addition
@@ -261,6 +262,8 @@ public class Game implements Runnable {
         }
         
 
+        leftBorder = new Platform(0 - 600, 0 , 10, getHeight() - getHeight()/4);
+        rightBorder = new Platform(12000, 0, 10, getHeight() - getHeight()/4);
         player = new Player(0, getHeight() - getHeight()/4 - 64, 64, 64, this);
 
 
@@ -350,6 +353,17 @@ public class Game implements Runnable {
         }
         cam.tick(player);
         bar.tick();
+        
+        //checks if player collides with borders
+        if(player.intersects(leftBorder)){
+            player.setDirection(player.getDirection() * -1);
+            player.setDistanceX(player.getDistanceX()*player.getDirection()); 
+        }
+        
+        if (player.intersects(rightBorder)){
+            player.setDirection(player.getDirection() * -1);
+            player.setDistanceX(player.getDistanceX()*player.getDirection()); 
+        }
         
         //checks all platforms for collisions
         for(Platform p : level){
@@ -466,6 +480,8 @@ public class Game implements Runnable {
             g2d.translate(cam.getX(), cam.getY()); //Begin of cam            
                 g.drawImage(Assets.background, -700, 0, width*10, height, null);
                 player.render(g);
+                leftBorder.render(g);
+                rightBorder.render(g);
                 lava.render(g);
                 end.render(g);
                 for(Enemy e : enemies)
