@@ -205,7 +205,7 @@ public class Game implements Runnable {
    public void level1(){
        //nivel 1
         for(int iX=0;iX<20;iX++){
-            level.add(new Platform(500+500*iX,500,400,40));
+            level.add(new Platform(500+500*iX,515,400,20));
         }
         lava = new Lava(550,520,10000,20);
         player.setX(0);
@@ -355,7 +355,9 @@ public class Game implements Runnable {
         for(Platform p : level){
             if(player.intersects(p)){
                 if(!player.isOnPlataform()){ 
-                    if(player.getX() + player.getWidth() > p.getX() + player.getDistanceX()) {
+                    if(player.getX() + player.getWidth() > p.getX() + player.getDistanceX() 
+                           && 
+                            player.getY() + player.getHeight() <= p.getY() + 8) {
                         player.setOnPlataform(true);
                         player.setTempFloor(player.getY() + player.getHeight());
                     }
