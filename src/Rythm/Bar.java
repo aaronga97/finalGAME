@@ -24,7 +24,7 @@ public class Bar extends Item{
     
     @Override
     public void tick() {
-        if(counter != 4){
+        if((game.getBeat() + 1) % 4 != 0){
             height = 20;
             y = game.getHeight() - 30 - (game.getHeight()/8)+20;
         }else{
@@ -37,11 +37,7 @@ public class Bar extends Item{
         }
         else {
             setX(game.getWidth()/2 - 20 - game.getUnit() - (int) game.getCam().getX());
-            if(counter!=4){
-                counter++;
-            }else{
-                counter = 1;
-            }
+            
             
         }
     }
