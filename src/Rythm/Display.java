@@ -16,7 +16,6 @@ import javax.swing.JFrame;
 public class Display {
     private JFrame jframe;  // this is the app class
     private Canvas canvas;  // to display images
-    
     private String title;   // title of the window
     private int width;      // width of the window
     private int height;     // height of the window
