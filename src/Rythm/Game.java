@@ -376,7 +376,11 @@ public class Game implements Runnable {
         //if the player touches the lava
         if(player.intersects(lava)){
             player.setDirection(1);
+            player.setDistanceX(0);
+            player.setDistanceY(0);
             player.setX(0);
+            player.setY(getHeight() - getHeight()/4);
+            setBeat(1);
         }
         
         if(player.intersects(end)){
