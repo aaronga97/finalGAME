@@ -355,10 +355,9 @@ public class Game implements Runnable {
         for(Platform p : level){
             if(player.intersects(p)){
                 if(!player.isOnPlataform()){ 
-                    if(player.getX() + player.getWidth() > p.getX() + player.getDistanceX() /*&&
-                            player.getX() <  p.getWidth() + p.getX() - 8*/){
-                        player.setDistanceToFloor(0);
+                    if(player.getX() + player.getWidth() > p.getX() + player.getDistanceX()) {
                         player.setOnPlataform(true);
+                        player.setTempFloor(player.getY() + player.getHeight());
                     }
                     else{
                         player.setDirection(player.getDirection() * -1);
@@ -366,6 +365,7 @@ public class Game implements Runnable {
                     }
                 } 
             }
+
         }
         // if jump was set to true on the previous tick, make it false
         if(isJump()) {
