@@ -161,8 +161,14 @@ public class Player extends Item {
         }
 
         if (game.isJump()) {
-            setDistanceX((game.getUnit() * 2 * getDirection()) / (int) game.getTimeBetweenBeat());
-            setDistanceY((2 * game.getUnit()) / (int) game.getTimeBetweenBeat());
+            if(game.getBeat() % 4 != 0) {
+                setDistanceX((game.getUnit() * 2 * getDirection()) / (int) game.getTimeBetweenBeat());
+                setDistanceY((2 * game.getUnit()) / (int) game.getTimeBetweenBeat());
+            }
+            else {
+                setDistanceX((game.getUnit() * 5 * getDirection()) / (int) game.getTimeBetweenBeat());
+                setDistanceY((4 * game.getUnit()) / (int) game.getTimeBetweenBeat());
+            }
         }
 
         //if jump is active this makes the character jump
