@@ -25,8 +25,12 @@ public class Platform extends Item{
 
     @Override
     public void render(Graphics g) {
+        g.setColor(Color.black);
+        g.fillRect(getX(), getY(), getWidth(), getHeight());
         g.setColor(Color.blue);
-        g.fillRect(getX(),getY(), getWidth(), getHeight());
+        g.drawRect(getX(),getY(),getWidth(),getHeight());
+
+        //g.fillRect(getX(),getY(), getWidth(), getHeight());
     }
     
 }

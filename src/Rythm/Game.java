@@ -207,7 +207,7 @@ public class Game implements Runnable {
         for(int iX=0;iX<20;iX++){
             level.add(new Platform(500+500*iX,500,400,40));
         }
-        lava = new Lava(550,550,10000,40);
+        lava = new Lava(550,520,10000,20);
         player.setX(0);
         //falta endgoal
    }
@@ -373,6 +373,7 @@ public class Game implements Runnable {
         }
         //if the player touches the lava
         if(player.intersects(lava)){
+            player.setDirection(1);
             player.setX(0);
         }
         
@@ -383,9 +384,7 @@ public class Game implements Runnable {
                 level1();
             }
         }
-        
-        
-        
+  
         // a counter for ticks
         setTimeCounter(getTimeCounter() + 1);
         // when the counter gets to the number of ticks that should pass each beat
@@ -404,7 +403,7 @@ public class Game implements Runnable {
         //creates bullet if necessary, only one in screen
         if (keyManager.isSpace()) {
             proyectiles.add(new Proyectile(player.getX(),
-            player.getY()+player.getHeight()/2, 20, 20,player.getDirection(), this));
+            player.getY()+player.getHeight()/2, 20, 10,player.getDirection(), this));
         }
         //tick every bullet
         Iterator itr = proyectiles.iterator();

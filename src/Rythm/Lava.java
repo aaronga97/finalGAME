@@ -25,6 +25,7 @@ public class Lava extends Item{
     @Override
     public void render(Graphics g) {
         g.setColor(Color.red);
-        g.fillRect(getX(),getY(), getWidth(), getHeight());
+        g.drawRect(getX(),getY(),getWidth(),getHeight());
+        //g.fillRect(getX(),getY(), getWidth(), getHeight());
     }
 }

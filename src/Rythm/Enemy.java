@@ -180,11 +180,13 @@ public class Enemy extends Item{
     public void render(Graphics g) {
         if(unit == 64){
             g.setColor(Color.yellow);
-            g.fillRect(getX(), getY(), 40, 40);
+            g.drawRect(getX(),getY(),getWidth(),getHeight());
+            //g.fillRect(getX(), getY(), 40, 40);
         }else
          if(unit == 64*4){
             g.setColor(Color.gray);
-            g.fillRect(getX(), getY(), 30, 30);
+            g.drawRect(getX(),getY(),getWidth(),getHeight());
+            //g.fillRect(getX(), getY(), 30, 30);
          }
     }
 }

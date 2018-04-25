@@ -5,8 +5,10 @@
  */
 package Rythm;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 /**
  *
@@ -190,7 +192,11 @@ public class Player extends Item {
 
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.red);
-        g.fillRect(getX(), getY(), getWidth(), getHeight());
+        Graphics2D g2D = (Graphics2D) g; 
+        g2D.setColor(Color.red);
+        g2D.setStroke(new BasicStroke(3F));
+        g2D.drawRect(getX(),getY(),getWidth(),getHeight());
+        
+        //g.fillRect(getX(), getY(), getWidth(), getHeight());
     }
 }

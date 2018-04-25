@@ -42,6 +42,7 @@ public class Proyectile extends Item{
     public void render(Graphics g) {
         //        g.drawImage(Assets.enemy, getX(), getY(), getWidth(), getHeight(), null);
         g.setColor(Color.red);
-        g.fillRect(getX(), getY(), getWidth(), getHeight());
+        g.drawRect(getX(),getY(),getWidth(),getHeight());
+       // g.fillRect(getX(), getY(), getWidth(), getHeight());
     }
 }
