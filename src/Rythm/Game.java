@@ -18,18 +18,18 @@ import java.util.Iterator;
  */
 public class Game implements Runnable {
 
-    private boolean canShoot;
+    private boolean canShoot;       //to see if he can shoot
     private boolean jump;           // checks if there is a change in beat
 
     private double bpm;             // the beats per minute
     private double timeBetweenBeat; // keeps how many seconds are between beats
 
     private int beat;               // keeps track of the current beat (1-4)
-    private int enemyNumbers = 30;
+    private int enemyNumbers = 30;  //to count the number of enemies
     private int height;             // height of the window
     private int running;            // to set the game
     private int score;              //Keeps track of player score
-    private int shootCounter;
+    private int shootCounter;       //to count the shooting
     private int timeCounter;        // keeps track of the seconds
     private int unit;               // the game's metric units
     private int width;              // width of the window
@@ -37,22 +37,22 @@ public class Game implements Runnable {
     private Bar bar;                // the beat bar that will help the user keep rythm visually
     private BufferStrategy bs;      // to have several buffers when displaying
     private BufferStrategy bh;
-    private Camera cam;
+    private Camera cam;             //camera to follow player
     private Display display;        // to display in the game
     private ArrayList<Enemy> enemies; // to store enemies
-    private End end;
+    private End end;                 //to change the level
     private Enemy enemy;            //to test enemy addition
     private Graphics g;             // to paint objects
     private Graphics h;             //to paint objects
     private KeyManager keyManager;  // to manage the keyboard
-    private Lava lava;
+    private Lava lava;              //platform to make a challenge
     private Platform leftBorder;    // the left border of the game zone
-    private ArrayList<Platform> level;
+    private ArrayList<Platform> level; //to change the level
     private Player player;          // to use a player
     private ArrayList<Enemy> poweredEnemies; // to store enemies
-    private ArrayList<Proyectile> proyectiles;
+    private ArrayList<Proyectile> proyectiles; //to shoot multiple times 
     private Platform rightBorder;   // the right border of the game zone
-    private SoundClip testTrack;
+    private SoundClip testTrack;    //to add music
     private String title;           // title of the window
     private Thread thread;          // thread to create the game     
 
@@ -113,11 +113,19 @@ public class Game implements Runnable {
     public double getBpm() {
         return bpm;
     }
-
+    
+    /**
+     * sets <int> beat </int> value
+     * @param beat 
+     */
     public void setBeat(int beat) {
         this.beat = beat;
     }
 
+    /**
+     * returns <int> beta </int> value
+     * @return beat
+     */
     public int getBeat() {
         return beat;
     }
@@ -271,8 +279,9 @@ public class Game implements Runnable {
                 enemies.add(new Enemy(ex, getHeight() - getHeight()/4 - 115, 64, 64, this, 64*2));
             }
         }
+
         
-        //create borders to stop the player for ggetting out of bounds
+        //create borders to stop the player for getting out of bounds
         leftBorder = new Platform(0 - 600, 0 , 10, getHeight() - getHeight()/4);
         rightBorder = new Platform(12000, 0, 10, getHeight() - getHeight()/4);
         //adds the player
@@ -289,6 +298,7 @@ public class Game implements Runnable {
 
         //creates the proyectiles list
         proyectiles = new ArrayList<Proyectile>();
+
         display.getJframe().addKeyListener(keyManager);
     }
 
@@ -415,6 +425,7 @@ public class Game implements Runnable {
             player.setY(getHeight() - getHeight() / 4);
             setBeat(1);
         }
+        
         //if the player ends the level, touches the end
         if(player.intersects(end)){
             int levelNum = end.getLevel();
