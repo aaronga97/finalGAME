@@ -183,7 +183,7 @@ public class Enemy extends Item{
             g.drawRect(getX(),getY(),getWidth(),getHeight());
             //g.fillRect(getX(), getY(), 40, 40);
         }else
-         if(unit == 64*4){
+         if(unit == 64*2){
             g.setColor(Color.gray);
             g.drawRect(getX(),getY(),getWidth(),getHeight());
             //g.fillRect(getX(), getY(), 30, 30);

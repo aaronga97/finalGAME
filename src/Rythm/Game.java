@@ -70,7 +70,7 @@ public class Game implements Runnable {
         //Checking script
         testTrack = new SoundClip("/Audio/movNaranja.wav");
         testTrack.setLooping(true);
-        //testTrack.play();
+        testTrack.play();
         
         keyManager = new KeyManager();
         score = 0;
@@ -264,7 +264,7 @@ public class Game implements Runnable {
             enemies.add(new Enemy(ex, getHeight() - getHeight()/4 - 90, 64, 64, this, 64));
             if(i % 3 == 0){
                 ex = (int) (Math.random() * 1000 + i * 1000);
-                enemies.add(new Enemy(ex, getHeight() - getHeight()/4 - 90, 64, 64, this, 64*4));
+                enemies.add(new Enemy(ex, getHeight() - getHeight()/4 - 115, 64, 64, this, 64*2));
             }
         }
         
@@ -330,11 +330,10 @@ public class Game implements Runnable {
     }
     
     /**
-    * Make enemy chase player && change zombie direction animation
+    * Make enemy chase player
     **/
-    /*
     public void makeEnemyChase(Player p, Enemy ene){
-        int speedFollow = 3;
+        int speedFollow = 1;
         
         //Si el enemigo está a la mitad de distancia del jugador (en la pantalla masomenos), siguelo
         if(player.getX() - ene.getX() <= getWidth()/2){
@@ -344,16 +343,17 @@ public class Game implements Runnable {
             else if (player.getY() < ene.getY()) ene.setY(ene.getY() - speedFollow);
         }
     }
-*/
+
     private void tick() {
         keyManager.tick();
         player.tick();
 
-        //tick enemies
+        //tick enemies to chase player
         for(Enemy e : enemies){
-            //e.tick();
-           //  makeEnemyChase(player, e);
+            e.tick();
+            makeEnemyChase(player, e);
         }
+
         cam.tick(player);
         bar.tick();
         
