@@ -287,7 +287,6 @@ public class Game implements Runnable {
         lava = new Lava(0,0,0,0);
         level.add(new Platform(500, 500, 3000, 40));
         end = new End(3400,400,100,100,0);
-        end.setLevel(2);
         
         bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
         
