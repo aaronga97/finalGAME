@@ -13,13 +13,15 @@ import java.awt.Rectangle;
  * @author Usuario1
  */
 public abstract class Item {
+
+    protected int height; // to store height value
+    protected int width; // to store width value
     protected int x;        // to store x position
     protected int y;        // to store y position
-    protected int width; // to store width value
-    protected int height; // to store height value
-    
+
     /**
      * Set the initial values to create the item
+     *
      * @param x <b>x</b> position of the object
      * @param y <b>y</b> position of the object
      */
@@ -30,32 +32,25 @@ public abstract class Item {
         this.height = height;
     }
 
-    /**
-     * Get x value
-     * @return x 
-     */
-    public int getX() {
-        return x;
-    }
-
-    /**
-     * Get y value
-     * @return y 
-     */
-    public int getY() {
-        return y;
-    }
-    
-    public int getWidth() {
-        return width;
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public int getHeight() {
         return height;
     }
 
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
     /**
      * Set x value
+     *
      * @param x to modify
      */
     public void setX(int x) {
@@ -63,37 +58,49 @@ public abstract class Item {
     }
 
     /**
+     * Get x value
+     *
+     * @return x
+     */
+    public int getX() {
+        return x;
+    }
+
+    /**
      * Set y value
+     *
      * @param y to modify
      */
     public void setY(int y) {
         this.y = y;
     }
-    
-    public void setWidth(int width) {
-        this.width = width;
+
+    /**
+     * Get y value
+     *
+     * @return y
+     */
+    public int getY() {
+        return y;
     }
 
-    public void setHeight(int height) {
-        this.height = height;
+    public boolean intersects(Object obj) {
+        return (obj instanceof Item
+                && this.getBounds().intersects(((Item) obj).getBounds()));
     }
-    
-    public boolean intersects(Object obj){
-        return (obj instanceof Item && 
-                this.getBounds().intersects(((Item) obj).getBounds()));
+
+    private Rectangle getBounds() {
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
-    
-    private Rectangle getBounds(){
-        return new Rectangle(getX(),getY(), getWidth(), getHeight());
-    }
-    
+
     /**
      * To update positions of the item for every tick
      */
     public abstract void tick();
-    
+
     /**
      * To paint the item
+     *
      * @param g <b>Graphics</b> object to paint the item
      */
     public abstract void render(Graphics g);

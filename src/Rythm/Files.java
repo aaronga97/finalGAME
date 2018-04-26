@@ -15,34 +15,35 @@ import java.io.PrintWriter;
  *
  * @author ricky
  */
-public class Files {    
+public class Files {
+
     public static void loadFile(Game game) {
         BufferedReader br = null;
         FileReader fr = null;
-        String line;        
-        
+        String line;
+
         try {
             fr = new FileReader("save.txt");
             br = new BufferedReader(fr);
-            
+
             fr.close();
 
         } catch (IOException ioe) {
             System.out.println("no hay nada grabado " + ioe.toString());
         }
     }
-    
+
     public static void saveFile(Game game) {
         try {
             PrintWriter printWriter = new PrintWriter(new FileWriter("save.txt"));
-            
+
             printWriter.close();
 
         } catch (IOException ex) {
-            System.out.println("Se lleno el disco duro" + ex.toString() );
+            System.out.println("Se lleno el disco duro" + ex.toString());
             ex.printStackTrace();
         }
-        
+
     }
-    
+
 }

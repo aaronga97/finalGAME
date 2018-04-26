@@ -12,12 +12,12 @@ import java.awt.Graphics;
  *
  * @author Usuario1
  */
-public class Proyectile extends Item{
-    
-    private Game game;
+public class Proyectile extends Item {
+
     private int direction;
     private int type;
-    
+    private Game game;
+
     public Proyectile(int x, int y, int width, int height, int direction, Game game) {
         super(x, y, width, height);
         this.game = game;
@@ -30,11 +30,11 @@ public class Proyectile extends Item{
 
     @Override
     public void tick() {
-        if(direction==1){
-            setX(getX()+15);
+        if (direction == 1) {
+            setX(getX() + 15);
         }
-        if(direction==-1){
-            setX(getX()-15);
+        if (direction == -1) {
+            setX(getX() - 15);
         }
     }
 
@@ -42,7 +42,7 @@ public class Proyectile extends Item{
     public void render(Graphics g) {
         //        g.drawImage(Assets.enemy, getX(), getY(), getWidth(), getHeight(), null);
         g.setColor(Color.red);
-        g.drawRect(getX(),getY(),getWidth(),getHeight());
-       // g.fillRect(getX(), getY(), getWidth(), getHeight());
+        g.drawRect(getX(), getY(), getWidth(), getHeight());
+        // g.fillRect(getX(), getY(), getWidth(), getHeight());
     }
 }

@@ -12,8 +12,9 @@ import java.awt.Graphics;
  *
  * @author Jose
  */
-public class Lava extends Item{
-    Lava(int x, int y, int width, int height){
+public class Lava extends Item {
+
+    Lava(int x, int y, int width, int height) {
         super(x, y, width, height);
     }
 
@@ -25,7 +26,7 @@ public class Lava extends Item{
     @Override
     public void render(Graphics g) {
         g.setColor(Color.red);
-        g.drawRect(getX(),getY(),getWidth(),getHeight());
+        g.drawRect(getX(), getY(), getWidth(), getHeight());
         //g.fillRect(getX(),getY(), getWidth(), getHeight());
     }
 }

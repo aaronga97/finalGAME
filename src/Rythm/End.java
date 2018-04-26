@@ -12,13 +12,15 @@ import java.awt.Graphics;
  *
  * @author Jose
  */
-public class End extends Item{
+public class End extends Item {
+
     private int level;
-    End(int x, int y, int width, int height,int level){
+
+    End(int x, int y, int width, int height, int level) {
         super(x, y, width, height);
     }
-    
-    public int getLevel(){
+
+    public int getLevel() {
         return level;
     }
 
@@ -31,12 +33,11 @@ public class End extends Item{
     public void tick() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
 
     @Override
     public void render(Graphics g) {
         g.setColor(Color.PINK);
-        g.fillRect(getX(),getY(), getWidth(), getHeight());
+        g.fillRect(getX(), getY(), getWidth(), getHeight());
     }
-    
+
 }

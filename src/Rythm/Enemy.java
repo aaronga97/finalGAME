@@ -12,17 +12,19 @@ import java.awt.Graphics;
  *
  * @author Usuario1
  */
-public class Enemy extends Item{
-    
-    private Game game;
+public class Enemy extends Item {
+
+    private boolean init;               //tells if the player is making the first jump
+    private boolean onPlataform;        //tells if the player is touching a plataform
+
     private int direction;              //direction of the enemy
+    private int distanceToFloor;        //distance from the enemy to the floor
     private int distanceX;              //distance to travel in X in one beat
     private int distanceY;              //distance to travel in Y in one beat
-    private int distanceToFloor;        //distance from the enemy to the floor
     private int floor;                  //location of the floor
-    private boolean onPlataform;        //tells if the player is touching a plataform
-    private boolean init;               //tells if the player is making the first jump
     private int unit;                   //tells the enemy how much to jump
+
+    private Game game;
 
     public Enemy(int x, int y, int width, int height, Game game, int unit) {
         super(x, y, width, height);
@@ -37,12 +39,39 @@ public class Enemy extends Item{
     }
 
     /**
-     * returns <int> direction </int> value
+     * sets <boolean> init </boolean> value
      *
-     * @return direction
+     * @param init
      */
-    public int getDirection() {
-        return direction;
+    public void setInit(boolean init) {
+        this.init = init;
+    }
+
+    /**
+     * returns <boolean> init </boolean> value
+     *
+     * @return init
+     */
+    public boolean isInit() {
+        return init;
+    }
+
+    /**
+     * sets <boolean> onPlataform </boolean> value
+     *
+     * @param onPlataform
+     */
+    public void setOnPlataform(boolean onPlataform) {
+        this.onPlataform = onPlataform;
+    }
+
+    /**
+     * returns <boolean> onPlataform </boolean> value
+     *
+     * @return onPlataform
+     */
+    public boolean isOnPlataform() {
+        return onPlataform;
     }
 
     /**
@@ -54,13 +83,13 @@ public class Enemy extends Item{
         this.direction = iDirection;
     }
 
-     /**
-     * returns <int> distanceX </int> value
+    /**
+     * returns <int> direction </int> value
      *
-     * @return distanceX
+     * @return direction
      */
-    public int getDistanceX() {
-        return distanceX;
+    public int getDirection() {
+        return direction;
     }
 
     /**
@@ -73,12 +102,12 @@ public class Enemy extends Item{
     }
 
     /**
-     * returns <int> distanceY </int> value
+     * returns <int> distanceX </int> value
      *
-     * @return distanceY
+     * @return distanceX
      */
-    public int getDistanceY() {
-        return distanceY;
+    public int getDistanceX() {
+        return distanceX;
     }
 
     /**
@@ -90,13 +119,13 @@ public class Enemy extends Item{
         this.distanceY = distanceY;
     }
 
-        /**
-     * returns <int> distanceToFloor </int> value
+    /**
+     * returns <int> distanceY </int> value
      *
-     * @return distanceToFloor
+     * @return distanceY
      */
-    public int getDistanceToFloor() {
-        return distanceToFloor;
+    public int getDistanceY() {
+        return distanceY;
     }
 
     /**
@@ -108,69 +137,40 @@ public class Enemy extends Item{
         this.distanceToFloor = distanceToFloor;
     }
 
-        /**
-     * returns <boolean> init </boolean> value
-     *
-     * @return init
-     */
-    public boolean isInit() {
-        return init;
-    }
-
     /**
-     * sets <boolean> init </boolean> value
+     * returns <int> distanceToFloor </int> value
      *
-     * @param init
+     * @return distanceToFloor
      */
-    public void setInit(boolean init) {
-        this.init = init;
-    }
-    
-        /**
-     * returns <boolean> onPlataform </boolean> value
-     *
-     * @return onPlataform
-     */
-    public boolean isOnPlataform() {
-        return onPlataform;
-    }
-
-    /**
-     * sets <boolean> onPlataform </boolean> value
-     *
-     * @param onPlataform
-     */
-    public void setOnPlataform(boolean onPlataform) {
-        this.onPlataform = onPlataform;
+    public int getDistanceToFloor() {
+        return distanceToFloor;
     }
 
     @Override
     public void tick() {
         setX(getX());
 
-        if(game.isJump()){
+        if (game.isJump()) {
             if (game.getBeat() % 4 != 0) {
                 //The distance between jumps is calculated and then divided by the number of frames/ticks per jump to get the distance to move each tick
-                setDistanceY((getY() - (getY() - unit))/((int)game.getTimeBetweenBeat()/2));
-            }
-            else {
+                setDistanceY((getY() - (getY() - unit)) / ((int) game.getTimeBetweenBeat() / 2));
+            } else {
                 //The distance between jumps is calculated and then divided by the number of frames/ticks per jump to get the distance to move each tick
-                setDistanceY((getY() - (getY() - (unit * 2)))/((int)game.getTimeBetweenBeat()/2));
+                setDistanceY((getY() - (getY() - (unit * 2))) / ((int) game.getTimeBetweenBeat() / 2));
             }
             //calculate the distance that is between the player and the floor
-            setDistanceToFloor((floor - (getY() - (getDistanceY() * ((int)game.getTimeBetweenBeat()/2)))) / ((int)game.getTimeBetweenBeat()/2));
+            setDistanceToFloor((floor - (getY() - (getDistanceY() * ((int) game.getTimeBetweenBeat() / 2)))) / ((int) game.getTimeBetweenBeat() / 2));
         }
 
-        if(!isInit()){
-            setDistanceY((getY() - (getY() - unit))/((int)game.getTimeBetweenBeat()/2));
-            setDistanceToFloor((floor - (getY() - (getDistanceY() * ((int)game.getTimeBetweenBeat()/2)))) / ((int)game.getTimeBetweenBeat()/2));
+        if (!isInit()) {
+            setDistanceY((getY() - (getY() - unit)) / ((int) game.getTimeBetweenBeat() / 2));
+            setDistanceToFloor((floor - (getY() - (getDistanceY() * ((int) game.getTimeBetweenBeat() / 2)))) / ((int) game.getTimeBetweenBeat() / 2));
         }
-        
+
         //here, half of the jump, the enemy goes up and the other half goes down
         if (game.getTimeCounter() < game.getTimeBetweenBeat() / 2) {
             setY(getY() - getDistanceY());
-        }
-        else {
+        } else {
             setOnPlataform(false);
             setY(getY() + getDistanceToFloor());
         }
@@ -178,15 +178,15 @@ public class Enemy extends Item{
 
     @Override
     public void render(Graphics g) {
-        if(unit == 64){
+        if (unit == 64) {
             g.setColor(Color.yellow);
-            g.drawRect(getX(),getY(),getWidth(),getHeight());
+            g.drawRect(getX(), getY(), getWidth(), getHeight());
             //g.fillRect(getX(), getY(), 40, 40);
         }else
          if(unit == 64*2){
             g.setColor(Color.gray);
-            g.drawRect(getX(),getY(),getWidth(),getHeight());
+            g.drawRect(getX(), getY(), getWidth(), getHeight());
             //g.fillRect(getX(), getY(), 30, 30);
-         }
+        }
     }
 }

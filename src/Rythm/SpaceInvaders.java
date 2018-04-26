@@ -19,5 +19,5 @@ public class SpaceInvaders {
         Game g = new Game("Juego", 1280, 720);
         g.start();
     }
-    
+
 }

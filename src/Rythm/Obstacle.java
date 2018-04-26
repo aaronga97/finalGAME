@@ -12,7 +12,7 @@ import java.awt.Graphics;
  *
  * @author ricky
  */
-public class Obstacle extends Item{
+public class Obstacle extends Item {
 
     public Obstacle(int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -28,5 +28,5 @@ public class Obstacle extends Item{
         g.setColor(Color.yellow);
         g.fillRect(getX(), getY(), getWidth(), getHeight());
     }
-    
+
 }

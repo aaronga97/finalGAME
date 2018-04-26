@@ -10,38 +10,18 @@ package Rythm;
  * @author A4RON
  */
 public class Camera {
-    private float x, y;
-    
-    public Camera(float x, float y){
+
+    private float x;
+    private float y;
+
+    public Camera(float x, float y) {
         this.x = x;
         this.y = y;
-    }
-    
-    
-    public void tick(Player player){
-
-        setX(-player.getX() + 1280/2); //1280/2 = gamewidth/2
-
-    }
-    
-    /**
-     * returns <float> x </float> value
-     * @param x
-     */
-    public float getX() {
-        return x;
-    }
-
-    /**
-     * returns <float> y </float> value
-     * @param y
-     */
-    public float getY() {
-        return y;
     }
 
     /**
      * sets <float> x </float> value
+     *
      * @param x
      */
     public void setX(float x) {
@@ -49,10 +29,35 @@ public class Camera {
     }
 
     /**
+     * returns <float> x </float> value
+     *
+     * @param x
+     */
+    public float getX() {
+        return x;
+    }
+
+    /**
      * sets <float> y </float> value
+     *
      * @param y
      */
     public void setY(float y) {
         this.y = y;
+    }
+
+    /**
+     * returns <float> y </float> value
+     *
+     * @param y
+     */
+    public float getY() {
+        return y;
+    }
+
+    public void tick(Player player) {
+
+        setX(-player.getX() + 1280 / 2); //1280/2 = gamewidth/2
+
     }
 }

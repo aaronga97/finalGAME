@@ -12,9 +12,9 @@ import java.awt.Graphics;
  *
  * @author Usuario1
  */
-public class Platform extends Item{
-    
-    Platform(int x, int y, int width, int height){
+public class Platform extends Item {
+
+    Platform(int x, int y, int width, int height) {
         super(x, y, width, height);
     }
 
@@ -28,9 +28,9 @@ public class Platform extends Item{
         g.setColor(Color.black);
         g.fillRect(getX(), getY(), getWidth(), getHeight());
         g.setColor(Color.blue);
-        g.drawRect(getX(),getY(),getWidth(),getHeight());
+        g.drawRect(getX(), getY(), getWidth(), getHeight());
 
         //g.fillRect(getX(),getY(), getWidth(), getHeight());
     }
-    
+
 }

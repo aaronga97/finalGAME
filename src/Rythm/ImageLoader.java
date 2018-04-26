@@ -16,9 +16,10 @@ import javax.imageio.ImageIO;
  * @author Usuario1
  */
 public class ImageLoader {
-        
+
     /**
      * to get an image from the file path
+     *
      * @param path it is the path of the file
      * @return the <bold>BufferedImage</bold> object
      */
