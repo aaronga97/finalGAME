@@ -1,22 +1,27 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Rythm;
 
 /**
- *
- * @author A4RON
+ * Class that simulates a camera that follows the player moving through the level
+ * @author Aarón García
+ * @author José Napoleón Lazo
+ * @author José Roberto Adame
+ * @author Ricardo Lozano
  */
 public class Camera {
 
-    private float x;
-    private float y;
-
-    public Camera(float x, float y) {
+    private float x, y;
+    
+    private Game game; // Used to get information from the game
+    /**
+     * Initializes a new Camera instance
+     * @param x x position of the camera
+     * @param y y position of the camera
+     * @param game Game instance needed for game information
+     */
+    public Camera(float x, float y, Game game){
         this.x = x;
         this.y = y;
+        this.game = game;
     }
 
     /**
@@ -55,9 +60,13 @@ public class Camera {
         return y;
     }
 
+    /**
+     * Normal functionality during the game
+     * @param player The player instance to follow
+     */
     public void tick(Player player) {
 
-        setX(-player.getX() + 1280 / 2); //1280/2 = gamewidth/2
-
+        //This will keep the player to appear always on the center of the screen
+        setX(-player.getX() + game.getWidth()/2);
     }
 }

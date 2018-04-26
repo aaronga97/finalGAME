@@ -13,8 +13,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
+<<<<<<< 1647fadbd9a75cf19a93c416916e8d6079148149
  *
  * @author Ricardo Lozano,Napoleon Lazo, Jose Adame, Aaron Garcia
+=======
+ * Game manager
+ * Here, everything that happens on the game is managed
+ * @author Aarón García
+ * @author José Napoleón Lazo
+ * @author José Roberto Adame
+ * @author Ricardo Lozano
+>>>>>>> Added comments and javadoc to most classes
  */
 public class Game implements Runnable {
 
@@ -56,6 +65,7 @@ public class Game implements Runnable {
     private String title;           // title of the window
     private Thread thread;          // thread to create the game     
 
+
     /**
      * to create title, width and height and set the game is still not running
      *
@@ -68,15 +78,6 @@ public class Game implements Runnable {
         this.width = width;
         this.height = height;
 
-        //1)Carga los clips de sonido
-        //2)Activa la repetición del clip
-        //3)Reproduce el clip
-        //Checking script
-        testTrack = new SoundClip("/Audio/movNaranja.wav");
-        testTrack.setLooping(true);
-
-        testTrack.play();
-        
         keyManager = new KeyManager();
         score = 0;
         running = -1;
@@ -210,11 +211,17 @@ public class Game implements Runnable {
         return player;
     }
 
+     /*
+     * 
+     * @return The ArrayList that contains all Proyectile instances
+     */
     public ArrayList<Proyectile> getProyectiles() {
         return proyectiles;
     }
-    //load level1
-   public void level1(){       
+   
+    /**
+     * Creates platforms for level 1
+     */   public void level1(){       
         for(int iX=0;iX<10;iX++){
             level.add(new Platform(500+500*iX,515,400,20));//add the platforms
         }
@@ -222,7 +229,11 @@ public class Game implements Runnable {
         end.setX(5000);//set the end goal
         end.setY(400);
         player.setX(0);//reset the player position
-        }
+   }
+   
+
+    
+   
    
    public void level2(){
        //nivel 2
@@ -234,7 +245,10 @@ public class Game implements Runnable {
        end.setY(400);
        player.setX(0);
    }
-   //clear the level (platforms,and enemies)
+  
+   /**
+    * Clears the platforms and enemies from the screen to load the next level
+    */
    public void clearLevel(){
         Iterator itr = level.iterator();
         while (itr.hasNext()) {
@@ -243,15 +257,14 @@ public class Game implements Runnable {
             itr = level.iterator();
         }
 
-        //Delete enemy and bullet if they intersect
+        //Delete enemy 
         Iterator itr2 = enemies.iterator();
-        //Itera todos los enemigos
-        while (itr2.hasNext()) {
-            Enemy ene = (Enemy) itr2.next();
-            //Si interesecta borra los 2, y reseta ambos iteradores dsps de borrar y add 10 to score
-            enemies.remove(ene);
-            itr2 = enemies.iterator();
-        }
+            //Itera todos los enemigos
+            while(itr2.hasNext()){
+                Enemy ene = (Enemy) itr2.next();
+                enemies.remove(ene);
+                itr2 = enemies.iterator();
+            }
         end.setX(-5000);
         end.setY(5000);
     }
@@ -264,7 +277,7 @@ public class Game implements Runnable {
         Assets.init();
 
         //Initialize new camera in the corner.
-        cam = new Camera(0, 0);
+        cam = new Camera(0, 0, this);
         //bar = new Bar(getWidth()/2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - getHeight()/8, 20, 60, this);
         //Assets.backgroundMusic.play();
 
@@ -359,7 +372,7 @@ public class Game implements Runnable {
             else if (player.getY() < ene.getY()) ene.setY(ene.getY() - speedFollow);
         }
     }
-    
+
     private void tick() {
         keyManager.tick();
         player.tick();
@@ -449,7 +462,6 @@ public class Game implements Runnable {
         if (getTimeCounter() == getTimeBetweenBeat()) {
             setJump(true);
 
-            player.setInit(true);
             setBeat(getBeat() + 1);
             setTimeCounter(0);
         }

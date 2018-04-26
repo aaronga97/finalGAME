@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Rythm;
 
 import java.awt.BasicStroke;
@@ -20,14 +16,15 @@ public class Player extends Item {
     private boolean init;        //tells if the player is making the first jump
     private boolean onPlataform; //tells if the player is touching a plataform
 
+
     private int direction;      //direction of the player
     private int distanceToFloor; //distance from the player to the floor
     private int distanceX;      //distance to travel in X in one beat
     private int distanceY;      //distance to travel in Y in one beat
-    private int floor;           //location of the floor
-    private int tempFloor;
+    private int floor;           //location of the floor of the level
+    private int tempFloor;       // to store the height of the platform the player is on, originally it's equal to floor
 
-    private Game game;
+    private Game game;      // to access informaction from the game
 
     public Player(int x, int y, int width, int height, Game game) {
         super(x, y, width, height);
@@ -37,7 +34,6 @@ public class Player extends Item {
         distanceY = game.getHeight() - getHeight();
         floor = y + height;
         tempFloor = floor;
-        init = false;
         onPlataform = false;
         extraFall = false;
     }
@@ -149,6 +145,7 @@ public class Player extends Item {
         return floor;
     }
 
+
     @Override
     public void tick() {
         //changes the players direction depending on the key pressed
@@ -158,8 +155,13 @@ public class Player extends Item {
             setDirection(1);
         }
 
+        //If there is a beat the player jumps
         if (game.isJump()) {
-            if (game.getBeat() % 4 != 0) {
+            
+        //if jump is active this makes the character jump
+        //if the beat is between 1-3 it performs a normal jump
+        // the beat that matches with 4 is a "special jump", which is larger
+            if(game.getBeat() % 4 != 0) {
                 setDistanceX((game.getUnit() * 2 * getDirection()) / (int) game.getTimeBetweenBeat());
                 setDistanceY((2 * game.getUnit()) / (int) game.getTimeBetweenBeat());
             } else {
@@ -168,24 +170,31 @@ public class Player extends Item {
             }
         }
 
-        //if jump is active this makes the character jump
-        //if the beat is between 1-3 it performs a normal jump
-        // the beat that matches with 4 is a "special jump", which is larger
+
         //moves the player between beats
         setX(getX() + getDistanceX());
+        
+        // if the player falls on a platform after a jump, it will not jump until next beat, so that rythm is not lost
         // here, half of the jump, the player goes up and the other half goes down
         if (isOnPlataform() && !game.isJump()) {
             setOnPlataform(false);
-        } else if (game.getTimeCounter() < game.getTimeBetweenBeat() / 2 && !extraFall) {
+        } 
+        // Normally, on a beat the player goes up and down
+        // if the player falls from a platform, the player enters an "extra fall"
+        // this means the player wont go up until it lands
+        else if (game.getTimeCounter() < game.getTimeBetweenBeat() / 2 && !extraFall) {
             setY(getY() - getDistanceY());
         } else {
             setY(getY() + getDistanceY());
+            
+            // when the player falls beyond the platform it was standing (tempFloor), extraFall is activated
             if (getY() + getHeight() > getTempFloor()) {
                 extraFall = true;
                 setTempFloor(floor);
             }
 
-            if (getY() + getHeight() >= floor) {
+            //when it lands, extraFall ends and a new floor is set
+            if(getY() + getHeight() >= floor) {
                 extraFall = false;
                 setY(floor - height);
             }
@@ -199,6 +208,5 @@ public class Player extends Item {
         g2D.setStroke(new BasicStroke(3F));
         g2D.drawRect(getX(), getY(), getWidth(), getHeight());
 
-        //g.fillRect(getX(), getY(), getWidth(), getHeight());
     }
 }

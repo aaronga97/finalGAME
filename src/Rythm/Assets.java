@@ -1,15 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Rythm;
 
 import java.awt.image.BufferedImage;
 
 /**
- *
- * @author Usuario1
+ * In this class, resources, such as sprites and audio, are loaded
+ * @author Aarón García
+ * @author José Napoleón Lazo
+ * @author José Roberto Adame
+ * @author Ricardo Lozano
  */
 public class Assets {
 
@@ -18,15 +16,20 @@ public class Assets {
     public static BufferedImage enemy;      // to store the enemy image
     public static BufferedImage player;     // to store the player image
 
+
+    public static SoundClip trackOne;           // to store track for the tutorial
+    
     /**
-     * initializing the images of the game
+     * initializing the images and sounds of the game
      */
     public static void init() {
-        background = ImageLoader.loadImage("/images/background.jpg");
 
-        //player = ImageLoader.loadImage("/images/chef.png");
-        //enemy = ImageLoader.loadImage("/images/client.png");
-        //backgroundMusic = new SoundClip("/Sounds/music.wav");
-        //backgroundMusic.setLooping(true);
+        
+        // Images
+        background = ImageLoader.loadImage("/images/background.jpg"); 
+        
+        //Sounds
+        trackOne = new SoundClip("/Audio/movNaranja.wav");
+        trackOne.setLooping(true);
     }
 }

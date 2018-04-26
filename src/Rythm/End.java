@@ -1,16 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Rythm;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 /**
- *
- * @author Jose
+ * Class that represents the section where the level ends
+ * Even though this class doesn't use the tick() method, it uses most of the
+ * features of an Item, and that's why it inherits from it
+ * @author Aarón García
+ * @author José Napoleón Lazo
+ * @author José Roberto Adame
+ * @author Ricardo Lozano
  */
 public class End extends Item {
 
@@ -28,12 +28,19 @@ public class End extends Item {
         this.level = level;
     }
     
-
+    /**
+     * This method doesn't use a tick
+     */
     @Override
     public void tick() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
+    
+    /**
+     * To draw the end zone
+     * @param g To handle graphics
+     */
     @Override
     public void render(Graphics g) {
         g.setColor(Color.PINK);

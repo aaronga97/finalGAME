@@ -1,16 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Rythm;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 /**
- *
- * @author Usuario1
+ * Class used to create enemy instances
+ * @author Aarón García
+ * @author José Napoleón Lazo
+ * @author José Roberto Adame
+ * @author Ricardo Lozano
  */
 public class Enemy extends Item {
 
@@ -24,8 +22,18 @@ public class Enemy extends Item {
     private int floor;                  //location of the floor
     private int unit;                   //tells the enemy how much to jump
 
-    private Game game;
+    private Game game;      // to get information from the game
 
+
+    /**
+     * Initializes a new enemy instance
+     * @param x x position
+     * @param y y position
+     * @param width width of the enemy
+     * @param height height of the enemy
+     * @param game Game instance
+     * @param unit the number of pixels the enemy will jump
+     */
     public Enemy(int x, int y, int width, int height, Game game, int unit) {
         super(x, y, width, height);
         this.game = game;
