@@ -365,6 +365,17 @@ public class Game implements Runnable {
             player.setDistanceX(player.getDistanceX()*player.getDirection()); 
         }
         
+        //checks bullet collision with borders 
+        Iterator itrP = proyectiles.iterator();
+        while (itrP.hasNext()) {
+            Proyectile p = (Proyectile) itrP.next();
+            //if the enemy is out of the screen delete it
+            if(p.intersects(leftBorder) || p.intersects(rightBorder)){
+                proyectiles.remove(p);
+                itrP = proyectiles.iterator();
+            }
+        }
+        
         //checks all platforms for collisions
         for(Platform p : level){
             if(player.intersects(p)){
