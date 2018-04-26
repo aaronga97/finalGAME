@@ -14,12 +14,11 @@ import java.util.Iterator;
 
 /**
  *
- * @author Ricardo Lozano y Napoleon Lazo
+ * @author Ricardo Lozano,Napoleon Lazo, Jose Adame, Aaron Garcia
  */
 public class Game implements Runnable {
 
     private BufferStrategy bs;      // to have several buffers when displaying
-    private BufferStrategy bh;
     private Graphics g;             // to paint objects
     private Graphics h;             //to paint objects
     private Display display;        // to display in the game
@@ -42,17 +41,16 @@ public class Game implements Runnable {
     private ArrayList<Enemy> enemies; // to store enemies
     private ArrayList<Enemy> poweredEnemies; // to store enemies
     private Enemy enemy;            //to test enemy addition
-
-    private ArrayList<Proyectile> proyectiles;
-    private boolean canShoot;
-    private int shootCounter;
+    private ArrayList<Proyectile> proyectiles; //to shoot multiple times
+    private boolean canShoot; //to see if he can shoot
+    private int shootCounter; //to count the shooting
     private int score;              //Keeps track of player score
-    private int enemyNumbers = 30;  
-    private SoundClip testTrack;
-    private ArrayList<Platform> level;
-    private Lava lava;
-    Camera cam;
-    private End end;
+    private int enemyNumbers = 30;  //to count the number of enemies
+    private SoundClip testTrack; //to add music
+    private ArrayList<Platform> level; //to change the level
+    private Lava lava; //platform to make a challenge
+    Camera cam; //camera to follow player
+    private End end; //to change the level
 
     /**
      * to create title, width and height and set the game is still not running
@@ -79,8 +77,8 @@ public class Game implements Runnable {
         running = -1;
         canShoot = true;
         shootCounter = 0;
-        unit = 64;
-        bpm = 120;
+        unit = 64; //nuestro estandard unit of measurements
+        bpm = 120;//cuantos beats por minuto se tocan, termino musical
         beat = 1;
     }
 //test 
@@ -182,67 +180,61 @@ public class Game implements Runnable {
     public void setTimeBetweenBeat(double timeBetweenBeat) {
         this.timeBetweenBeat = timeBetweenBeat;
     }
-
+    //return the beat
     public int getBeat() {
         return beat;
     }
-
+    //set the beat
     public void setBeat(int beat) {
         this.beat = beat;
     }
-
+    //return camera
     public Camera getCam() {
         return cam;
     }
-    
+    //return enemies
     public ArrayList<Enemy> getEnemies() {
         return enemies;
     }
-
+    //return proyectiles
     public ArrayList<Proyectile> getProyectiles() {
         return proyectiles;
     }
-
-   public void level1(){
-       //nivel 1
-       
+    //load level1
+   public void level1(){       
         for(int iX=0;iX<10;iX++){
-            level.add(new Platform(500+500*iX,515,400,20));
+            level.add(new Platform(500+500*iX,515,400,20));//add the platforms
         }
-        lava = new Lava(550,520,10000,20);
-        end.setX(5000);
+        lava = new Lava(550,520,10000,20);//add lava in the floor
+        end.setX(5000);//set the end goal
         end.setY(400);
-        player.setX(0);
+        player.setX(0);//reset the player position
         }
    
    public void level2(){
        //nivel 2
-       
        for(int iX=0;iX<10;iX++){
            level.add(new Platform(500+500*iX,515-40*iX,450,20));
        }
        level.add(new Platform(5200, 500, 1000, 40));
-       //lava = new Lava(550,520,10000,20);
        end.setX(5500);
        end.setY(400);
        player.setX(0);
    }
-   
+   //clear the level (platforms,and enemies)
    public void clearLevel(){
         Iterator itr = level.iterator();
         while (itr.hasNext()) {
             Platform p = (Platform) itr.next();
-            //if the enemy is out of the screen delete it
             level.remove(p);
             itr = level.iterator();
         }
         
-        //Delete enemy and bullet if they intersect
+       //delete enemies
         Iterator itr2 = enemies.iterator();
             //Itera todos los enemigos
             while(itr2.hasNext()){
                 Enemy ene = (Enemy) itr2.next();
-                //Si interesecta borra los 2, y reseta ambos iteradores dsps de borrar y add 10 to score
                 enemies.remove(ene);
                 itr2 = enemies.iterator();
             }
@@ -276,9 +268,10 @@ public class Game implements Runnable {
             }
         }
         
-
+        //create borders to stop the player for ggetting out of bounds
         leftBorder = new Platform(0 - 600, 0 , 10, getHeight() - getHeight()/4);
         rightBorder = new Platform(12000, 0, 10, getHeight() - getHeight()/4);
+        //adds the player
         player = new Player(0, getHeight() - getHeight()/4 - 64, 64, 64, this);
 
 
@@ -287,15 +280,11 @@ public class Game implements Runnable {
         lava = new Lava(0,0,0,0);
         level.add(new Platform(500, 500, 3000, 40));
         end = new End(3400,400,100,100,0);
-        
+        //adds the timing bar
         bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
-        
+        //creates the proyectiles list
         proyectiles = new ArrayList<Proyectile>();
-        
-        
-
         display.getJframe().addKeyListener(keyManager);
-
     }
 
     @Override
@@ -422,7 +411,7 @@ public class Game implements Runnable {
             player.setY(getHeight() - getHeight()/4);
             setBeat(1);
         }
-        
+        //if the player ends the level, touches the end
         if(player.intersects(end)){
             int levelNum = end.getLevel();
             if(levelNum==0){
