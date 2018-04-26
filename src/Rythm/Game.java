@@ -356,8 +356,9 @@ public class Game implements Runnable {
         
         //checks if player collides with borders
         if(player.intersects(leftBorder)){
-            player.setDirection(player.getDirection() * -1);
-            player.setDistanceX(player.getDistanceX()*player.getDirection()); 
+            player.setDirection(1);
+            player.setDistanceX(player.getDistanceX()*-1);
+            
         }
         
         if (player.intersects(rightBorder)){
