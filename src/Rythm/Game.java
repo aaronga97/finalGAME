@@ -205,12 +205,27 @@ public class Game implements Runnable {
 
    public void level1(){
        //nivel 1
-        for(int iX=0;iX<20;iX++){
+       
+        for(int iX=0;iX<10;iX++){
             level.add(new Platform(500+500*iX,515,400,20));
         }
         lava = new Lava(550,520,10000,20);
+        end.setX(5000);
+        end.setY(400);
         player.setX(0);
-        //falta endgoal
+        }
+   
+   public void level2(){
+       //nivel 2
+       
+       for(int iX=0;iX<10;iX++){
+           level.add(new Platform(500+500*iX,515-40*iX,450,20));
+       }
+       level.add(new Platform(5200, 500, 1000, 40));
+       //lava = new Lava(550,520,10000,20);
+       end.setX(5500);
+       end.setY(400);
+       player.setX(0);
    }
    
    public void clearLevel(){
@@ -272,7 +287,7 @@ public class Game implements Runnable {
         lava = new Lava(0,0,0,0);
         level.add(new Platform(500, 500, 3000, 40));
         end = new End(3400,400,100,100,0);
-        //bar = new Bar(getWidth()/2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
+        end.setLevel(2);
         
         bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
         
@@ -414,6 +429,11 @@ public class Game implements Runnable {
             if(levelNum==0){
                 clearLevel();
                 level1();
+                end.setLevel(1);
+            }else if(levelNum==1){
+                clearLevel();
+                level2();
+                end.setLevel(2);
             }
         }
   

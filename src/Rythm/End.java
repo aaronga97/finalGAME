@@ -22,6 +22,11 @@ public class End extends Item{
         return level;
     }
 
+    public void setLevel(int level) {
+        this.level = level;
+    }
+    
+
     @Override
     public void tick() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
