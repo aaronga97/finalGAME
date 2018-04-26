@@ -103,7 +103,6 @@ public class Player extends Item {
     }
 
     /**
-<<<<<<< 8a5d8c043f41001acd19bb0b8c210cb1df71410a
      * returns <int> floor </int> value
      * @return 
      */
@@ -114,10 +113,6 @@ public class Player extends Item {
     /**
      * returns <boolean> onPlataform </boolean> value 
      * 
-=======
-     * returns <boolean> onPlataform </boolean> value
-     *
->>>>>>> Fixed jump on and off platforms
      * @return onPlataform
      */
     public boolean isOnPlataform() {
