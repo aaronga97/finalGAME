@@ -258,10 +258,12 @@ public class Game implements Runnable {
    */ 
    public void level3(){
        //nivel 3
-        for(int iX = 0; iX < 2; iX++){
+        for(int iX = 0; iX < 3; iX+=2){
             for(int iY = 0; iY < 3; iY++){
-                level.add(new Platform(500 + 500 * iX, 515-40*iY, 450,20));
+                level.add(new Platform(500 + 500 * (iY + iX*3), 515-40*iY, 450,20));
             }
+            
+            player.setX(0);
         }
    }
   
@@ -323,7 +325,7 @@ public class Game implements Runnable {
         //tutorial 1
         level = new ArrayList<Platform>();
         lava = new Lava(0, 0, 0, 0);
-        level.add(new Platform(500, 500, 1000, 40));
+        level.add(new Platform(500, 500, 3000, 40));
 
         end = new End(3400,400,100,100,0);
         //adds the timing bar
@@ -430,9 +432,12 @@ public class Game implements Runnable {
             if (player.intersects(p)) {
                 if (!player.isOnPlataform()) {
                     if (player.getX() + player.getWidth() > p.getX() + player.getDistanceX()
-                            && player.getX() <= p.getX() + p.getWidth() - 12) {
-                        player.setY(p.getY()-player.getHeight() + 2);
+                            && player.getX() <= p.getX() + p.getWidth() - 8){
+                        if(player.getY() + player.getHeight() <= p.getY() + p.getHeight()){
+                            player.setY(p.getY()-player.getHeight() + 2);
+                        }
                         player.setOnPlataform(true);
+                        player.setExtraFall(false);
                         player.setTempFloor(player.getY() + player.getHeight());
                     } else {
                         player.setDirection(player.getDirection() * -1);
@@ -460,7 +465,7 @@ public class Game implements Runnable {
         if(player.intersects(end)){
             int levelNum = end.getLevel();
             switch (levelNum){
-                case 0: clearLevel();
+                case 3: clearLevel();
                 level1();
                 end.setLevel(1);
                 break;
@@ -470,7 +475,7 @@ public class Game implements Runnable {
                 end.setLevel(2);
                 break;
                 
-                case 2: clearLevel();
+                case 0: clearLevel();
                 level3();
                 end.setLevel(3);
                 break;

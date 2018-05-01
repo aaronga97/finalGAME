@@ -39,6 +39,15 @@ public class Player extends Item {
     }
 
     /**
+     * sets <boolean> extraFall </boolean> value
+     * 
+     * @param extraFall 
+     */
+    public void setExtraFall(boolean extraFall) {
+        this.extraFall = extraFall;
+    }
+
+    /**
      * sets <boolean> init </boolean> value
      *
      * @param init
