@@ -40,6 +40,7 @@ public class Game implements Runnable {
     private int running;            // to set the game
     private int score;           //Keeps track of player score
     private double scoreHelper;     //Helps add the score
+    private int lives;              //Player lives
     private int shootCounter;       //to count the shooting
     private int timeCounter;        // keeps track of the seconds
     private int unit;               // the game's metric units
@@ -86,6 +87,7 @@ public class Game implements Runnable {
         running = -1;
         canShoot = true;
         shootCounter = 0;
+        lives = 3;
         unit = 64; //nuestro estandard unit of measurements
         bpm = 120;//cuantos beats por minuto se tocan, termino musical
         beat = 1;
@@ -308,12 +310,12 @@ public class Game implements Runnable {
 
         //Create enemies array list
         enemies = new ArrayList<Enemy>();
-        for (int i = 0; i < enemyNumbers; ++i) {
-            //Generate enemies randomly inside a range of 1k pixels for each enemy
-            int ex = (int) (Math.random() * 1000 + i * 1000);
+        for (int i = 1; i < enemyNumbers; ++i) {
+            //Generate enemies randomly inside a minimum separated range of 1k pixels between each enemy
+            int ex = (int) (Math.random() * 750+ i * 750);
             enemies.add(new Enemy(ex, getHeight() - getHeight() / 4 - 90, 64, 64, this, 64));
             if (i % 3 == 0) {
-                ex = (int) (Math.random() * 1000 + i * 1000);
+                ex = (int) (Math.random() * 750 + i * 750);
                 enemies.add(new Enemy(ex, getHeight() - getHeight()/4 - 115, 64, 64, this, 64*2));
             }
         }
@@ -401,6 +403,19 @@ public class Game implements Runnable {
         scoreHelper += .1;
         score = (int)Math.floor(scoreHelper);
     }
+    
+    /**
+     * Resets player to the beginning of level
+     */
+    public void resetPlayer(){
+        player.setDirection(1);
+        player.setDistanceX(0);
+        player.setDistanceY(0);
+        player.setX(0);
+        player.setY(getHeight() - getHeight() / 4);
+        setBeat(1);
+        lives--;
+    }
 
     private void tick() {
         keyManager.tick();
@@ -408,10 +423,12 @@ public class Game implements Runnable {
         
         incrementScore();
         
-        //tick enemies to chase player
+        //tick enemies to chase player, and check if player enemy collide
         for(Enemy e : enemies){
             e.tick();
             makeEnemyChase(player, e);
+            
+            if(player.intersects(e)) resetPlayer();
         }
 
         cam.tick(player);
@@ -464,14 +481,9 @@ public class Game implements Runnable {
         if (isJump()) {
             setJump(false);
         }
-        //if the player touches the lava
+        //if the player touches the lava, decreas 1 live
         if (player.intersects(lava)) {
-            player.setDirection(1);
-            player.setDistanceX(0);
-            player.setDistanceY(0);
-            player.setX(0);
-            player.setY(getHeight() - getHeight() / 4);
-            setBeat(1);
+            resetPlayer();
         }
         
         //if the player ends the level, touches the end
@@ -583,11 +595,16 @@ public class Game implements Runnable {
                 e.render(g);
             }
             
-            int tmp = player.getX()+500;
+            //Score related
+            int tmp = player.getX();
             String s = Integer.toString(score);
             Font font = new Font("Serif", Font.BOLD, 32);
             g.setFont(font);
-            g.drawString(s, tmp, getHeight()-(getHeight()-50));
+            g.drawString(s, tmp+500, getHeight()-(getHeight()-50));
+            
+            //Lives realted
+            s = "Lives: " + Integer.toString(lives);
+            g.drawString(s, tmp-600, getHeight()-(getHeight()-50));
 
             Iterator itr = proyectiles.iterator();
             while (itr.hasNext()) {
