@@ -201,6 +201,10 @@ public class Game implements Runnable {
     public ArrayList<Enemy> getEnemies() {
         return enemies;
     }
+    
+    public KeyManager getKeyManager() {
+        return keyManager;
+    }
 
     /**
      * returns <player> player </player> object
@@ -221,7 +225,8 @@ public class Game implements Runnable {
    
     /**
      * Creates platforms for level 1
-     */   public void level1(){       
+     */ 
+    public void level1(){       
         for(int iX=0;iX<10;iX++){
             level.add(new Platform(500+500*iX,515,400,20));//add the platforms
         }
@@ -234,7 +239,9 @@ public class Game implements Runnable {
 
     
    
-   
+   /**
+     * Creates platforms for level 2
+     */ 
    public void level2(){
        //nivel 2
        for(int iX=0;iX<10;iX++){
@@ -244,6 +251,18 @@ public class Game implements Runnable {
        end.setX(5500);
        end.setY(400);
        player.setX(0);
+   }
+   
+   /**
+     * Creates platforms for level 1
+   */ 
+   public void level3(){
+       //nivel 3
+        for(int iX = 0; iX < 2; iX++){
+            for(int iY = 0; iY < 3; iY++){
+                level.add(new Platform(500 + 500 * iX, 515-40*iY, 450,20));
+            }
+        }
    }
   
    /**
@@ -304,7 +323,7 @@ public class Game implements Runnable {
         //tutorial 1
         level = new ArrayList<Platform>();
         lava = new Lava(0, 0, 0, 0);
-        level.add(new Platform(500, 500, 3000, 40));
+        level.add(new Platform(500, 500, 1000, 40));
 
         end = new End(3400,400,100,100,0);
         //adds the timing bar
@@ -352,10 +371,6 @@ public class Game implements Runnable {
         }
         render();
         stop();
-    }
-
-    public KeyManager getKeyManager() {
-        return keyManager;
     }
 
     /**
@@ -415,12 +430,13 @@ public class Game implements Runnable {
             if (player.intersects(p)) {
                 if (!player.isOnPlataform()) {
                     if (player.getX() + player.getWidth() > p.getX() + player.getDistanceX()
-                            && player.getY() + player.getHeight() <= p.getY() + 8) {
+                            && player.getX() <= p.getX() + p.getWidth() - 12) {
+                        player.setY(p.getY()-player.getHeight() + 2);
                         player.setOnPlataform(true);
                         player.setTempFloor(player.getY() + player.getHeight());
                     } else {
                         player.setDirection(player.getDirection() * -1);
-                        player.setDistanceX(player.getDistanceX() * player.getDirection());
+                        player.setDistanceX(player.getDistanceX() * -1);
                     }
                 }
             }
@@ -443,14 +459,21 @@ public class Game implements Runnable {
         //if the player ends the level, touches the end
         if(player.intersects(end)){
             int levelNum = end.getLevel();
-            if (levelNum == 0) {
-                clearLevel();
+            switch (levelNum){
+                case 0: clearLevel();
                 level1();
                 end.setLevel(1);
-            }else if(levelNum==1){
-                clearLevel();
+                break;
+                
+                case 1: clearLevel();
                 level2();
                 end.setLevel(2);
+                break;
+                
+                case 2: clearLevel();
+                level3();
+                end.setLevel(3);
+                break;
             }
         }
 
