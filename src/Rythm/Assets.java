@@ -14,6 +14,7 @@ public class Assets {
     public static BufferedImage background; // to store background image
     public static SoundClip backgroundMusic;
     public static BufferedImage enemy;      // to store the enemy image
+    public static BufferedImage gameOver;   // to store the game over screen
     public static BufferedImage player;     // to store the player image
 
 
@@ -27,6 +28,7 @@ public class Assets {
         
         // Images
         background = ImageLoader.loadImage("/images/background.jpg"); 
+        gameOver = ImageLoader.loadImage("/images/gameover.jpg");
         
         //Sounds
         trackOne = new SoundClip("/Audio/movNaranja.wav");

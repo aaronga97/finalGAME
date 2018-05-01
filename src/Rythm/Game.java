@@ -32,15 +32,15 @@ public class Game implements Runnable {
     private boolean jump;           // checks if there is a change in beat
 
     private double bpm;             // the beats per minute
+    private double scoreHelper;     //Helps add the score
     private double timeBetweenBeat; // keeps how many seconds are between beats
 
     private int beat;               // keeps track of the current beat (1-4)
     private int enemyNumbers = 30;  //to count the number of enemies
     private int height;             // height of the window
-    private int running;            // to set the game
-    private int score;           //Keeps track of player score
-    private double scoreHelper;     //Helps add the score
     private int lives;              //Player lives
+    private int running;            // to set the game
+    private int score;           //Keeps track of player score 
     private int shootCounter;       //to count the shooting
     private int timeCounter;        // keeps track of the seconds
     private int unit;               // the game's metric units
@@ -64,7 +64,6 @@ public class Game implements Runnable {
     private ArrayList<Enemy> poweredEnemies; // to store enemies
     private ArrayList<Proyectile> proyectiles; //to shoot multiple times 
     private Platform rightBorder;   // the right border of the game zone
-    private SoundClip testTrack;    //to add music
     private String title;           // title of the window
     private Thread thread;          // thread to create the game     
 
@@ -161,6 +160,24 @@ public class Game implements Runnable {
      */
     public int getHeight() {
         return height;
+    }
+
+    /**
+     * To get the number of lives left
+     * 
+     * @return an <code>int</code> value with the number of lives
+     */
+    public int getLives() {
+        return lives;
+    }
+
+    /**
+     * To set if the game is running or not
+     * 
+     * @param running
+     */
+    public void setRunning(int running) {
+        this.running = running;
     }
 
     /**
@@ -377,6 +394,15 @@ public class Game implements Runnable {
             }
         }
         render();
+        for(int i = 0; i < 3; i++){
+            if(getLives() == 0){
+                g = bs.getDrawGraphics();
+                g.drawImage(Assets.gameOver, 0, 0, getWidth(), getHeight(), null);
+                bs.show();
+                g.dispose();
+            }
+        }
+        Assets.trackOne.stop();
         stop();
     }
 
@@ -408,13 +434,18 @@ public class Game implements Runnable {
      * Resets player to the beginning of level
      */
     public void resetPlayer(){
-        player.setDirection(1);
-        player.setDistanceX(0);
-        player.setDistanceY(0);
-        player.setX(0);
-        player.setY(getHeight() - getHeight() / 4);
-        setBeat(1);
-        lives--;
+        if(getLives() != 0){
+            player.setDirection(1);
+            player.setDistanceX(0);
+            player.setDistanceY(0);
+            player.setX(0);
+            player.setY(getHeight() - getHeight() / 4);
+            setBeat(1);
+            lives--;
+        }
+        else{
+            setRunning(1);
+        }
     }
 
     private void tick() {
