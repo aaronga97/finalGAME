@@ -498,8 +498,14 @@ public class Game implements Runnable {
         //BULLETS
         //creates bullet if necessary, only one in screen
         if (keyManager.isSpace()) {
-            proyectiles.add(new Proyectile(player.getX(),
-                    player.getY() + player.getHeight() / 2, 20, 10, player.getDirection(), this));
+            int offset;
+            if(player.getDirection()==1){
+                offset = player.getWidth()/2;
+            }else{
+                offset = -player.getWidth()/2;
+            }
+            proyectiles.add(new Proyectile(player.getX()+offset+20,
+            player.getY()+player.getHeight()/2, 20, 10,player.getDirection(), this));
         }
         //tick every bullet
         Iterator itr = proyectiles.iterator();
