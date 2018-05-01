@@ -6,6 +6,7 @@
 package Rythm;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
@@ -37,7 +38,8 @@ public class Game implements Runnable {
     private int enemyNumbers = 30;  //to count the number of enemies
     private int height;             // height of the window
     private int running;            // to set the game
-    private int score;              //Keeps track of player score
+    private int score;           //Keeps track of player score
+    private double scoreHelper;     //Helps add the score
     private int shootCounter;       //to count the shooting
     private int timeCounter;        // keeps track of the seconds
     private int unit;               // the game's metric units
@@ -80,6 +82,7 @@ public class Game implements Runnable {
 
         keyManager = new KeyManager();
         score = 0;
+        scoreHelper = 0;
         running = -1;
         canShoot = true;
         shootCounter = 0;
@@ -390,11 +393,21 @@ public class Game implements Runnable {
             else if (player.getY() < ene.getY()) ene.setY(ene.getY() - speedFollow);
         }
     }
+    
+    /**
+     * Increment score while the player is alive
+     */
+    public void incrementScore(){
+        scoreHelper += .1;
+        score = (int)Math.floor(scoreHelper);
+    }
 
     private void tick() {
         keyManager.tick();
         player.tick();
-
+        
+        incrementScore();
+        
         //tick enemies to chase player
         for(Enemy e : enemies){
             e.tick();
@@ -529,7 +542,7 @@ public class Game implements Runnable {
                     enemies.remove(ene);
                     itr = proyectiles.iterator();
                     itr2 = enemies.iterator();
-                    score += 10;
+                    scoreHelper += 100;
                 }
             }
         }
@@ -569,6 +582,12 @@ public class Game implements Runnable {
             for (Enemy e : enemies) {
                 e.render(g);
             }
+            
+            int tmp = player.getX()+500;
+            String s = Integer.toString(score);
+            Font font = new Font("Serif", Font.BOLD, 32);
+            g.setFont(font);
+            g.drawString(s, tmp, getHeight()-(getHeight()-50));
 
             Iterator itr = proyectiles.iterator();
             while (itr.hasNext()) {
@@ -583,7 +602,7 @@ public class Game implements Runnable {
             }
             g.drawRect(getWidth() / 2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - getHeight() / 8 - 35, unit * 2 + 30, 70);
             g.drawRect(getWidth() / 2 - 20 - getUnit() - (int) getCam().getX() + getUnit() * 2 - 10, getHeight() - getHeight() / 8 - 35, 40, 70);
-
+            
             g2d.translate(cam.getX(), cam.getY()); //End of cam
             //////////////////////////////////////////////////////////////////
             bs.show();
