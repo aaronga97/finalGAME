@@ -13,6 +13,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
 <<<<<<< 1647fadbd9a75cf19a93c416916e8d6079148149
@@ -69,7 +70,9 @@ public class Game implements Runnable {
     private ArrayList<Proyectile> proyectiles; //to shoot multiple times 
     private Platform rightBorder;   // the right border of the game zone
     private String title;           // title of the window
-    private Thread thread;          // thread to create the game     
+    private Thread thread;          // thread to create the game 
+    private ArrayList<StaticStar> stars;
+    private StaticStar star;
 
 
     /**
@@ -328,6 +331,7 @@ public class Game implements Runnable {
         for(int iX=5;iX<8;iX++){
             level.add(new Platform(500+480*iX,515 - 80,400,20));
         }
+        
         level.add(new Platform(500+490*8,515 - 40,450,20));
         level.add(new Platform(500+500*9,500,620,20));
         end.setX(5500);
@@ -418,6 +422,13 @@ public class Game implements Runnable {
                 ex = (int) (Math.random() * 750 + i * 750);
                 enemies.add(new Enemy(ex, getHeight() - getHeight()/4 - 115, 64, 64, this, 64*2));
             }
+        }
+        stars = new ArrayList<StaticStar>();
+        Random rand= new Random();
+        for(int iX = 0;iX<25;iX++){
+            int starX = rand.nextInt((getWidth()*10-0)+1)+0;
+            int starY = rand.nextInt((getHeight()/2-0)+1)+0;
+            stars.add(new StaticStar(starX,starY,40,40));
         }
 
         
@@ -524,6 +535,37 @@ public class Game implements Runnable {
         }
         else{
             setRunning(1);
+        }
+    }
+
+    /**
+     * Display enemy score jump
+     */
+    public void enemyScoreJump(Enemy e){
+        bs = display.getCanvas().getBufferStrategy();
+        if (bs == null) {
+            display.getCanvas().createBufferStrategy(3);
+        } else {
+            g = bs.getDrawGraphics();
+            //Turn g to g2d inorder to use translate function for camera
+            Graphics2D g2d = (Graphics2D) g;
+            //////////////////////////////////////////////////////////////////
+            ////DRAW HERE
+            //Everything in between these 2 functions will be affected by camera
+            g2d.translate(cam.getX(), cam.getY()); //Begin of cam
+
+            //Score related
+            int ex = e.getX(), wai = e.getY();
+            String s = "+100";
+            Font font = new Font("Serif", Font.BOLD, 32);
+            g.setFont(font);
+            g.setColor(new Color(198,226,255));
+            g.drawString(s, ex, wai-20);
+
+            g2d.translate(cam.getX(), cam.getY()); //End of cam
+            //////////////////////////////////////////////////////////////////
+            bs.show();
+            g.dispose();
         }
     }
 
@@ -661,6 +703,7 @@ public class Game implements Runnable {
                 //Si interesecta borra los 2, y reseta ambos iteradores dsps de borrar y add 10 to score
                 if (p.intersects(ene)) {
                     proyectiles.remove(p);
+                    enemyScoreJump(ene);
                     enemies.remove(ene);
                     itr = proyectiles.iterator();
                     itr2 = enemies.iterator();
@@ -727,6 +770,14 @@ public class Game implements Runnable {
                 Platform level = (Platform) itr.next();
                 level.render(g);
             }
+            
+            itr = stars.iterator();
+            while(itr.hasNext()){
+                StaticStar star = (StaticStar) itr.next();
+                star.tick();
+                star.render(g);
+            }
+            
             g.drawRect(getWidth() / 2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - getHeight() / 8 - 35, unit * 2 + 30, 70);
             g.drawRect(getWidth() / 2 - 20 - getUnit() - (int) getCam().getX() + getUnit() * 2 - 10, getHeight() - getHeight() / 8 - 35, 40, 70);
             
