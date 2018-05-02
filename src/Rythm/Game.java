@@ -421,10 +421,7 @@ public class Game implements Runnable {
         player = new Player(0, getHeight() - getHeight() / 4 - 64, 64, 64, this);
 
         
-        //Load Tutorial Level
-        enemies = Level.tutorialEnemies;
-        platforms = Level.tutorialPlatforms;
-        lava = new Lava(0,0,0,0);
+        
 
         //start the moving star
         mstar = new MovingStar(0,150,60,30,1);
@@ -595,6 +592,22 @@ public class Game implements Runnable {
         }
     }
 
+    public void resetGame() {
+        player = new Player(0, getHeight() - getHeight() / 4 - 64, 64, 64, this);
+        clearLevel();
+        //Load Tutorial Level
+        //Load Tutorial Level
+        enemies = new ArrayList<>(Level.tutorialEnemies);
+        platforms = new ArrayList<>(Level.tutorialPlatforms);
+        lava = new Lava(0,0,0,0);
+
+        end = new End(Level.tutorialEnd);
+        
+        setScore(0);
+        setScoreHelper(0);
+        setLives(3);
+        
+    }
      /**
      * Function that creates enemy for desired level
      */
@@ -757,6 +770,12 @@ public class Game implements Runnable {
             }
         }
 
+        // RESET Feature
+        // Resets the entire game
+        if(keyManager.isReset()) {
+            resetGame();
+        }
+        
         //BULLETS
         //creates bullet if necessary, only one in screen
         if (keyManager.isSpace()) {

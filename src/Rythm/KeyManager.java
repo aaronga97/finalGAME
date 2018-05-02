@@ -15,16 +15,11 @@ import java.awt.event.KeyListener;
 public class KeyManager implements KeyListener {
 
     private boolean keys[];  // to store all the flags for every key
-    private boolean load;    // flag to load game
     private boolean left;    // flag to move left the player
-    private boolean pause;   // flag to pause
     private boolean right;   // flag to move right the player
-    private boolean save;    // flag to save
+    private boolean reset;    // flag to save
     private boolean space;   // flag to shoot 
 
-    public boolean isLoad() {
-        return load;
-    }
 
     /**
      * returns left
@@ -33,10 +28,6 @@ public class KeyManager implements KeyListener {
      */
     public boolean isLeft() {
         return left;
-    }
-
-    public boolean isPause() {
-        return pause;
     }
 
     /**
@@ -48,10 +39,15 @@ public class KeyManager implements KeyListener {
         return right;
     }
 
-    public boolean isSave() {
-        return save;
+    /**
+     * returns reset
+     * 
+     * @return 
+     */
+    public boolean isReset() {
+        return reset;
     }
-
+    
     /**
      * returns space
      *
@@ -72,10 +68,8 @@ public class KeyManager implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
 
-        if (e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_L) {
+        if (e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_R) {
             keys[e.getKeyCode()] = false;
-        } else if (e.getKeyCode() == KeyEvent.VK_P) {
-
         } else {
             keys[e.getKeyCode()] = true;
         }
@@ -84,10 +78,8 @@ public class KeyManager implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         // set false to every key released
-        if (e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_L) {
+        if (e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_R) {
             keys[e.getKeyCode()] = true;
-        } else if (e.getKeyCode() == KeyEvent.VK_P) {
-            keys[e.getKeyCode()] = !keys[e.getKeyCode()];
         } else {
             keys[e.getKeyCode()] = false;
         }
@@ -100,18 +92,12 @@ public class KeyManager implements KeyListener {
         left = keys[KeyEvent.VK_LEFT];
         right = keys[KeyEvent.VK_RIGHT];
         space = keys[KeyEvent.VK_SPACE];
-        pause = keys[KeyEvent.VK_P];
-        save = keys[KeyEvent.VK_S];
-        load = keys[KeyEvent.VK_L];
+        reset = keys[KeyEvent.VK_R];
         if (space) {
             keys[KeyEvent.VK_SPACE] = false;
         }
-        if (save) {
-            keys[KeyEvent.VK_S] = false;
+        if (reset) {
+            keys[KeyEvent.VK_R] = false;
         }
-        if (load) {
-            keys[KeyEvent.VK_L] = false;
-        }
-
     }
 }
