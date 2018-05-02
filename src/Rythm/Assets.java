@@ -18,6 +18,8 @@ public class Assets {
     public static BufferedImage player[];     // to store the player image
     public static BufferedImage sprites;    // to store the animation
     public static SoundClip trackOne;           // to store track for the tutorial
+    public static BufferedImage lazer[];
+    public static BufferedImage lazerX;
     
     /**
      * initializing the images and sounds of the game
@@ -25,12 +27,18 @@ public class Assets {
     public static void init() {
         //get the sprites from the picture
         sprites = ImageLoader.loadImage("/images/player.png");
+        lazerX = ImageLoader.loadImage("/images/lazer.png");
         //create array of images before animations
         SpriteSheet spritesheet = new SpriteSheet(sprites);
+        SpriteSheet spritesheet2 = new SpriteSheet(lazerX);
         player = new BufferedImage[17];
+        lazer = new BufferedImage[2];
         //get tehe player animation
         for(int iX=0;iX<17;iX++){
             player[iX] = spritesheet.crop(iX*19,0,19,19);
+        }
+        for(int i=0;i<2;i++){
+            lazer[i]= spritesheet2.crop(i*4,0,4,2);
         }
         // Images
         background = ImageLoader.loadImage("/images/background.jpg"); 

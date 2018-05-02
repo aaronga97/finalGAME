@@ -17,11 +17,13 @@ public class Proyectile extends Item {
     private int direction;
     private int type;
     private Game game;
+    private Animation animation;
 
     public Proyectile(int x, int y, int width, int height, int direction, Game game) {
         super(x, y, width, height);
         this.game = game;
         this.direction = direction;
+        this.animation = new Animation(Assets.lazer,100);
     }
 
     public int getDirection() {
@@ -36,13 +38,11 @@ public class Proyectile extends Item {
         if (direction == -1) {
             setX(getX() - 15);
         }
+        this.animation.tick();
     }
 
     @Override
     public void render(Graphics g) {
-        //        g.drawImage(Assets.enemy, getX(), getY(), getWidth(), getHeight(), null);
-        g.setColor(Color.red);
-        g.drawRect(getX(), getY(), getWidth(), getHeight());
-        // g.fillRect(getX(), getY(), getWidth(), getHeight());
+        g.drawImage(animation.getCurrentFrame(), getX(), getY(), getWidth(),getHeight(),null);
     }
 }
