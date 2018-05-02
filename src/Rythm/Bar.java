@@ -28,10 +28,10 @@ public class Bar extends Item{
         this.game = game;
     }
 
-    @Override
     /**
      * Normal functionality of the bar during the game
      */
+    @Override
     public void tick() {
 
         

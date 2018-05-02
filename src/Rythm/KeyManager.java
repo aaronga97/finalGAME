@@ -57,6 +57,9 @@ public class KeyManager implements KeyListener {
         return space;
     }
 
+    /**
+     * Constructor. Initializes new KeyManager
+     */
     public KeyManager() {
         keys = new boolean[256];
     }
@@ -68,6 +71,8 @@ public class KeyManager implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
 
+        // If space or R is pressed, ignore until release
+        // Else, turn the array position to true
         if (e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_R) {
             keys[e.getKeyCode()] = false;
         } else {
@@ -78,6 +83,7 @@ public class KeyManager implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         // set false to every key released
+        // If space or R, set to true
         if (e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_R) {
             keys[e.getKeyCode()] = true;
         } else {
@@ -93,6 +99,8 @@ public class KeyManager implements KeyListener {
         right = keys[KeyEvent.VK_RIGHT];
         space = keys[KeyEvent.VK_SPACE];
         reset = keys[KeyEvent.VK_R];
+        
+        //Space and R only work for one tick, then it's false
         if (space) {
             keys[KeyEvent.VK_SPACE] = false;
         }

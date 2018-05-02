@@ -11,10 +11,10 @@ import java.awt.Graphics2D;
  */
 public class Player extends Item {
 
-    private boolean extraFall;
+    private boolean extraFall;   // Boolean to trigger a fall higher than current 'floor'
     private boolean init;        //tells if the player is making the first jump
     private boolean onPlataform; //tells if the player is touching a plataform
-    private Animation animation;
+    private Animation animation;    // To handle animation of player
 
     private int direction;      //direction of the player
     private int distanceToFloor; //distance from the player to the floor
@@ -25,18 +25,25 @@ public class Player extends Item {
 
     private Game game;      // to access informaction from the game
 
+    /**
+     * Initializes new Player instance
+     * @param x X postion
+     * @param y Y position
+     * @param width Width value
+     * @param height height value
+     * @param game Game instance to access game information
+     */
     public Player(int x, int y, int width, int height, Game game) {
         super(x, y, width, height);
         this.game = game;
-        direction = 1;
-        distanceX = 0;
-        distanceY = game.getHeight() - getHeight();
-        floor = y + height;
-        tempFloor = floor;
+        direction = 1;  // Moves to the right
+        distanceX = 0;  //Starts without moving on X
+        distanceY = game.getHeight() - getHeight(); //Starts without moving on X 
+        floor = y + height; // floor equals starting Y position
+        tempFloor = floor;  //tempFloor starts the same as floor
         onPlataform = false;
         extraFall = false;
         this.animation = new Animation(Assets.player, 40);
-        ;
     }
 
     /**
@@ -179,11 +186,10 @@ public class Player extends Item {
             }
         }
 
-        //moves the player between beats
+        //moves the player on X between beats
         setX(getX() + getDistanceX());
 
         // if the player falls on a platform after a jump, it will not jump until next beat, so that rythm is not lost
-        // here, half of the jump, the player goes up and the other half goes down
         if (isOnPlataform() && !game.isJump()) {
             setOnPlataform(false);
 
@@ -211,9 +217,13 @@ public class Player extends Item {
                 setY(floor - height);
             }
         }
-        this.animation.tick();
+        this.animation.tick(); // Animation plays
     }
 
+    /**
+     * Renders player
+     * @param g Graphics instance to handle graphics
+     */
     @Override
     public void render(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;

@@ -184,17 +184,19 @@ public class Enemy extends Item {
         }
     }
 
+    /**
+     * Render enemy color depending on unity value
+     * @param g 
+     */
     @Override
     public void render(Graphics g) {
         if (unit == 64) {
             g.setColor(Color.yellow);
             g.drawRect(getX(), getY(), getWidth(), getHeight());
-            //g.fillRect(getX(), getY(), 40, 40);
         }else
          if(unit == 64*2){
             g.setColor(Color.gray);
             g.drawRect(getX(), getY(), getWidth(), getHeight());
-            //g.fillRect(getX(), getY(), 30, 30);
         }
     }
 }
