@@ -69,8 +69,15 @@ public class Game implements Runnable {
     private Thread thread;          // thread to create the game 
     private ArrayList<StaticStar> stars;
     private StaticStar star;
-    private MouseManager MouseManager;
+    private MouseManager MouseManager;  //to manage mouse
     private boolean startclick;
+    
+    //To know if we are in menu o rin game already
+    private enum STATE{
+      MENU,
+      GAME
+    };
+    
     /**
      * to create title, width and height and set the game is still not running
      *
@@ -426,6 +433,12 @@ public class Game implements Runnable {
         Assets.init();        
         Assets.trackOne.play();
         
+        //Mouse being mouse
+        display.getJframe().addMouseListener(MouseManager);
+        display.getJframe().addMouseMotionListener(MouseManager);
+        display.getCanvas().addMouseListener(MouseManager);
+        display.getCanvas().addMouseMotionListener(MouseManager);
+        
         //Initialize new camera in the corner.
         cam = new Camera(0, 0, this);
         //bar = new Bar(getWidth()/2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - getHeight()/8, 20, 60, this);
@@ -468,9 +481,30 @@ public class Game implements Runnable {
 
         display.getJframe().addKeyListener(keyManager);
     }
+    
+    /**
+     * Displays menu until someone clicks mouse
+     */
+    public void menu(){
+        
+        while(!(MouseManager.isIzquierdo())){
+            bs = display.getCanvas().getBufferStrategy();
+            if (bs == null) display.getCanvas().createBufferStrategy(3);
+            else {
+                g = bs.getDrawGraphics();
+
+                g.drawImage(Assets.startscreen, 0, 0, width, height, null);
+
+                bs.show();
+                g.dispose();
+            }
+        }
+    }
+    
     @Override
     public void run() {
         init();
+        menu();
         // frames per second
         double fps = 60;
         // time for each tick in nano segs
@@ -496,7 +530,6 @@ public class Game implements Runnable {
 
             // if delta is positive we tick the game 
             if (delta >= 1) {
-
                 tick();
                 render();
                 delta--;
