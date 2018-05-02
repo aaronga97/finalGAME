@@ -395,6 +395,8 @@ public class Game implements Runnable {
             int starY = rand.nextInt((getHeight()/2-0)+1)+0;
             stars.add(new StaticStar(starX,starY,40,40));
         }
+        
+        
 
         //create borders to stop the player for getting out of bounds
         leftBorder = new Platform(0 - 600, 0, 10, getHeight() - getHeight() / 4);
@@ -411,7 +413,6 @@ public class Game implements Runnable {
         //start the moving star
 
         mstar = new MovingStar(0,150,60,30,1);
-
         
         //Load Tutorial Level
         enemies = new ArrayList<>(Level.tutorialEnemies);
@@ -577,6 +578,14 @@ public class Game implements Runnable {
         }
     }
 
+     /**
+     * Function that creates enemy for desired level
+     */
+    public Enemy createEnemy(int ex, int wai, int iX){
+        if(iX%2==0)return (new Enemy(ex, wai, 64, 64, this, 64));
+        else return (new Enemy(ex, wai-15, 64, 64, this, 64*2));
+    }
+    
     private void tick() {
         keyManager.tick();
         player.tick();
@@ -591,8 +600,7 @@ public class Game implements Runnable {
 
             if (player.intersects(e)) {
                 resetPlayer();
-
-            Assets.playerhit.play();
+                Assets.playerhit.play();
             }
 
             if(whichLevel == 0) {
@@ -668,6 +676,7 @@ public class Game implements Runnable {
             switch (whichLevel) {
                 case 0:
                     clearLevel();
+                    enemies = new ArrayList<>(Level.levelOneEnemies);
                     platforms = new ArrayList<Platform>(Level.levelOnePlatforms);
                     end = new End(Level.levelOneEnd);
 
@@ -677,6 +686,7 @@ public class Game implements Runnable {
 
                 case 1:
                     clearLevel();
+                    enemies = new ArrayList<>(Level.levelTwoEnemies);
                     platforms = new ArrayList<Platform>(Level.levelTwoPlatforms);
                     end = new End(Level.levelTwoEnd);
 
@@ -685,7 +695,7 @@ public class Game implements Runnable {
 
                 case 2:
                     clearLevel();
-
+                    enemies = new ArrayList<>(Level.levelThreeEnemies);
                     platforms = new ArrayList<Platform>(Level.levelThreePlatforms);
                     end = new End(Level.levelThreeEnd);
                     //whichLevel++;
