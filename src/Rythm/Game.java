@@ -7,6 +7,7 @@ package Rythm;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
@@ -40,7 +41,7 @@ public class Game implements Runnable {
     private int height;             // height of the window
     private int lives;              //Player lives
     private int running;            // to set the game
-    private int score;           //Keeps track of player score 
+    private int score;              //Keeps track of player score 
     private int shootCounter;       //to count the shooting
     private int timeCounter;        // keeps track of the seconds
     private int unit;               // the game's metric units
@@ -178,6 +179,24 @@ public class Game implements Runnable {
      */
     public void setRunning(int running) {
         this.running = running;
+    }
+
+    /**
+     * To set the score of the player
+     * 
+     * @param score 
+     */
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    /**
+     * To get the current score of the player
+     * 
+     * @return an <code> int </code> value with the number of the score
+     */
+    public int getScore() {
+        return score;
     }
 
     /**
@@ -396,8 +415,22 @@ public class Game implements Runnable {
         render();
         for(int i = 0; i < 3; i++){
             if(getLives() == 0){
+                String s = Integer.toString(getScore());
+                s = "Final Score: " + s;
+                Font font = new Font("Serif", Font.BOLD, 32);
+                // Get the FontMetrics
+                FontMetrics metrics = g.getFontMetrics(font);
+                // Determine the X coordinate for the text
+                int x = (getWidth() - metrics.stringWidth(s)) / 2;
+                // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
+                int y = getHeight() - (getHeight() - metrics.getHeight()) / 4 + metrics.getAscent();
                 g = bs.getDrawGraphics();
-                g.drawImage(Assets.gameOver, 0, 0, getWidth(), getHeight(), null);
+                g.setColor(Color.black);
+                g.fillRect(0, 0, getWidth(), getHeight());
+                g.setColor(Color.yellow);
+                g.drawImage(Assets.gameOver, 0, -100, getWidth(), getHeight(), null);
+                g.setFont(font);
+                g.drawString(s, x, y);
                 bs.show();
                 g.dispose();
             }
@@ -427,7 +460,7 @@ public class Game implements Runnable {
      */
     public void incrementScore(){
         scoreHelper += .1;
-        score = (int)Math.floor(scoreHelper);
+        setScore((int)Math.floor(scoreHelper));
     }
     
     /**
