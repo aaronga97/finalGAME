@@ -65,11 +65,12 @@ public class Game implements Runnable {
     private Thread thread;          // thread to create the game 
     private ArrayList<StaticStar> stars;
     private StaticStar star;
+    private MovingStar mstar;
 
     private MouseManager MouseManager;  //to manage mouse
     private boolean startclick;
     
-    //To know if we are in menu o rin game already
+    //To know if we are in menu or in game already
     private enum STATE{
       MENU,
       GAME
@@ -406,7 +407,8 @@ public class Game implements Runnable {
         platforms = Level.tutorialPlatforms;
         lava = new Lava(0,0,0,0);
 
-
+        //start the moving star
+        mstar = new MovingStar(0,100,60,30,1);
         
         //Load Tutorial Level
         enemies = new ArrayList<>(Level.tutorialEnemies);
@@ -748,6 +750,8 @@ public class Game implements Runnable {
         if(MouseManager.isIzquierdo()){
             startclick = true;
         }
+        //add a movingstar if there is not one on screen
+        
     }
 
     private void render() {
@@ -781,6 +785,7 @@ public class Game implements Runnable {
             rightBorder.render(g);
             lava.render(g);
             end.render(g);
+            mstar.render(g);
             for (Enemy e : enemies) {
                 e.render(g);
             }
