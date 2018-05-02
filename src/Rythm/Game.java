@@ -803,7 +803,6 @@ public class Game implements Runnable {
             //h = bh.getDrawGraphics();
             //Turn g to g2d inorder to use translate function for camera
             Graphics2D g2d = (Graphics2D) g;
-            g2d.drawImage(Assets.startscreen, 0, 0, width, height, null);
             //////////////////////////////////////////////////////////////////
            
             ////DRAW HERE
