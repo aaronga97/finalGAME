@@ -642,7 +642,7 @@ public class Game implements Runnable {
         if(player.intersects(end)){
             int levelNum = end.getLevel();
             switch (levelNum){
-                case 3: clearLevel();
+                case 0: clearLevel();
                 level1();
                 end.setLevel(1);
                 break;
@@ -652,7 +652,7 @@ public class Game implements Runnable {
                 end.setLevel(2);
                 break;
                 
-                case 0: clearLevel();
+                case 2: clearLevel();
                 level3();
                 end.setLevel(3);
                 break;
