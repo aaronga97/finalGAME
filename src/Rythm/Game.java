@@ -631,7 +631,7 @@ public class Game implements Runnable {
 
                 case 2:
                     clearLevel();
-                    platforms = new ArrayList<Platform>(platforms = Level.levelThreePlatforms);
+                    platforms = new ArrayList<Platform>(Level.levelThreePlatforms);
                     end = new End(Level.levelThreeEnd);
                     break;
             }
