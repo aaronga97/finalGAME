@@ -325,12 +325,18 @@ public class Game implements Runnable {
    public void level3(){
        //nivel 3
         for(int iX = 0; iX < 3; iX++){
-            for(int iY = 0; iY < 3; iY++){
-                level.add(new Platform(500 + 500 * (iY + iX*3), 515-40*iY, 450,20));
-            }
-            
-            player.setX(0);
+            level.add(new Platform(500 + 500 * iX, 515-40*iX, 450,20));    
         }
+        level.add(new Platform(2100, 515 -80, 570, 20));
+        for(int iX=5;iX<8;iX++){
+            level.add(new Platform(500+480*iX,515 - 80,400,20));
+        }
+        level.add(new Platform(500+490*8,515 - 40,450,20));
+        level.add(new Platform(500+500*9,500,620,20));
+        end.setX(5500);
+        end.setY(400);
+        player.setX(0);
+        
    }
   
    /**
@@ -635,7 +641,7 @@ public class Game implements Runnable {
         if(player.intersects(end)){
             int levelNum = end.getLevel();
             switch (levelNum){
-                case 0: clearLevel();
+                case 3: clearLevel();
                 level1();
                 end.setLevel(1);
                 break;
@@ -645,7 +651,7 @@ public class Game implements Runnable {
                 end.setLevel(2);
                 break;
                 
-                case 2: clearLevel();
+                case 0: clearLevel();
                 level3();
                 end.setLevel(3);
                 break;
