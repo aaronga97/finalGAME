@@ -360,6 +360,7 @@ public class Game implements Runnable {
    public void displayGameOver(){
         for(int i = 0; i < 3; i++){
             if(getLives() == 0){
+                Assets.gameover.play();
                 String s = Integer.toString(getScore());
                 Font font = new Font("Serif", Font.BOLD, 32);
                 // Get the FontMetrics
@@ -402,7 +403,6 @@ public class Game implements Runnable {
         //Initialize new camera in the corner.
         cam = new Camera(0, 0, this);
         //bar = new Bar(getWidth()/2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - getHeight()/8, 20, 60, this);
-        //Assets.backgroundMusic.play();
 
         //Create enemies array list
         enemies = new ArrayList<Enemy>();
@@ -569,7 +569,10 @@ public class Game implements Runnable {
             e.tick();
             makeEnemyChase(player, e);
             
-            if(player.intersects(e)) resetPlayer();
+            if(player.intersects(e)){
+            resetPlayer();
+            Assets.playerhit.play();
+            }
         }
 
         cam.tick(player);
@@ -625,6 +628,7 @@ public class Game implements Runnable {
         //if the player touches the lava, decreas 1 live
         if (player.intersects(lava)) {
             resetPlayer();
+            Assets.playerhit.play();
         }
         
         //if the player ends the level, touches the end
@@ -697,7 +701,8 @@ public class Game implements Runnable {
                     itr = proyectiles.iterator();
                     itr2 = enemies.iterator();
                     scoreHelper += 100;
-                }
+                    Assets.hit.play(); 
+               }
             }
         }
         if(MouseManager.isIzquierdo()){
@@ -742,10 +747,10 @@ public class Game implements Runnable {
             
             //Score related
             int tmp = player.getX();
-            String s = Integer.toString(score);
+            String s = "Score: "+Integer.toString(score);
             Font font = new Font("Serif", Font.BOLD, 32);
             g.setFont(font);
-            g.drawString(s, tmp+500, getHeight()-(getHeight()-50));
+            g.drawString(s, tmp+450, getHeight()-(getHeight()-50));
             
             //Lives realted
             s = "Lives: " + Integer.toString(lives);

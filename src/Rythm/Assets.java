@@ -20,6 +20,9 @@ public class Assets {
     public static BufferedImage lazerX;
     public static BufferedImage starX;
     public static BufferedImage star[];
+    public static SoundClip hit;
+    public static SoundClip playerhit;
+    public static SoundClip gameover;
     /**
      * initializing the images and sounds of the game
      */
@@ -51,6 +54,9 @@ public class Assets {
         gameOver = ImageLoader.loadImage("/images/gameover.jpg");
         //Sounds
         trackOne = new SoundClip("/Audio/Transmission.wav");
+        hit = new SoundClip("/Audio/leg.wav");
+        playerhit = new SoundClip("/Audio/get.wav");
+        gameover = new SoundClip("/Audio/gameover.wav");
         trackOne.setLooping(true);
     }
 }
