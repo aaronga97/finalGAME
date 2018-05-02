@@ -15,9 +15,11 @@ import java.awt.Graphics;
 public class End extends Item {
 
     private int level;
-
+    private Animation animation;
+    
     End(int x, int y, int width, int height, int level) {
         super(x, y, width, height);
+        this.animation = new Animation(Assets.end,40);
     }
     
     End(End e) {
@@ -41,18 +43,17 @@ public class End extends Item {
      */
     @Override
     public void tick() {
-        
-    }
-
-    
+        this.animation.tick();
+    }  
     /**
      * To draw the end zone
      * @param g To handle graphics
      */
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.PINK);
-        g.fillRect(getX(), getY(), getWidth(), getHeight());
+        //g.setColor(Color.PINK);
+        //g.fillRect(getX(), getY(), getWidth(), getHeight());
+        g.drawImage(animation.getCurrentFrame(), getX(), getY(), getWidth(),getHeight(),null);
     }
 
 }

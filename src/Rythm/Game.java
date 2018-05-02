@@ -26,14 +26,11 @@ import java.util.Random;
  * @author Ricardo Lozano >>>>>>> Added comments and javadoc to most classes
  */
 public class Game implements Runnable {
-
     private boolean canShoot;       //to see if he can shoot
     private boolean jump;           // checks if there is a change in beat
-
     private double bpm;             // the beats per minute
     private double scoreHelper;     //Helps add the score
     private double timeBetweenBeat; // keeps how many seconds are between beats
-
     private int beat;               // keeps track of the current beat (1-4)
     private int height;             // height of the window
     private int lives;              //Player lives
@@ -43,12 +40,11 @@ public class Game implements Runnable {
     private int timeCounter;        // keeps track of the seconds
     private int unit;               // the game's metric units
     private int width;              // width of the window
-    
     private String highscore;       //stores the player's highscore
-
     private Bar bar;                // the beat bar that will help the user keep rythm visually
     private BufferStrategy bs;      // to have several buffers when displaying
     private BufferStrategy bh;
+    private int whichLevel;              //Tells you in which level we are
     private Camera cam;             //camera to follow player
     private Display display;        // to display in the game
     private ArrayList<Enemy> enemies; // to store enemies
@@ -69,6 +65,15 @@ public class Game implements Runnable {
     private ArrayList<StaticStar> stars;
     private StaticStar star;
 
+    private MouseManager MouseManager;  //to manage mouse
+    private boolean startclick;
+    
+    //To know if we are in menu o rin game already
+    private enum STATE{
+      MENU,
+      GAME
+    };
+    
     /**
      * to create title, width and height and set the game is still not running
      *
@@ -82,6 +87,7 @@ public class Game implements Runnable {
         this.height = height;
 
         keyManager = new KeyManager();
+        MouseManager = new MouseManager();
         score = 0;
         scoreHelper = 0;
         running = -1;
@@ -91,6 +97,7 @@ public class Game implements Runnable {
         unit = 64; //nuestro estandard unit of measurements
         bpm = 120;//cuantos beats por minuto se tocan, termino musical
         beat = 1;
+        whichLevel = 0;
     }
 
     /**
@@ -265,6 +272,11 @@ public class Game implements Runnable {
         return enemies;
     }
 
+    
+    public MouseManager getMouseManager(){
+        return MouseManager;
+     }
+    
     public KeyManager getKeyManager() {
         return keyManager;
     }
@@ -288,6 +300,7 @@ public class Game implements Runnable {
 
     
   
+
    /**
     * Clears the platforms and enemies from the screen to load the next level
     */
@@ -300,6 +313,7 @@ public class Game implements Runnable {
    public void displayGameOver(){
         for(int i = 0; i < 3; i++){
             if(getLives() == 0){
+                Assets.gameover.play();
                 String s = Integer.toString(getScore());
                 Font font = new Font("Serif", Font.BOLD, 32);
                 // Get the FontMetrics
@@ -331,20 +345,25 @@ public class Game implements Runnable {
             }
         }
     }
-
     /**
      * initializing the display window of the game
      */
     private void init() {
         display = new Display(title, getWidth(), getHeight());
-        Assets.init();
+        Assets.init();        
         Assets.trackOne.play();
         Level.init(this);
 
+        
+        //Mouse being mouse
+        display.getJframe().addMouseListener(MouseManager);
+        display.getJframe().addMouseMotionListener(MouseManager);
+        display.getCanvas().addMouseListener(MouseManager);
+        display.getCanvas().addMouseMotionListener(MouseManager);
+        
         //Initialize new camera in the corner.
         cam = new Camera(0, 0, this);
         //bar = new Bar(getWidth()/2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - getHeight()/8, 20, 60, this);
-        //Assets.backgroundMusic.play();
 
         
         
@@ -378,10 +397,30 @@ public class Game implements Runnable {
 
         display.getJframe().addKeyListener(keyManager);
     }
+    
+    /**
+     * Displays menu until someone clicks mouse
+     */
+    public void menu(){
+        
+        while(!(MouseManager.isIzquierdo())){
+            bs = display.getCanvas().getBufferStrategy();
+            if (bs == null) display.getCanvas().createBufferStrategy(3);
+            else {
+                g = bs.getDrawGraphics();
 
+                g.drawImage(Assets.startscreen, 0, 0, width, height, null);
+
+                bs.show();
+                g.dispose();
+            }
+        }
+    }
+    
     @Override
     public void run() {
         init();
+        menu();
         // frames per second
         double fps = 60;
         // time for each tick in nano segs
@@ -407,7 +446,6 @@ public class Game implements Runnable {
 
             // if delta is positive we tick the game 
             if (delta >= 1) {
-
                 tick();
                 render();
                 delta--;
@@ -504,15 +542,22 @@ public class Game implements Runnable {
         keyManager.tick();
         player.tick();
 
+        end.tick();
         incrementScore();
 
         //tick enemies to chase player, and check if player enemy collide
         for (Enemy e : enemies) {
             e.tick();
-            makeEnemyChase(player, e);
+
 
             if (player.intersects(e)) {
                 resetPlayer();
+
+            Assets.playerhit.play();
+            }
+
+            if(whichLevel == 0) {
+                makeEnemyChase(player, e);
             }
         }
 
@@ -571,6 +616,7 @@ public class Game implements Runnable {
         //if the player touches the lava, decreas 1 live
         if (player.intersects(lava)) {
             resetPlayer();
+            Assets.playerhit.play();
         }
 
         //if the player ends the level, touches the end
@@ -623,8 +669,10 @@ public class Game implements Runnable {
             } else {
                 offset = -player.getWidth() / 2;
             }
-            proyectiles.add(new Proyectile(player.getX() + offset + 20,
-                    player.getY() + player.getHeight() / 2, 20, 10, player.getDirection(), this));
+
+            proyectiles.add(new Proyectile(player.getX()+offset+20,
+            player.getY()+player.getHeight()/2, 20, 10,player.getDirection(), this));
+            Assets.lazerSound.play();
         }
         //tick every bullet
         Iterator itr = proyectiles.iterator();
@@ -650,10 +698,13 @@ public class Game implements Runnable {
                     itr = proyectiles.iterator();
                     itr2 = enemies.iterator();
                     scoreHelper += 100;
-                }
+                    Assets.hit.play(); 
+               }
             }
         }
-
+        if(MouseManager.isIzquierdo()){
+            startclick = true;
+        }
     }
 
     private void render() {
@@ -673,8 +724,9 @@ public class Game implements Runnable {
             //h = bh.getDrawGraphics();
             //Turn g to g2d inorder to use translate function for camera
             Graphics2D g2d = (Graphics2D) g;
+            g2d.drawImage(Assets.startscreen, 0, 0, width, height, null);
             //////////////////////////////////////////////////////////////////
-
+           
             ////DRAW HERE
             //Everything in between these 2 functions will be affected by camera
             //h.drawRect(20, 20, 20, 20);
@@ -692,11 +744,12 @@ public class Game implements Runnable {
 
             //Score related
             int tmp = player.getX();
-            String s = Integer.toString(score);
+            String s = "Score: "+Integer.toString(score);
             Font font = new Font("Serif", Font.BOLD, 32);
             g.setFont(font);
-            g.drawString(s, tmp + 500, getHeight() - (getHeight() - 50));
 
+            g.drawString(s, tmp+450, getHeight()-(getHeight()-50));
+            
             //Lives realted
             s = "Lives: " + Integer.toString(lives);
             g.drawString(s, tmp - 600, getHeight() - (getHeight() - 50));
@@ -728,6 +781,8 @@ public class Game implements Runnable {
             bs.show();
             g.dispose();
         }
+        
+            
     }
 
     /**
