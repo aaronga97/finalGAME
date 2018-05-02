@@ -294,20 +294,32 @@ public class Game implements Runnable {
         return highscore;
     }
     
-    //return camera
+    /**
+     * To get the camera
+     * @return 
+     */
     public Camera getCam() {
         return cam;
     }
-
+    /**
+     * To get all the enemies
+     * @return 
+     */
     public ArrayList<Enemy> getEnemies() {
         return enemies;
     }
 
-    
+    /**
+     * To get the MouseManager
+     * @return 
+     */
     public MouseManager getMouseManager(){
         return MouseManager;
      }
-    
+    /**
+     * To get the keyManager
+     * @return 
+     */
     public KeyManager getKeyManager() {
         return keyManager;
     }
@@ -338,7 +350,9 @@ public class Game implements Runnable {
         enemies.clear();
     }
    
-   //displays the game over screen
+   /**
+    * Displays the game over screen and shows the highscore
+    */
    public void displayGameOver(){
         for(int i = 0; i < 3; i++){
             String s = Integer.toString(getScore());
@@ -357,13 +371,10 @@ public class Game implements Runnable {
                 g.setColor(Color.black);
                 g.fillRect(0, 0, getWidth(), getHeight());
                 g.drawImage(Assets.gameOver, 0, -100, getWidth(), getHeight(), null);
-                
-
             }
             else {
                 g.drawImage(Assets.youWin, 0, 0, getWidth(), getHeight(), null);
-            }
-            
+            }   
             g.setColor(Color.yellow);
             g.setFont(font);            
             g.drawString("Highscore: " + getHighscore(), x, y);
@@ -390,7 +401,6 @@ public class Game implements Runnable {
         Assets.trackOne.play();
         Level.init(this);
 
-        
         //Mouse being mouse
         display.getJframe().addMouseListener(MouseManager);
         display.getJframe().addMouseMotionListener(MouseManager);
@@ -403,7 +413,7 @@ public class Game implements Runnable {
         cam = new Camera(0, 0, this);
         //bar = new Bar(getWidth()/2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - getHeight()/8, 20, 60, this);
 
-
+        //make random placement on stars
         stars = new ArrayList<StaticStar>();
         Random rand= new Random();
         for(int iX = 0;iX<25;iX++){
@@ -591,7 +601,9 @@ public class Game implements Runnable {
             g.dispose();
         }
     }
-
+    /**
+     * Resets the game for the player to play
+     */
     public void resetGame() {
         player = new Player(0, getHeight() - getHeight() / 4 - 64, 64, 64, this);
         clearLevel();
@@ -615,7 +627,9 @@ public class Game implements Runnable {
         if(iX%2==0)return (new Enemy(ex, wai, 64, 64, this, 64));
         else return (new Enemy(ex, wai-15, 64, 64, this, 64*2));
     }
-    
+    /**
+     * Run this code each tick of the game
+     */
     private void tick() {
         keyManager.tick();
         player.tick();
@@ -818,13 +832,14 @@ public class Game implements Runnable {
                }
             }
         }
+        //check if the mouse is clicked
         if(MouseManager.isIzquierdo()){
             startclick = true;
         }
-        //add a movingstar if there is not one on screen
-        
     }
-
+    /**
+     * Render the game
+     */
     private void render() {
         // get the buffer strategy from the display
         bs = display.getCanvas().getBufferStrategy();
