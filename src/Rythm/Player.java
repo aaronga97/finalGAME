@@ -186,7 +186,11 @@ public class Player extends Item {
         // here, half of the jump, the player goes up and the other half goes down
         if (isOnPlataform() && !game.isJump()) {
             setOnPlataform(false);
-        } // Normally, on a beat the player goes up and down
+
+            setTempFloor(getY() + getHeight() - 1);
+        } 
+
+        // Normally, on a beat the player goes up and down
         // if the player falls from a platform, the player enters an "extra fall"
         // this means the player wont go up until it lands
         else if (game.getTimeCounter() < game.getTimeBetweenBeat() / 2 && !extraFall) {

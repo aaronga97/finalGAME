@@ -411,7 +411,6 @@ public class Game implements Runnable {
         lava = new Lava(0,0,0,0);
 
         //start the moving star
-
         mstar = new MovingStar(0,150,60,30,1);
         
         //Load Tutorial Level
@@ -643,11 +642,12 @@ public class Game implements Runnable {
                     if (player.getX() + player.getWidth() > p.getX() + player.getDistanceX()
                             && player.getX() <= p.getX() + p.getWidth() - 8) {
                         if (player.getY() + player.getHeight() > p.getY()) {
+                            player.setDistanceX(player.getDistanceX() / 2);
                             player.setY(p.getY() - player.getHeight() + 2);
+                            
                         }
                         player.setOnPlataform(true);
                         player.setExtraFall(false);
-                        player.setTempFloor(player.getY() + player.getHeight());
                     } else {
                         player.setDirection(player.getDirection() * -1);
                         player.setDistanceX(player.getDistanceX() * -1);
