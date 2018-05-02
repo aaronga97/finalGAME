@@ -46,6 +46,8 @@ public class Game implements Runnable {
     private int timeCounter;        // keeps track of the seconds
     private int unit;               // the game's metric units
     private int width;              // width of the window
+    
+    private String highscore;       //stores the player's highscore
 
     private Bar bar;                // the beat bar that will help the user keep rythm visually
     private BufferStrategy bs;      // to have several buffers when displaying
@@ -55,6 +57,7 @@ public class Game implements Runnable {
     private ArrayList<Enemy> enemies; // to store enemies
     private End end;                 //to change the level
     private Enemy enemy;            //to test enemy addition
+    private Files files;
     private Graphics g;             // to paint objects
     private Graphics h;             //to paint objects
     private KeyManager keyManager;  // to manage the keyboard
@@ -234,6 +237,25 @@ public class Game implements Runnable {
     public int getWidth() {
         return width;
     }
+
+    /**
+     * To set the highscore of the player
+     * 
+     * @param highscore 
+     */
+    public void setHighscore(String highscore) {
+        this.highscore = highscore;
+    }
+
+    /**
+     * To get the highscore of the player
+     * 
+     * @return an <code> String </code> with the highscore of the player
+     */
+    public String getHighscore() {
+        return highscore;
+    }
+    
     //return camera
     public Camera getCam() {
         return cam;
@@ -330,6 +352,42 @@ public class Game implements Runnable {
         end.setX(-5000);
         end.setY(5000);
     }
+   
+   //displays the game over screen
+   public void displayGameOver(){
+        for(int i = 0; i < 3; i++){
+            if(getLives() == 0){
+                String s = Integer.toString(getScore());
+                Font font = new Font("Serif", Font.BOLD, 32);
+                // Get the FontMetrics
+                FontMetrics metrics = g.getFontMetrics(font);
+                files.loadFile(this);
+                // Determine the X coordinate for the text
+                int x = (getWidth() - metrics.stringWidth("Highscore: " + getHighscore())) / 2;
+                // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
+                int y = getHeight() - (getHeight() - metrics.getHeight()) / 4 + metrics.getAscent();
+                g = bs.getDrawGraphics();
+                g.setColor(Color.black);
+                g.fillRect(0, 0, getWidth(), getHeight());
+                g.setColor(Color.yellow);
+                g.drawImage(Assets.gameOver, 0, -100, getWidth(), getHeight(), null);
+                g.setFont(font);            
+                g.drawString("Highscore: " + getHighscore(), x, y);
+                if(Integer.parseInt(getHighscore()) > getScore()){
+                    s = "Your Score: " + s;
+                    x = (getWidth() - metrics.stringWidth(s)) / 2;
+                    g.drawString(s, x, y + 40);
+                }
+                else{
+                    s = "New Highscore: " + s;
+                    x = (getWidth() - metrics.stringWidth(s)) / 2;
+                    g.drawString(s, x, y + 40);
+                }
+                bs.show();
+                g.dispose();
+            }
+        }
+    }
 
     /**
      * initializing the display window of the game
@@ -413,29 +471,11 @@ public class Game implements Runnable {
             }
         }
         render();
-        for(int i = 0; i < 3; i++){
-            if(getLives() == 0){
-                String s = Integer.toString(getScore());
-                s = "Final Score: " + s;
-                Font font = new Font("Serif", Font.BOLD, 32);
-                // Get the FontMetrics
-                FontMetrics metrics = g.getFontMetrics(font);
-                // Determine the X coordinate for the text
-                int x = (getWidth() - metrics.stringWidth(s)) / 2;
-                // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
-                int y = getHeight() - (getHeight() - metrics.getHeight()) / 4 + metrics.getAscent();
-                g = bs.getDrawGraphics();
-                g.setColor(Color.black);
-                g.fillRect(0, 0, getWidth(), getHeight());
-                g.setColor(Color.yellow);
-                g.drawImage(Assets.gameOver, 0, -100, getWidth(), getHeight(), null);
-                g.setFont(font);
-                g.drawString(s, x, y);
-                bs.show();
-                g.dispose();
-            }
-        }
+        displayGameOver();
         Assets.trackOne.stop();
+        if(Integer.parseInt(getHighscore()) < getScore()){
+            files.saveFile(this);
+        }
         stop();
     }
 

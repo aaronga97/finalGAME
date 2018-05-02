@@ -26,9 +26,10 @@ public class Files {
         String line;
 
         try {
-            fr = new FileReader("save.txt");
+            fr = new FileReader("Highscores.txt");
             br = new BufferedReader(fr);
-
+            line = br.readLine();
+            game.setHighscore(line);
             fr.close();
 
         } catch (IOException ioe) {
@@ -43,8 +44,8 @@ public class Files {
      */
     public static void saveFile(Game game) {
         try {
-            PrintWriter printWriter = new PrintWriter(new FileWriter("save.txt"));
-
+            PrintWriter printWriter = new PrintWriter(new FileWriter("Highscores.txt"));
+            printWriter.print(game.getScore());
             printWriter.close();
 
         } catch (IOException ex) {
