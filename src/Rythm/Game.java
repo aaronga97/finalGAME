@@ -531,6 +531,37 @@ public class Game implements Runnable {
         }
     }
 
+    /**
+     * Display enemy score jump
+     */
+    public void enemyScoreJump(Enemy e){
+        bs = display.getCanvas().getBufferStrategy();
+        if (bs == null) {
+            display.getCanvas().createBufferStrategy(3);
+        } else {
+            g = bs.getDrawGraphics();
+            //Turn g to g2d inorder to use translate function for camera
+            Graphics2D g2d = (Graphics2D) g;
+            //////////////////////////////////////////////////////////////////
+            ////DRAW HERE
+            //Everything in between these 2 functions will be affected by camera
+            g2d.translate(cam.getX(), cam.getY()); //Begin of cam
+
+            //Score related
+            int ex = e.getX(), wai = e.getY();
+            String s = "+100";
+            Font font = new Font("Serif", Font.BOLD, 32);
+            g.setFont(font);
+            g.setColor(new Color(198,226,255));
+            g.drawString(s, ex, wai-20);
+
+            g2d.translate(cam.getX(), cam.getY()); //End of cam
+            //////////////////////////////////////////////////////////////////
+            bs.show();
+            g.dispose();
+        }
+    }
+
     private void tick() {
         keyManager.tick();
         player.tick();
@@ -665,6 +696,7 @@ public class Game implements Runnable {
                 //Si interesecta borra los 2, y reseta ambos iteradores dsps de borrar y add 10 to score
                 if (p.intersects(ene)) {
                     proyectiles.remove(p);
+                    enemyScoreJump(ene);
                     enemies.remove(ene);
                     itr = proyectiles.iterator();
                     itr2 = enemies.iterator();
