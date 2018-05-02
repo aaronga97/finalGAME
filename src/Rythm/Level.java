@@ -36,7 +36,7 @@ public class Level {
         tutorialPlatforms = new ArrayList<Platform>();
         tutorialPlatforms.add(new Platform(500, 500, 3000, 40));
 
-        tutorialEnd = new End(3400, 400, 100, 100, 0);
+        tutorialEnd = new End(3400, 400, 100, 100);
         
         tutorialEnemies = new ArrayList<Enemy>();
         for (int i = 1; i < 30; ++i) {
@@ -55,7 +55,7 @@ public class Level {
             levelOnePlatforms.add(new Platform(500 + 500 * iX, 515, 400, 20));//add the platforms
         }
         levelOneLava = new Lava(550, 520, 10000, 20);//add lava in the floor
-        levelOneEnd = new End(5000, 400, 100, 100, 1);//set the end goal
+        levelOneEnd = new End(5000, 400, 100, 100);//set the end goal
         
         //Level 2
         levelTwoPlatforms = new ArrayList<Platform>();
@@ -63,7 +63,7 @@ public class Level {
             levelTwoPlatforms.add(new Platform(500 + 500 * iX, 515 - 40 * iX, 450, 20));
         }
         levelTwoPlatforms.add(new Platform(5200, 500, 1000, 40));
-        levelTwoEnd = new End(5500, 400, 100, 100, 2);
+        levelTwoEnd = new End(5500, 400, 100, 100);
         
         //Level 3
         levelThreePlatforms = new ArrayList<Platform>();
@@ -77,6 +77,6 @@ public class Level {
         
         levelThreePlatforms.add(new Platform(500+490*8,515 - 40,450,20));
         levelThreePlatforms.add(new Platform(500+500*9,500,620,20));
-        levelThreeEnd = new End(5500, 400, 100, 100, 2);
+        levelThreeEnd = new End(5500, 400, 100, 100);
     }
 }

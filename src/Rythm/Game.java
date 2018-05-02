@@ -43,6 +43,7 @@ public class Game implements Runnable {
     private int timeCounter;        // keeps track of the seconds
     private int unit;               // the game's metric units
     private int width;              // width of the window
+    
     private String highscore;       //stores the player's highscore
     private Bar bar;                // the beat bar that will help the user keep rythm visually
     private BufferStrategy bs;      // to have several buffers when displaying
@@ -100,6 +101,7 @@ public class Game implements Runnable {
         bpm = 120;//cuantos beats por minuto se tocan, termino musical
         beat = 1;
         whichLevel = 0;
+        
     }
 
     /**
@@ -388,7 +390,7 @@ public class Game implements Runnable {
         platforms = new ArrayList<>(Level.tutorialPlatforms);
         lava = new Lava(0,0,0,0);
 
-        end = new End(3400, 400, 100, 100, 0);
+        end = new End(Level.tutorialEnd);
 
         //adds the timing bar
         bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
@@ -612,14 +614,15 @@ public class Game implements Runnable {
         
         //if the player ends the level, touches the end
         if(player.intersects(end)){
-            int levelNum = end.getLevel();
+            
 
-            System.out.println(levelNum);
-            switch (levelNum) {
+            System.out.println(whichLevel);
+            switch (whichLevel) {
                 case 0:
                     clearLevel();
                     platforms = new ArrayList<Platform>(Level.levelOnePlatforms);
                     end = new End(Level.levelOneEnd);
+                    whichLevel++;
                     lava = Level.levelOneLava;
                     break;
 
@@ -627,16 +630,18 @@ public class Game implements Runnable {
                     clearLevel();
                     platforms = new ArrayList<Platform>(Level.levelTwoPlatforms);
                     end = new End(Level.levelTwoEnd);
+                    whichLevel++;
                     break;
 
                 case 2:
                     clearLevel();
                     platforms = new ArrayList<Platform>(Level.levelThreePlatforms);
                     end = new End(Level.levelThreeEnd);
+                    //whichLevel++;
                     break;
             }
             
-            player.setX(4800);
+            player.setX(0);
         }
 
         // a counter for ticks
