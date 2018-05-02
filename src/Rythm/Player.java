@@ -1,4 +1,3 @@
-
 package Rythm;
 
 import java.awt.BasicStroke;
@@ -36,13 +35,14 @@ public class Player extends Item {
         tempFloor = floor;
         onPlataform = false;
         extraFall = false;
-        this.animation = new Animation(Assets.player,40);
-;    }
+        this.animation = new Animation(Assets.player, 40);
+        ;
+    }
 
     /**
      * sets <boolean> extraFall </boolean> value
-     * 
-     * @param extraFall 
+     *
+     * @param extraFall
      */
     public void setExtraFall(boolean extraFall) {
         this.extraFall = extraFall;
@@ -155,7 +155,6 @@ public class Player extends Item {
         return floor;
     }
 
-
     @Override
     public void tick() {
         //changes the players direction depending on the key pressed
@@ -166,12 +165,12 @@ public class Player extends Item {
         }
 
         //If there is a beat the player jumps
-        if (game.isJump()) {
-            
-        //if jump is active this makes the character jump
-        //if the beat is between 1-3 it performs a normal jump
-        // the beat that matches with 4 is a "special jump", which is larger
-            if(game.getBeat() % 4 != 0) {
+        if (game.isJump() && !extraFall) {
+
+            //if jump is active this makes the character jump
+            //if the beat is between 1-3 it performs a normal jump
+            // the beat that matches with 4 is a "special jump", which is larger
+            if (game.getBeat() % 4 != 0) {
                 setDistanceX((game.getUnit() * 2 * getDirection()) / (int) game.getTimeBetweenBeat());
                 setDistanceY((2 * game.getUnit()) / (int) game.getTimeBetweenBeat());
             } else {
@@ -180,23 +179,22 @@ public class Player extends Item {
             }
         }
 
-
         //moves the player between beats
         setX(getX() + getDistanceX());
-        
+
         // if the player falls on a platform after a jump, it will not jump until next beat, so that rythm is not lost
         // here, half of the jump, the player goes up and the other half goes down
         if (isOnPlataform() && !game.isJump()) {
             setOnPlataform(false);
-        } 
-        // Normally, on a beat the player goes up and down
+        } // Normally, on a beat the player goes up and down
         // if the player falls from a platform, the player enters an "extra fall"
         // this means the player wont go up until it lands
         else if (game.getTimeCounter() < game.getTimeBetweenBeat() / 2 && !extraFall) {
             setY(getY() - getDistanceY());
         } else {
-            setY(getY() + getDistanceY());
             
+            setY(getY() + (getDistanceY()));
+
             // when the player falls beyond the platform it was standing (tempFloor), extraFall is activated
             if (getY() + getHeight() > getTempFloor()) {
                 extraFall = true;
@@ -204,7 +202,7 @@ public class Player extends Item {
             }
 
             //when it lands, extraFall ends and a new floor is set
-            if(getY() + getHeight() >= floor) {
+            if (getY() + getHeight() >= floor) {
                 extraFall = false;
                 setY(floor - height);
             }
@@ -218,7 +216,7 @@ public class Player extends Item {
         g2D.setColor(Color.red);
         g2D.setStroke(new BasicStroke(3F));
         g2D.drawRect(getX(), getY(), getWidth(), getHeight());
-        g.drawImage(animation.getCurrentFrame(), getX(), getY(), getWidth(),getHeight(),null);
+        g.drawImage(animation.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
 
     }
 }

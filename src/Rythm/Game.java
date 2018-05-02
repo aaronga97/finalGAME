@@ -15,17 +15,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
-<<<<<<< 1647fadbd9a75cf19a93c416916e8d6079148149
+ * <<<<<<< 1647fadbd9a75cf19a93c416916e8d6079148149
  *
- * @author Ricardo Lozano,Napoleon Lazo, Jose Adame, Aaron Garcia
-=======
- * Game manager
- * Here, everything that happens on the game is managed
+ * @author Ricardo Lozano,Napoleon Lazo, Jose Adame, Aaron Garcia ======= Game
+ * manager Here, everything that happens on the game is managed
  * @author Aarón García
  * @author José Napoleón Lazo
  * @author José Roberto Adame
- * @author Ricardo Lozano
->>>>>>> Added comments and javadoc to most classes
+ * @author Ricardo Lozano >>>>>>> Added comments and javadoc to most classes
  */
 public class Game implements Runnable {
 
@@ -67,7 +64,6 @@ public class Game implements Runnable {
     private Platform rightBorder;   // the right border of the game zone
     private String title;           // title of the window
     private Thread thread;          // thread to create the game     
-
 
     /**
      * to create title, width and height and set the game is still not running
@@ -119,10 +115,11 @@ public class Game implements Runnable {
     public double getBpm() {
         return bpm;
     }
-    
+
     /**
      * sets <int> beat </int> value
-     * @param beat 
+     *
+     * @param beat
      */
     public void setBeat(int beat) {
         this.beat = beat;
@@ -130,6 +127,7 @@ public class Game implements Runnable {
 
     /**
      * returns <int> beta </int> value
+     *
      * @return beat
      */
     public int getBeat() {
@@ -165,7 +163,7 @@ public class Game implements Runnable {
 
     /**
      * To get the number of lives left
-     * 
+     *
      * @return an <code>int</code> value with the number of lives
      */
     public int getLives() {
@@ -174,7 +172,7 @@ public class Game implements Runnable {
 
     /**
      * To set if the game is running or not
-     * 
+     *
      * @param running
      */
     public void setRunning(int running) {
@@ -183,8 +181,8 @@ public class Game implements Runnable {
 
     /**
      * To set the score of the player
-     * 
-     * @param score 
+     *
+     * @param score
      */
     public void setScore(int score) {
         this.score = score;
@@ -192,7 +190,7 @@ public class Game implements Runnable {
 
     /**
      * To get the current score of the player
-     * 
+     *
      * @return an <code> int </code> value with the number of the score
      */
     public int getScore() {
@@ -234,6 +232,7 @@ public class Game implements Runnable {
     public int getWidth() {
         return width;
     }
+
     //return camera
     public Camera getCam() {
         return cam;
@@ -242,7 +241,7 @@ public class Game implements Runnable {
     public ArrayList<Enemy> getEnemies() {
         return enemies;
     }
-    
+
     public KeyManager getKeyManager() {
         return keyManager;
     }
@@ -256,62 +255,59 @@ public class Game implements Runnable {
         return player;
     }
 
-     /*
+    /*
      * 
      * @return The ArrayList that contains all Proyectile instances
      */
     public ArrayList<Proyectile> getProyectiles() {
         return proyectiles;
     }
-   
+
     /**
      * Creates platforms for level 1
-     */ 
-    public void level1(){       
-        for(int iX=0;iX<10;iX++){
-            level.add(new Platform(500+500*iX,515,400,20));//add the platforms
+     */
+    public void level1() {
+        for (int iX = 0; iX < 10; iX++) {
+            level.add(new Platform(500 + 500 * iX, 515, 400, 20));//add the platforms
         }
-        lava = new Lava(550,520,10000,20);//add lava in the floor
+        lava = new Lava(550, 520, 10000, 20);//add lava in the floor
         end.setX(5000);//set the end goal
         end.setY(400);
         player.setX(0);//reset the player position
-   }
-   
+    }
 
-    
-   
-   /**
+    /**
      * Creates platforms for level 2
-     */ 
-   public void level2(){
-       //nivel 2
-       for(int iX=0;iX<10;iX++){
-           level.add(new Platform(500+500*iX,515-40*iX,450,20));
-       }
-       level.add(new Platform(5200, 500, 1000, 40));
-       end.setX(5500);
-       end.setY(400);
-       player.setX(0);
-   }
-   
-   /**
+     */
+    public void level2() {
+        //nivel 2
+        for (int iX = 0; iX < 10; iX++) {
+            level.add(new Platform(500 + 500 * iX, 515 - 40 * iX, 450, 20));
+        }
+        level.add(new Platform(5200, 500, 1000, 40));
+        end.setX(5500);
+        end.setY(400);
+        player.setX(0);
+    }
+
+    /**
      * Creates platforms for level 1
-   */ 
-   public void level3(){
-       //nivel 3
-        for(int iX = 0; iX < 3; iX++){
-            for(int iY = 0; iY < 3; iY++){
-                level.add(new Platform(500 + 500 * (iY + iX*3), 515-40*iY, 450,20));
+     */
+    public void level3() {
+        //nivel 3
+        for (int iX = 0; iX < 3; iX++) {
+            for (int iY = 0; iY < 3; iY++) {
+                level.add(new Platform(500 + 500 * (iY + iX * 3), 515 - 40 * iY, 450, 20));
             }
-            
+
             player.setX(0);
         }
-   }
-  
-   /**
-    * Clears the platforms and enemies from the screen to load the next level
-    */
-   public void clearLevel(){
+    }
+
+    /**
+     * Clears the platforms and enemies from the screen to load the next level
+     */
+    public void clearLevel() {
         Iterator itr = level.iterator();
         while (itr.hasNext()) {
             Platform p = (Platform) itr.next();
@@ -321,12 +317,12 @@ public class Game implements Runnable {
 
         //Delete enemy 
         Iterator itr2 = enemies.iterator();
-            //Itera todos los enemigos
-            while(itr2.hasNext()){
-                Enemy ene = (Enemy) itr2.next();
-                enemies.remove(ene);
-                itr2 = enemies.iterator();
-            }
+        //Itera todos los enemigos
+        while (itr2.hasNext()) {
+            Enemy ene = (Enemy) itr2.next();
+            enemies.remove(ene);
+            itr2 = enemies.iterator();
+        }
         end.setX(-5000);
         end.setY(5000);
     }
@@ -338,7 +334,7 @@ public class Game implements Runnable {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
         Assets.trackOne.play();
-        
+
         //Initialize new camera in the corner.
         cam = new Camera(0, 0, this);
         //bar = new Bar(getWidth()/2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - getHeight()/8, 20, 60, this);
@@ -348,29 +344,28 @@ public class Game implements Runnable {
         enemies = new ArrayList<Enemy>();
         for (int i = 1; i < enemyNumbers; ++i) {
             //Generate enemies randomly inside a minimum separated range of 1k pixels between each enemy
-            int ex = (int) (Math.random() * 750+ i * 750);
+            int ex = (int) (Math.random() * 750 + i * 750);
             enemies.add(new Enemy(ex, getHeight() - getHeight() / 4 - 90, 64, 64, this, 64));
             if (i % 3 == 0) {
                 ex = (int) (Math.random() * 750 + i * 750);
-                enemies.add(new Enemy(ex, getHeight() - getHeight()/4 - 115, 64, 64, this, 64*2));
+                enemies.add(new Enemy(ex, getHeight() - getHeight() / 4 - 115, 64, 64, this, 64 * 2));
             }
         }
 
-        
         //create borders to stop the player for getting out of bounds
-        leftBorder = new Platform(0 - 600, 0 , 10, getHeight() - getHeight()/4);
-        rightBorder = new Platform(12000, 0, 10, getHeight() - getHeight()/4);
+        leftBorder = new Platform(0 - 600, 0, 10, getHeight() - getHeight() / 4);
+        rightBorder = new Platform(12000, 0, 10, getHeight() - getHeight() / 4);
         //adds the player
-        player = new Player(0, getHeight() - getHeight()/4 - 64, 64, 64, this);
+        player = new Player(0, getHeight() - getHeight() / 4 - 64, 64, 64, this);
 
         //tutorial 1
         level = new ArrayList<Platform>();
         lava = new Lava(0, 0, 0, 0);
         level.add(new Platform(500, 500, 3000, 40));
 
-        end = new End(3400,400,100,100,0);
+        end = new End(3400, 400, 100, 100, 0);
         //adds the timing bar
-        bar = new Bar(getWidth()/2 - 20 - getUnit(), getHeight() - 30 - (getHeight()/8), 20, 60, this);
+        bar = new Bar(getWidth() / 2 - 20 - getUnit(), getHeight() - 30 - (getHeight() / 8), 20, 60, this);
 
         //creates the proyectiles list
         proyectiles = new ArrayList<Proyectile>();
@@ -413,8 +408,8 @@ public class Game implements Runnable {
             }
         }
         render();
-        for(int i = 0; i < 3; i++){
-            if(getLives() == 0){
+        for (int i = 0; i < 3; i++) {
+            if (getLives() == 0) {
                 String s = Integer.toString(getScore());
                 s = "Final Score: " + s;
                 Font font = new Font("Serif", Font.BOLD, 32);
@@ -440,34 +435,39 @@ public class Game implements Runnable {
     }
 
     /**
-    * Make enemy chase player && change zombie direction animation
-    *
-    */
-    public void makeEnemyChase(Player p, Enemy ene){
+     * Make enemy chase player && change zombie direction animation
+     *
+     */
+    public void makeEnemyChase(Player p, Enemy ene) {
         int speedFollow = 1;
-        
+
         //Si el enemigo está a la mitad de distancia del jugador (en la pantalla masomenos), siguelo
-        if(player.getX() - ene.getX() <= getWidth()/2){
-            if(player.getX() > ene.getX()) ene.setX(ene.getX() + speedFollow);
-            else if (player.getX() < ene.getX()) ene.setX(ene.getX() - speedFollow); 
-            else if(player.getY() > ene.getY()) ene.setY(ene.getY() + speedFollow);
-            else if (player.getY() < ene.getY()) ene.setY(ene.getY() - speedFollow);
+        if (player.getX() - ene.getX() <= getWidth() / 2) {
+            if (player.getX() > ene.getX()) {
+                ene.setX(ene.getX() + speedFollow);
+            } else if (player.getX() < ene.getX()) {
+                ene.setX(ene.getX() - speedFollow);
+            } else if (player.getY() > ene.getY()) {
+                ene.setY(ene.getY() + speedFollow);
+            } else if (player.getY() < ene.getY()) {
+                ene.setY(ene.getY() - speedFollow);
+            }
         }
     }
-    
+
     /**
      * Increment score while the player is alive
      */
-    public void incrementScore(){
+    public void incrementScore() {
         scoreHelper += .1;
-        setScore((int)Math.floor(scoreHelper));
+        setScore((int) Math.floor(scoreHelper));
     }
-    
+
     /**
      * Resets player to the beginning of level
      */
-    public void resetPlayer(){
-        if(getLives() != 0){
+    public void resetPlayer() {
+        if (getLives() != 0) {
             player.setDirection(1);
             player.setDistanceX(0);
             player.setDistanceY(0);
@@ -475,8 +475,7 @@ public class Game implements Runnable {
             player.setY(getHeight() - getHeight() / 4);
             setBeat(1);
             lives--;
-        }
-        else{
+        } else {
             setRunning(1);
         }
     }
@@ -484,15 +483,17 @@ public class Game implements Runnable {
     private void tick() {
         keyManager.tick();
         player.tick();
-        
+
         incrementScore();
-        
+
         //tick enemies to chase player, and check if player enemy collide
-        for(Enemy e : enemies){
+        for (Enemy e : enemies) {
             e.tick();
             makeEnemyChase(player, e);
-            
-            if(player.intersects(e)) resetPlayer();
+
+            if (player.intersects(e)) {
+                resetPlayer();
+            }
         }
 
         cam.tick(player);
@@ -523,12 +524,13 @@ public class Game implements Runnable {
 
         //checks all platforms for collisions
         for (Platform p : level) {
+            
             if (player.intersects(p)) {
                 if (!player.isOnPlataform()) {
                     if (player.getX() + player.getWidth() > p.getX() + player.getDistanceX()
-                            && player.getX() <= p.getX() + p.getWidth() - 8){
-                        if(player.getY() + player.getHeight() <= p.getY() + p.getHeight()){
-                            player.setY(p.getY()-player.getHeight() + 2);
+                            && player.getX() <= p.getX() + p.getWidth() - 8) {
+                        if (player.getY() + player.getHeight() > p.getY()) {
+                            player.setY(p.getY() - player.getHeight() + 2);
                         }
                         player.setOnPlataform(true);
                         player.setExtraFall(false);
@@ -541,6 +543,7 @@ public class Game implements Runnable {
             }
 
         }
+
         // if jump was set to true on the previous tick, make it false
         if (isJump()) {
             setJump(false);
@@ -549,25 +552,28 @@ public class Game implements Runnable {
         if (player.intersects(lava)) {
             resetPlayer();
         }
-        
+
         //if the player ends the level, touches the end
-        if(player.intersects(end)){
+        if (player.intersects(end)) {
             int levelNum = end.getLevel();
-            switch (levelNum){
-                case 0: clearLevel();
-                level1();
-                end.setLevel(1);
-                break;
-                
-                case 1: clearLevel();
-                level2();
-                end.setLevel(2);
-                break;
-                
-                case 2: clearLevel();
-                level3();
-                end.setLevel(3);
-                break;
+            switch (levelNum) {
+                case 0:
+                    clearLevel();
+                    level3();
+                    end.setLevel(1);
+                    break;
+
+                case 1:
+                    clearLevel();
+                    level2();
+                    end.setLevel(2);
+                    break;
+
+                case 2:
+                    clearLevel();
+                    level3();
+                    end.setLevel(3);
+                    break;
             }
         }
 
@@ -588,13 +594,13 @@ public class Game implements Runnable {
         //creates bullet if necessary, only one in screen
         if (keyManager.isSpace()) {
             int offset;
-            if(player.getDirection()==1){
-                offset = player.getWidth()/2;
-            }else{
-                offset = -player.getWidth()/2;
+            if (player.getDirection() == 1) {
+                offset = player.getWidth() / 2;
+            } else {
+                offset = -player.getWidth() / 2;
             }
-            proyectiles.add(new Proyectile(player.getX()+offset+20,
-            player.getY()+player.getHeight()/2, 20, 10,player.getDirection(), this));
+            proyectiles.add(new Proyectile(player.getX() + offset + 20,
+                    player.getY() + player.getHeight() / 2, 20, 10, player.getDirection(), this));
         }
         //tick every bullet
         Iterator itr = proyectiles.iterator();
@@ -658,17 +664,17 @@ public class Game implements Runnable {
             for (Enemy e : enemies) {
                 e.render(g);
             }
-            
+
             //Score related
             int tmp = player.getX();
             String s = Integer.toString(score);
             Font font = new Font("Serif", Font.BOLD, 32);
             g.setFont(font);
-            g.drawString(s, tmp+500, getHeight()-(getHeight()-50));
-            
+            g.drawString(s, tmp + 500, getHeight() - (getHeight() - 50));
+
             //Lives realted
             s = "Lives: " + Integer.toString(lives);
-            g.drawString(s, tmp-600, getHeight()-(getHeight()-50));
+            g.drawString(s, tmp - 600, getHeight() - (getHeight() - 50));
 
             Iterator itr = proyectiles.iterator();
             while (itr.hasNext()) {
@@ -683,7 +689,7 @@ public class Game implements Runnable {
             }
             g.drawRect(getWidth() / 2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - getHeight() / 8 - 35, unit * 2 + 30, 70);
             g.drawRect(getWidth() / 2 - 20 - getUnit() - (int) getCam().getX() + getUnit() * 2 - 10, getHeight() - getHeight() / 8 - 35, 40, 70);
-            
+
             g2d.translate(cam.getX(), cam.getY()); //End of cam
             //////////////////////////////////////////////////////////////////
             bs.show();
