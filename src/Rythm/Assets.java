@@ -23,6 +23,7 @@ public class Assets {
     public static SoundClip hit;
     public static SoundClip playerhit;
     public static SoundClip gameover;
+    public static SoundClip lazerSound;
     /**
      * initializing the images and sounds of the game
      */
@@ -57,6 +58,7 @@ public class Assets {
         hit = new SoundClip("/Audio/leg.wav");
         playerhit = new SoundClip("/Audio/get.wav");
         gameover = new SoundClip("/Audio/gameover.wav");
+        lazerSound = new SoundClip("/Audio/lazer.wav");
         trackOne.setLooping(true);
     }
 }

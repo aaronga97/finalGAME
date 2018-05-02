@@ -676,6 +676,7 @@ public class Game implements Runnable {
             }
             proyectiles.add(new Proyectile(player.getX()+offset+20,
             player.getY()+player.getHeight()/2, 20, 10,player.getDirection(), this));
+            Assets.lazerSound.play();
         }
         //tick every bullet
         Iterator itr = proyectiles.iterator();
