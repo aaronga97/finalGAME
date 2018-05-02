@@ -15,17 +15,23 @@ public class Assets {
     public static SoundClip backgroundMusic;
     public static BufferedImage enemy;      // to store the enemy image
     public static BufferedImage gameOver;   // to store the game over screen
-    public static BufferedImage player;     // to store the player image
-
-
+    public static BufferedImage player[];     // to store the player image
+    public static BufferedImage sprites;    // to store the animation
     public static SoundClip trackOne;           // to store track for the tutorial
     
     /**
      * initializing the images and sounds of the game
      */
     public static void init() {
-
-        
+        //get the sprites from the picture
+        sprites = ImageLoader.loadImage("/images/player.png");
+        //create array of images before animations
+        SpriteSheet spritesheet = new SpriteSheet(sprites);
+        player = new BufferedImage[17];
+        //get tehe player animation
+        for(int iX=0;iX<17;iX++){
+            player[iX] = spritesheet.crop(iX*19,0,19,19);
+        }
         // Images
         background = ImageLoader.loadImage("/images/background.jpg"); 
         gameOver = ImageLoader.loadImage("/images/gameover.jpg");

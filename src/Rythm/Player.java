@@ -15,7 +15,7 @@ public class Player extends Item {
     private boolean extraFall;
     private boolean init;        //tells if the player is making the first jump
     private boolean onPlataform; //tells if the player is touching a plataform
-
+    private Animation animation;
 
     private int direction;      //direction of the player
     private int distanceToFloor; //distance from the player to the floor
@@ -36,7 +36,8 @@ public class Player extends Item {
         tempFloor = floor;
         onPlataform = false;
         extraFall = false;
-    }
+        this.animation = new Animation(Assets.player,40);
+;    }
 
     /**
      * sets <boolean> extraFall </boolean> value
@@ -208,6 +209,7 @@ public class Player extends Item {
                 setY(floor - height);
             }
         }
+        this.animation.tick();
     }
 
     @Override
@@ -216,6 +218,7 @@ public class Player extends Item {
         g2D.setColor(Color.red);
         g2D.setStroke(new BasicStroke(3F));
         g2D.drawRect(getX(), getY(), getWidth(), getHeight());
+        g.drawImage(animation.getCurrentFrame(), getX(), getY(), getWidth(),getHeight(),null);
 
     }
 }
