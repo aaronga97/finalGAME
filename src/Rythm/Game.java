@@ -13,6 +13,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  * <<<<<<< 1647fadbd9a75cf19a93c416916e8d6079148149
@@ -43,6 +44,8 @@ public class Game implements Runnable {
     private int timeCounter;        // keeps track of the seconds
     private int unit;               // the game's metric units
     private int width;              // width of the window
+    
+    private String highscore;       //stores the player's highscore
 
     private Bar bar;                // the beat bar that will help the user keep rythm visually
     private BufferStrategy bs;      // to have several buffers when displaying
@@ -52,6 +55,7 @@ public class Game implements Runnable {
     private ArrayList<Enemy> enemies; // to store enemies
     private End end;                 //to change the level
     private Enemy enemy;            //to test enemy addition
+    private Files files;
     private Graphics g;             // to paint objects
     private Graphics h;             //to paint objects
     private KeyManager keyManager;  // to manage the keyboard
@@ -63,7 +67,9 @@ public class Game implements Runnable {
     private ArrayList<Proyectile> proyectiles; //to shoot multiple times 
     private Platform rightBorder;   // the right border of the game zone
     private String title;           // title of the window
-    private Thread thread;          // thread to create the game     
+    private Thread thread;          // thread to create the game 
+    private ArrayList<StaticStar> stars;
+    private StaticStar star;
 
     /**
      * to create title, width and height and set the game is still not running
@@ -233,6 +239,25 @@ public class Game implements Runnable {
         return width;
     }
 
+
+    /**
+     * To set the highscore of the player
+     * 
+     * @param highscore 
+     */
+    public void setHighscore(String highscore) {
+        this.highscore = highscore;
+    }
+
+    /**
+     * To get the highscore of the player
+     * 
+     * @return an <code> String </code> with the highscore of the player
+     */
+    public String getHighscore() {
+        return highscore;
+    }
+    
     //return camera
     public Camera getCam() {
         return cam;
@@ -292,22 +317,30 @@ public class Game implements Runnable {
 
     /**
      * Creates platforms for level 1
-     */
-    public void level3() {
-        //nivel 3
-        for (int iX = 0; iX < 3; iX++) {
-            for (int iY = 0; iY < 3; iY++) {
-                level.add(new Platform(500 + 500 * (iY + iX * 3), 515 - 40 * iY, 450, 20));
-            }
 
-            player.setX(0);
+   */ 
+   public void level3(){
+       //nivel 3
+        for(int iX = 0; iX < 3; iX++){
+            level.add(new Platform(500 + 500 * iX, 515-40*iX, 450,20));    
         }
-    }
-
-    /**
-     * Clears the platforms and enemies from the screen to load the next level
-     */
-    public void clearLevel() {
+        level.add(new Platform(2100, 515 -80, 570, 20));
+        for(int iX=5;iX<8;iX++){
+            level.add(new Platform(500+480*iX,515 - 80,400,20));
+        }
+        
+        level.add(new Platform(500+490*8,515 - 40,450,20));
+        level.add(new Platform(500+500*9,500,620,20));
+        end.setX(5500);
+        end.setY(400);
+        player.setX(0);
+        
+   }
+  
+   /**
+    * Clears the platforms and enemies from the screen to load the next level
+    */
+   public void clearLevel(){
         Iterator itr = level.iterator();
         while (itr.hasNext()) {
             Platform p = (Platform) itr.next();
@@ -325,6 +358,42 @@ public class Game implements Runnable {
         }
         end.setX(-5000);
         end.setY(5000);
+    }
+   
+   //displays the game over screen
+   public void displayGameOver(){
+        for(int i = 0; i < 3; i++){
+            if(getLives() == 0){
+                String s = Integer.toString(getScore());
+                Font font = new Font("Serif", Font.BOLD, 32);
+                // Get the FontMetrics
+                FontMetrics metrics = g.getFontMetrics(font);
+                files.loadFile(this);
+                // Determine the X coordinate for the text
+                int x = (getWidth() - metrics.stringWidth("Highscore: " + getHighscore())) / 2;
+                // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
+                int y = getHeight() - (getHeight() - metrics.getHeight()) / 4 + metrics.getAscent();
+                g = bs.getDrawGraphics();
+                g.setColor(Color.black);
+                g.fillRect(0, 0, getWidth(), getHeight());
+                g.setColor(Color.yellow);
+                g.drawImage(Assets.gameOver, 0, -100, getWidth(), getHeight(), null);
+                g.setFont(font);            
+                g.drawString("Highscore: " + getHighscore(), x, y);
+                if(Integer.parseInt(getHighscore()) > getScore()){
+                    s = "Your Score: " + s;
+                    x = (getWidth() - metrics.stringWidth(s)) / 2;
+                    g.drawString(s, x, y + 40);
+                }
+                else{
+                    s = "New Highscore: " + s;
+                    x = (getWidth() - metrics.stringWidth(s)) / 2;
+                    g.drawString(s, x, y + 40);
+                }
+                bs.show();
+                g.dispose();
+            }
+        }
     }
 
     /**
@@ -350,6 +419,13 @@ public class Game implements Runnable {
                 ex = (int) (Math.random() * 750 + i * 750);
                 enemies.add(new Enemy(ex, getHeight() - getHeight() / 4 - 115, 64, 64, this, 64 * 2));
             }
+        }
+        stars = new ArrayList<StaticStar>();
+        Random rand= new Random();
+        for(int iX = 0;iX<25;iX++){
+            int starX = rand.nextInt((getWidth()*10-0)+1)+0;
+            int starY = rand.nextInt((getHeight()/2-0)+1)+0;
+            stars.add(new StaticStar(starX,starY,40,40));
         }
 
         //create borders to stop the player for getting out of bounds
@@ -408,29 +484,12 @@ public class Game implements Runnable {
             }
         }
         render();
-        for (int i = 0; i < 3; i++) {
-            if (getLives() == 0) {
-                String s = Integer.toString(getScore());
-                s = "Final Score: " + s;
-                Font font = new Font("Serif", Font.BOLD, 32);
-                // Get the FontMetrics
-                FontMetrics metrics = g.getFontMetrics(font);
-                // Determine the X coordinate for the text
-                int x = (getWidth() - metrics.stringWidth(s)) / 2;
-                // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
-                int y = getHeight() - (getHeight() - metrics.getHeight()) / 4 + metrics.getAscent();
-                g = bs.getDrawGraphics();
-                g.setColor(Color.black);
-                g.fillRect(0, 0, getWidth(), getHeight());
-                g.setColor(Color.yellow);
-                g.drawImage(Assets.gameOver, 0, -100, getWidth(), getHeight(), null);
-                g.setFont(font);
-                g.drawString(s, x, y);
-                bs.show();
-                g.dispose();
-            }
-        }
+
+        displayGameOver();
         Assets.trackOne.stop();
+        if(Integer.parseInt(getHighscore()) < getScore()){
+            files.saveFile(this);
+        }
         stop();
     }
 
@@ -477,6 +536,37 @@ public class Game implements Runnable {
             lives--;
         } else {
             setRunning(1);
+        }
+    }
+
+    /**
+     * Display enemy score jump
+     */
+    public void enemyScoreJump(Enemy e){
+        bs = display.getCanvas().getBufferStrategy();
+        if (bs == null) {
+            display.getCanvas().createBufferStrategy(3);
+        } else {
+            g = bs.getDrawGraphics();
+            //Turn g to g2d inorder to use translate function for camera
+            Graphics2D g2d = (Graphics2D) g;
+            //////////////////////////////////////////////////////////////////
+            ////DRAW HERE
+            //Everything in between these 2 functions will be affected by camera
+            g2d.translate(cam.getX(), cam.getY()); //Begin of cam
+
+            //Score related
+            int ex = e.getX(), wai = e.getY();
+            String s = "+100";
+            Font font = new Font("Serif", Font.BOLD, 32);
+            g.setFont(font);
+            g.setColor(new Color(198,226,255));
+            g.drawString(s, ex, wai-20);
+
+            g2d.translate(cam.getX(), cam.getY()); //End of cam
+            //////////////////////////////////////////////////////////////////
+            bs.show();
+            g.dispose();
         }
     }
 
@@ -621,6 +711,7 @@ public class Game implements Runnable {
                 //Si interesecta borra los 2, y reseta ambos iteradores dsps de borrar y add 10 to score
                 if (p.intersects(ene)) {
                     proyectiles.remove(p);
+                    enemyScoreJump(ene);
                     enemies.remove(ene);
                     itr = proyectiles.iterator();
                     itr2 = enemies.iterator();
@@ -687,6 +778,14 @@ public class Game implements Runnable {
                 Platform level = (Platform) itr.next();
                 level.render(g);
             }
+            
+            itr = stars.iterator();
+            while(itr.hasNext()){
+                StaticStar star = (StaticStar) itr.next();
+                star.tick();
+                star.render(g);
+            }
+            
             g.drawRect(getWidth() / 2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - getHeight() / 8 - 35, unit * 2 + 30, 70);
             g.drawRect(getWidth() / 2 - 20 - getUnit() - (int) getCam().getX() + getUnit() * 2 - 10, getHeight() - getHeight() / 8 - 35, 40, 70);
 
