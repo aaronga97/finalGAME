@@ -620,7 +620,7 @@ public class Game implements Runnable {
     private void tick() {
         keyManager.tick();
         player.tick();
-        
+        end.tick();
         incrementScore();
         
         //tick enemies to chase player, and check if player enemy collide

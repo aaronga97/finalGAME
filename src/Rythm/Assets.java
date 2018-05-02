@@ -24,6 +24,8 @@ public class Assets {
     public static SoundClip playerhit;
     public static SoundClip gameover;
     public static SoundClip lazerSound;
+    public static BufferedImage endX;
+    public static BufferedImage end[];
     /**
      * initializing the images and sounds of the game
      */
@@ -32,13 +34,16 @@ public class Assets {
         sprites = ImageLoader.loadImage("/images/player.png");
         lazerX = ImageLoader.loadImage("/images/lazer.png");
         starX = ImageLoader.loadImage("/images/star.png");
+        endX = ImageLoader.loadImage("/images/end.png");
         //create array of images before animations
         SpriteSheet spritesheet = new SpriteSheet(sprites);
         SpriteSheet spritesheet2 = new SpriteSheet(lazerX);
         SpriteSheet spritesheet3 = new SpriteSheet(starX);
+        SpriteSheet spritesheet4 = new SpriteSheet(endX);
         player = new BufferedImage[17];
         lazer = new BufferedImage[2];
         star = new BufferedImage[15];
+        end = new BufferedImage[3];
         //get the player animation
         for(int iX=0;iX<17;iX++){
             player[iX] = spritesheet.crop(iX*19,0,19,19);
@@ -49,6 +54,11 @@ public class Assets {
         for(int i=0;i<15;i++){
             star[i]=spritesheet3.crop(i*10, 0, 10, 10);
         }
+        
+        for(int i=0;i<3;i++){
+            end[i]=spritesheet4.crop(i*30,0,30,32);
+        }
+        
         // Images
         background = ImageLoader.loadImage("/Images/background.jpg");
         startscreen = ImageLoader.loadImage("/Images/startscreen.jpg");
