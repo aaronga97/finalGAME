@@ -14,6 +14,7 @@ import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * <<<<<<< 1647fadbd9a75cf19a93c416916e8d6079148149
@@ -408,7 +409,9 @@ public class Game implements Runnable {
         lava = new Lava(0,0,0,0);
 
         //start the moving star
-        mstar = new MovingStar(0,100,60,30,1);
+
+        mstar = new MovingStar(0,150,60,30,1);
+
         
         //Load Tutorial Level
         enemies = new ArrayList<>(Level.tutorialEnemies);
@@ -577,7 +580,7 @@ public class Game implements Runnable {
     private void tick() {
         keyManager.tick();
         player.tick();
-
+        mstar.tick();
         end.tick();
         incrementScore();
 
@@ -703,6 +706,25 @@ public class Game implements Runnable {
 
             setBeat(getBeat() + 1);
             setTimeCounter(0);
+        }
+        
+        //check if shooting star is outside the screen
+        if(mstar.getX() >= player.getX() + 650){
+            Random rand= new Random();
+            int mstarY = rand.nextInt((getHeight()/2-0)+1)+0;
+            mstar.setY(mstarY);
+            if(mstar.getDirection()==1){
+            mstar.setDirection(mstar.getDirection()*-1);
+            }
+           
+        }
+        if(mstar.getX() <= player.getX() - 650){
+            Random rand= new Random();
+            int mstarY = rand.nextInt((getHeight()/2-0)+1)+0;
+            mstar.setY(mstarY);
+            if(mstar.getDirection()!=1){
+                mstar.setDirection(mstar.getDirection()*-1);
+            }
         }
 
         //BULLETS

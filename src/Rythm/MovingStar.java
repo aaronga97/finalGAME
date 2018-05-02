@@ -22,13 +22,21 @@ public class MovingStar extends Item{
         this.animationLeft = new Animation(Assets.movingstar2,40);
     }
 
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+    
     @Override
     public void tick() {
         if(direction == 1){
-            setX(getX()+10);
+            setX(getX()+9);
             this.animationRight.tick();
         }else{
-            setX(getX()-10);
+            setX(getX()-6);
             this.animationLeft.tick();
         }
         
