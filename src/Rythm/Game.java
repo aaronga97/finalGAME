@@ -48,6 +48,7 @@ public class Game implements Runnable {
     private Bar bar;                // the beat bar that will help the user keep rythm visually
     private BufferStrategy bs;      // to have several buffers when displaying
     private BufferStrategy bh;
+    private int whichLevel;              //Tells you in which level we are
     private Camera cam;             //camera to follow player
     private Display display;        // to display in the game
     private ArrayList<Enemy> enemies; // to store enemies
@@ -93,6 +94,7 @@ public class Game implements Runnable {
         unit = 64; //nuestro estandard unit of measurements
         bpm = 120;//cuantos beats por minuto se tocan, termino musical
         beat = 1;
+        whichLevel = 0;
     }
 
     /**
@@ -288,50 +290,74 @@ public class Game implements Runnable {
     public ArrayList<Proyectile> getProyectiles() {
         return proyectiles;
     }
+    /**
+     * Function that creates enemy for desired level
+     */
+    public void createEnemies(int ex, int wai, int iX){
+        if(iX%2==0)enemies.add(new Enemy(ex, wai, 64, 64, this, 64));
+        else enemies.add(new Enemy(ex, wai-15, 64, 64, this, 64*2));
+    }
    
     /**
      * Creates platforms for level 1
      */ 
-    public void level1(){       
+    public void level1(){
+        enemies.clear();
         for(int iX=0;iX<10;iX++){
-            level.add(new Platform(500+500*iX,515,400,20));//add the platforms
+            int ex = 500+500*iX;
+            int wai = 515;
+            level.add(new Platform(ex,wai,400,20));//add the platforms
+            createEnemies(ex + 250, getHeight() - getHeight() / 4 - 90, iX);
         }
         lava = new Lava(550,520,10000,20);//add lava in the floor
         end.setX(5000);//set the end goal
         end.setY(400);
         player.setX(0);//reset the player position
+        whichLevel = 1;
    }
    /**
      * Creates platforms for level 2
      */ 
    public void level2(){
+       enemies.clear();
        //nivel 2
        for(int iX=0;iX<10;iX++){
-           level.add(new Platform(500+500*iX,515-40*iX,450,20));
+           int ex = 500+500*iX;
+           int wai = 515-40*iX;
+           level.add(new Platform(ex,wai,450,20));
+           createEnemies(ex+250, wai-75, iX);
        }
        level.add(new Platform(5200, 500, 1000, 40));
        end.setX(5500);
        end.setY(400);
        player.setX(0);
+       whichLevel = 2;
    }
    /**
      * Creates platforms for level 1
    */ 
    public void level3(){
+       enemies.clear();
        //nivel 3
         for(int iX = 0; iX < 3; iX++){
-            level.add(new Platform(500 + 500 * iX, 515-40*iX, 450,20));    
+            int ex = 500 + 500 * iX;
+            int wai = 515-40*iX;
+            level.add(new Platform(ex, wai, 450,20));
+            createEnemies(ex+250, wai-75, iX);
         }
         level.add(new Platform(2100, 515 -80, 570, 20));
         for(int iX=5;iX<8;iX++){
-            level.add(new Platform(500+480*iX,515 - 80,400,20));
+            int ex = 500+480*iX;
+            int wai = 515 - 80;
+            level.add(new Platform(ex, wai,400,20));
+            createEnemies(ex+250, wai-75, iX);
         }
-        
         level.add(new Platform(500+490*8,515 - 40,450,20));
         level.add(new Platform(500+500*9,500,620,20));
         end.setX(5500);
         end.setY(400);
         player.setX(0);
+        whichLevel = 3;
    }
    /**
     * Clears the platforms and enemies from the screen to load the next level
@@ -567,12 +593,13 @@ public class Game implements Runnable {
         //tick enemies to chase player, and check if player enemy collide
         for(Enemy e : enemies){
             e.tick();
-            makeEnemyChase(player, e);
-            
+           
             if(player.intersects(e)){
             resetPlayer();
             Assets.playerhit.play();
             }
+
+            if(whichLevel == 0) makeEnemyChase(player, e);
         }
 
         cam.tick(player);

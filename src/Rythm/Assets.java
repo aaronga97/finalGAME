@@ -50,9 +50,9 @@ public class Assets {
             star[i]=spritesheet3.crop(i*10, 0, 10, 10);
         }
         // Images
-        background = ImageLoader.loadImage("/images/background.jpg"); 
-        startscreen = ImageLoader.loadImage("/images/startscreen.jpg");
-        gameOver = ImageLoader.loadImage("/images/gameover.jpg");
+        background = ImageLoader.loadImage("/Images/background.jpg");
+        startscreen = ImageLoader.loadImage("/Images/startscreen.jpg");
+        gameOver = ImageLoader.loadImage("/Images/gameover.jpg");
         //Sounds
         trackOne = new SoundClip("/Audio/Transmission.wav");
         hit = new SoundClip("/Audio/leg.wav");
