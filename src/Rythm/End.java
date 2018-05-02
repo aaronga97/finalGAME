@@ -17,7 +17,9 @@ public class End extends Item {
     private int level;
     private Animation animation;
     
-    End(int x, int y, int width, int height, int level) {
+    
+
+    End(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.animation = new Animation(Assets.end,40);
     }
