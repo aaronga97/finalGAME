@@ -76,7 +76,7 @@ public class Assets {
         
         // Images
         background = ImageLoader.loadImage("/Images/background.jpg");
-        startscreen = ImageLoader.loadImage("/Images/startscreen.jpg");
+        startscreen = ImageLoader.loadImage("/Images/startscreen.png");
         gameOver = ImageLoader.loadImage("/Images/gameover.jpg");
         //Sounds
         trackOne = new SoundClip("/Audio/Transmission.wav");
