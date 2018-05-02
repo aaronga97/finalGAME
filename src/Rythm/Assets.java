@@ -53,7 +53,7 @@ public class Assets {
         gameOver = ImageLoader.loadImage("/images/gameover.jpg");
         
         //Sounds
-        trackOne = new SoundClip("/Audio/movNaranja.wav");
+        trackOne = new SoundClip("/Audio/Transmission.wav");
         trackOne.setLooping(true);
     }
 }
