@@ -20,16 +20,17 @@ public class Assets {
     public static BufferedImage lazerX;
     public static BufferedImage starX;
     public static BufferedImage star[];
-    public static SoundClip hit;
-    public static SoundClip playerhit;
-    public static SoundClip gameover;
-    public static SoundClip lazerSound;
     public static BufferedImage endX;
     public static BufferedImage end[];
     public static BufferedImage movingstarX;
     public static BufferedImage movingstar[];
     public static BufferedImage movingstar2X;
     public static BufferedImage movingstar2[];
+    public static BufferedImage youWin;
+    public static SoundClip hit;
+    public static SoundClip playerhit;
+    public static SoundClip gameover;
+    public static SoundClip lazerSound;
     /**
      * initializing the images and sounds of the game
      */
@@ -41,6 +42,7 @@ public class Assets {
         endX = ImageLoader.loadImage("/images/end.png");
         movingstarX = ImageLoader.loadImage("/images/movingstar.png");
         movingstar2X = ImageLoader.loadImage("/images/movingstar2.png");
+        youWin = ImageLoader.loadImage("/images/YouWin.png");
         //create array of images before animations
         SpriteSheet spritesheet = new SpriteSheet(sprites);
         SpriteSheet spritesheet2 = new SpriteSheet(lazerX);

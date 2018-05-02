@@ -195,6 +195,15 @@ public class Game implements Runnable {
     }
 
     /**
+     * sets <int> lives </int> value
+     * 
+     * @param lives 
+     */
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+    
+    /**
      * To get the number of lives left
      *
      * @return an <code>int</code> value with the number of lives
@@ -332,37 +341,44 @@ public class Game implements Runnable {
    //displays the game over screen
    public void displayGameOver(){
         for(int i = 0; i < 3; i++){
-            if(getLives() == 0){
+            String s = Integer.toString(getScore());
+            Font font = new Font("Serif", Font.BOLD, 32);
+            // Get the FontMetrics
+            FontMetrics metrics = g.getFontMetrics(font);
+            files.loadFile(this);
+            // Determine the X coordinate for the text
+            int x = (getWidth() - metrics.stringWidth("Highscore: " + getHighscore())) / 2;
+            // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
+            int y = getHeight() - (getHeight() - metrics.getHeight()) / 4 + metrics.getAscent();
+            
+            g = bs.getDrawGraphics();
+            if(getLives() < 0){
                 Assets.gameover.play();
-                String s = Integer.toString(getScore());
-                Font font = new Font("Serif", Font.BOLD, 32);
-                // Get the FontMetrics
-                FontMetrics metrics = g.getFontMetrics(font);
-                files.loadFile(this);
-                // Determine the X coordinate for the text
-                int x = (getWidth() - metrics.stringWidth("Highscore: " + getHighscore())) / 2;
-                // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
-                int y = getHeight() - (getHeight() - metrics.getHeight()) / 4 + metrics.getAscent();
-                g = bs.getDrawGraphics();
                 g.setColor(Color.black);
                 g.fillRect(0, 0, getWidth(), getHeight());
-                g.setColor(Color.yellow);
                 g.drawImage(Assets.gameOver, 0, -100, getWidth(), getHeight(), null);
-                g.setFont(font);            
-                g.drawString("Highscore: " + getHighscore(), x, y);
-                if(Integer.parseInt(getHighscore()) > getScore()){
-                    s = "Your Score: " + s;
-                    x = (getWidth() - metrics.stringWidth(s)) / 2;
-                    g.drawString(s, x, y + 40);
-                }
-                else{
-                    s = "New Highscore: " + s;
-                    x = (getWidth() - metrics.stringWidth(s)) / 2;
-                    g.drawString(s, x, y + 40);
-                }
+                
+
+            }
+            else {
+                g.drawImage(Assets.youWin, 0, 0, getWidth(), getHeight(), null);
+            }
+            
+            g.setColor(Color.yellow);
+            g.setFont(font);            
+            g.drawString("Highscore: " + getHighscore(), x, y);
+            if(Integer.parseInt(getHighscore()) > getScore()){
+                s = "Your Score: " + s;
+                x = (getWidth() - metrics.stringWidth(s)) / 2;
+                g.drawString(s, x, y + 40);
+            }
+            else{
+                s = "New Highscore: " + s;
+                x = (getWidth() - metrics.stringWidth(s)) / 2;
+                g.drawString(s, x, y + 40);
+            }
                 bs.show();
                 g.dispose();
-            }
         }
     }
     /**
@@ -525,8 +541,9 @@ public class Game implements Runnable {
     /**
      * Resets player to the beginning of level
      */
-    public void resetPlayer() {
-        if (getLives() != 0) {
+    public void damagePlayer() {
+        setLives(getLives() - 1);
+        if (getLives() >= 0) {
             if(getScore() - 300 < 0){
                 setScoreHelper(0);
                 setScore(0);
@@ -541,8 +558,8 @@ public class Game implements Runnable {
             player.setX(0);
             player.setY(getHeight() - getHeight() / 4);
             setBeat(1);
-            lives--;
-        } else {
+        } 
+        else{
             setRunning(1);
         }
     }
@@ -599,7 +616,7 @@ public class Game implements Runnable {
 
 
             if (player.intersects(e)) {
-                resetPlayer();
+                damagePlayer();
                 Assets.playerhit.play();
             }
 
@@ -664,7 +681,7 @@ public class Game implements Runnable {
         }
         //if the player touches the lava, decreas 1 live
         if (player.intersects(lava)) {
-            resetPlayer();
+            damagePlayer();
             Assets.playerhit.play();
         }
 
@@ -699,8 +716,10 @@ public class Game implements Runnable {
                     enemies = new ArrayList<>(Level.levelThreeEnemies);
                     platforms = new ArrayList<Platform>(Level.levelThreePlatforms);
                     end = new End(Level.levelThreeEnd);
-                    //whichLevel++;
+                    whichLevel++;
                     break;
+                case 3: 
+                    setRunning(1);
             }
             
             player.setX(0);
