@@ -21,6 +21,12 @@ public class End extends Item {
         super(x, y, width, height);
         this.animation = new Animation(Assets.end,40);
     }
+    
+    End(End e) {
+        super(e.getX(), e.getY(), e.getWidth(), e.getHeight());
+        
+        this.level = e.getLevel();
+    }
 
     public int getLevel() {
         return level;
@@ -29,6 +35,8 @@ public class End extends Item {
     public void setLevel(int level) {
         this.level = level;
     }
+    
+    
     
     /**
      * This method doesn't use a tick
