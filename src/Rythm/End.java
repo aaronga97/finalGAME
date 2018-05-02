@@ -28,6 +28,7 @@ public class End extends Item {
         super(e.getX(), e.getY(), e.getWidth(), e.getHeight());
         
         this.level = e.getLevel();
+        this.animation = new Animation(Assets.end,40);
     }
 
     public int getLevel() {
