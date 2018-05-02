@@ -446,6 +446,7 @@ public class Game implements Runnable {
                 g.dispose();
             }
         }
+        
     }
     
     @Override
