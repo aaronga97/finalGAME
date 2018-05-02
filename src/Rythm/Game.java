@@ -13,6 +13,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
 <<<<<<< 1647fadbd9a75cf19a93c416916e8d6079148149
@@ -69,7 +70,9 @@ public class Game implements Runnable {
     private ArrayList<Proyectile> proyectiles; //to shoot multiple times 
     private Platform rightBorder;   // the right border of the game zone
     private String title;           // title of the window
-    private Thread thread;          // thread to create the game     
+    private Thread thread;          // thread to create the game 
+    private ArrayList<StaticStar> stars;
+    private StaticStar star;
 
 
     /**
@@ -413,6 +416,13 @@ public class Game implements Runnable {
                 enemies.add(new Enemy(ex, getHeight() - getHeight()/4 - 115, 64, 64, this, 64*2));
             }
         }
+        stars = new ArrayList<StaticStar>();
+        Random rand= new Random();
+        for(int iX = 0;iX<25;iX++){
+            int starX = rand.nextInt((getWidth()*10-0)+1)+0;
+            int starY = rand.nextInt((getHeight()/2-0)+1)+0;
+            stars.add(new StaticStar(starX,starY,40,40));
+        }
 
         
         //create borders to stop the player for getting out of bounds
@@ -721,6 +731,14 @@ public class Game implements Runnable {
                 Platform level = (Platform) itr.next();
                 level.render(g);
             }
+            
+            itr = stars.iterator();
+            while(itr.hasNext()){
+                StaticStar star = (StaticStar) itr.next();
+                star.tick();
+                star.render(g);
+            }
+            
             g.drawRect(getWidth() / 2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - getHeight() / 8 - 35, unit * 2 + 30, 70);
             g.drawRect(getWidth() / 2 - 20 - getUnit() - (int) getCam().getX() + getUnit() * 2 - 10, getHeight() - getHeight() / 8 - 35, 40, 70);
             
