@@ -29,14 +29,11 @@ import java.util.Random;
 >>>>>>> Added comments and javadoc to most classes
  */
 public class Game implements Runnable {
-
     private boolean canShoot;       //to see if he can shoot
     private boolean jump;           // checks if there is a change in beat
-
     private double bpm;             // the beats per minute
     private double scoreHelper;     //Helps add the score
     private double timeBetweenBeat; // keeps how many seconds are between beats
-
     private int beat;               // keeps track of the current beat (1-4)
     private int enemyNumbers = 30;  //to count the number of enemies
     private int height;             // height of the window
@@ -47,9 +44,7 @@ public class Game implements Runnable {
     private int timeCounter;        // keeps track of the seconds
     private int unit;               // the game's metric units
     private int width;              // width of the window
-    
     private String highscore;       //stores the player's highscore
-
     private Bar bar;                // the beat bar that will help the user keep rythm visually
     private BufferStrategy bs;      // to have several buffers when displaying
     private BufferStrategy bh;
@@ -73,8 +68,8 @@ public class Game implements Runnable {
     private Thread thread;          // thread to create the game 
     private ArrayList<StaticStar> stars;
     private StaticStar star;
-
-
+    private MouseManager MouseManager;
+    private boolean startclick;
     /**
      * to create title, width and height and set the game is still not running
      *
@@ -88,6 +83,7 @@ public class Game implements Runnable {
         this.height = height;
 
         keyManager = new KeyManager();
+        MouseManager = new MouseManager();
         score = 0;
         scoreHelper = 0;
         running = -1;
@@ -268,6 +264,10 @@ public class Game implements Runnable {
         return enemies;
     }
     
+    public MouseManager getMouseManager(){
+        return MouseManager;
+     }
+    
     public KeyManager getKeyManager() {
         return keyManager;
     }
@@ -301,10 +301,6 @@ public class Game implements Runnable {
         end.setY(400);
         player.setX(0);//reset the player position
    }
-   
-
-    
-   
    /**
      * Creates platforms for level 2
      */ 
@@ -318,7 +314,6 @@ public class Game implements Runnable {
        end.setY(400);
        player.setX(0);
    }
-   
    /**
      * Creates platforms for level 1
    */ 
@@ -337,9 +332,7 @@ public class Game implements Runnable {
         end.setX(5500);
         end.setY(400);
         player.setX(0);
-        
    }
-  
    /**
     * Clears the platforms and enemies from the screen to load the next level
     */
@@ -398,13 +391,12 @@ public class Game implements Runnable {
             }
         }
     }
-
     /**
      * initializing the display window of the game
      */
     private void init() {
         display = new Display(title, getWidth(), getHeight());
-        Assets.init();
+        Assets.init();        
         Assets.trackOne.play();
         
         //Initialize new camera in the corner.
@@ -430,8 +422,6 @@ public class Game implements Runnable {
             int starY = rand.nextInt((getHeight()/2-0)+1)+0;
             stars.add(new StaticStar(starX,starY,40,40));
         }
-
-        
         //create borders to stop the player for getting out of bounds
         leftBorder = new Platform(0 - 600, 0 , 10, getHeight() - getHeight()/4);
         rightBorder = new Platform(12000, 0, 10, getHeight() - getHeight()/4);
@@ -452,7 +442,6 @@ public class Game implements Runnable {
 
         display.getJframe().addKeyListener(keyManager);
     }
-
     @Override
     public void run() {
         init();
@@ -711,7 +700,9 @@ public class Game implements Runnable {
                 }
             }
         }
-
+        if(MouseManager.isIzquierdo()){
+            startclick = true;
+        }
     }
 
     private void render() {
@@ -731,8 +722,9 @@ public class Game implements Runnable {
             //h = bh.getDrawGraphics();
             //Turn g to g2d inorder to use translate function for camera
             Graphics2D g2d = (Graphics2D) g;
+            g2d.drawImage(Assets.startscreen, 0, 0, width, height, null);
             //////////////////////////////////////////////////////////////////
-
+           
             ////DRAW HERE
             //Everything in between these 2 functions will be affected by camera
             //h.drawRect(20, 20, 20, 20);
@@ -786,6 +778,8 @@ public class Game implements Runnable {
             bs.show();
             g.dispose();
         }
+        
+            
     }
 
     /**
