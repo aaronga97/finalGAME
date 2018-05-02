@@ -19,6 +19,12 @@ public class End extends Item {
     End(int x, int y, int width, int height, int level) {
         super(x, y, width, height);
     }
+    
+    End(End e) {
+        super(e.getX(), e.getY(), e.getWidth(), e.getHeight());
+        
+        this.level = e.getLevel();
+    }
 
     public int getLevel() {
         return level;
@@ -27,6 +33,8 @@ public class End extends Item {
     public void setLevel(int level) {
         this.level = level;
     }
+    
+    
     
     /**
      * This method doesn't use a tick

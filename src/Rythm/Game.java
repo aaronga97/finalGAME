@@ -35,7 +35,6 @@ public class Game implements Runnable {
     private double timeBetweenBeat; // keeps how many seconds are between beats
 
     private int beat;               // keeps track of the current beat (1-4)
-    private int enemyNumbers = 30;  //to count the number of enemies
     private int height;             // height of the window
     private int lives;              //Player lives
     private int running;            // to set the game
@@ -61,9 +60,8 @@ public class Game implements Runnable {
     private KeyManager keyManager;  // to manage the keyboard
     private Lava lava;              //platform to make a challenge
     private Platform leftBorder;    // the left border of the game zone
-    private ArrayList<Platform> level; //to change the level
+    private ArrayList<Platform> platforms; //to change the level
     private Player player;          // to use a player
-    private ArrayList<Enemy> poweredEnemies; // to store enemies
     private ArrayList<Proyectile> proyectiles; //to shoot multiple times 
     private Platform rightBorder;   // the right border of the game zone
     private String title;           // title of the window
@@ -288,76 +286,14 @@ public class Game implements Runnable {
         return proyectiles;
     }
 
-    /**
-     * Creates platforms for level 1
-     */
-    public void level1() {
-        for (int iX = 0; iX < 10; iX++) {
-            level.add(new Platform(500 + 500 * iX, 515, 400, 20));//add the platforms
-        }
-        lava = new Lava(550, 520, 10000, 20);//add lava in the floor
-        end.setX(5000);//set the end goal
-        end.setY(400);
-        player.setX(0);//reset the player position
-    }
-
-    /**
-     * Creates platforms for level 2
-     */
-    public void level2() {
-        //nivel 2
-        for (int iX = 0; iX < 10; iX++) {
-            level.add(new Platform(500 + 500 * iX, 515 - 40 * iX, 450, 20));
-        }
-        level.add(new Platform(5200, 500, 1000, 40));
-        end.setX(5500);
-        end.setY(400);
-        player.setX(0);
-    }
-
-    /**
-     * Creates platforms for level 1
-
-   */ 
-   public void level3(){
-       //nivel 3
-        for(int iX = 0; iX < 3; iX++){
-            level.add(new Platform(500 + 500 * iX, 515-40*iX, 450,20));    
-        }
-        level.add(new Platform(2100, 515 -80, 570, 20));
-        for(int iX=5;iX<8;iX++){
-            level.add(new Platform(500+480*iX,515 - 80,400,20));
-        }
-        
-        level.add(new Platform(500+490*8,515 - 40,450,20));
-        level.add(new Platform(500+500*9,500,620,20));
-        end.setX(5500);
-        end.setY(400);
-        player.setX(0);
-        
-   }
+    
   
    /**
     * Clears the platforms and enemies from the screen to load the next level
     */
    public void clearLevel(){
-        Iterator itr = level.iterator();
-        while (itr.hasNext()) {
-            Platform p = (Platform) itr.next();
-            level.remove(p);
-            itr = level.iterator();
-        }
-
-        //Delete enemy 
-        Iterator itr2 = enemies.iterator();
-        //Itera todos los enemigos
-        while (itr2.hasNext()) {
-            Enemy ene = (Enemy) itr2.next();
-            enemies.remove(ene);
-            itr2 = enemies.iterator();
-        }
-        end.setX(-5000);
-        end.setY(5000);
+        platforms.clear();
+        enemies.clear();
     }
    
    //displays the game over screen
@@ -403,23 +339,15 @@ public class Game implements Runnable {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
         Assets.trackOne.play();
+        Level.init(this);
 
         //Initialize new camera in the corner.
         cam = new Camera(0, 0, this);
         //bar = new Bar(getWidth()/2 - 20 - getUnit() - (int) getCam().getX(), getHeight() - getHeight()/8, 20, 60, this);
         //Assets.backgroundMusic.play();
 
-        //Create enemies array list
-        enemies = new ArrayList<Enemy>();
-        for (int i = 1; i < enemyNumbers; ++i) {
-            //Generate enemies randomly inside a minimum separated range of 1k pixels between each enemy
-            int ex = (int) (Math.random() * 750 + i * 750);
-            enemies.add(new Enemy(ex, getHeight() - getHeight() / 4 - 90, 64, 64, this, 64));
-            if (i % 3 == 0) {
-                ex = (int) (Math.random() * 750 + i * 750);
-                enemies.add(new Enemy(ex, getHeight() - getHeight() / 4 - 115, 64, 64, this, 64 * 2));
-            }
-        }
+        
+        
         stars = new ArrayList<StaticStar>();
         Random rand= new Random();
         for(int iX = 0;iX<25;iX++){
@@ -434,12 +362,14 @@ public class Game implements Runnable {
         //adds the player
         player = new Player(0, getHeight() - getHeight() / 4 - 64, 64, 64, this);
 
-        //tutorial 1
-        level = new ArrayList<Platform>();
-        lava = new Lava(0, 0, 0, 0);
-        level.add(new Platform(500, 500, 3000, 40));
+        
+        //Load Tutorial Level
+        enemies = Level.tutorialEnemies;
+        platforms = Level.tutorialPlatforms;
+        lava = new Lava(0,0,0,0);
 
         end = new End(3400, 400, 100, 100, 0);
+
         //adds the timing bar
         bar = new Bar(getWidth() / 2 - 20 - getUnit(), getHeight() - 30 - (getHeight() / 8), 20, 60, this);
 
@@ -613,7 +543,7 @@ public class Game implements Runnable {
         }
 
         //checks all platforms for collisions
-        for (Platform p : level) {
+        for (Platform p : platforms) {
             
             if (player.intersects(p)) {
                 if (!player.isOnPlataform()) {
@@ -646,25 +576,29 @@ public class Game implements Runnable {
         //if the player ends the level, touches the end
         if (player.intersects(end)) {
             int levelNum = end.getLevel();
+            System.out.println(levelNum);
             switch (levelNum) {
                 case 0:
                     clearLevel();
-                    level3();
-                    end.setLevel(1);
+                    platforms = new ArrayList<Platform>(Level.levelOnePlatforms);
+                    end = new End(Level.levelOneEnd);
+                    lava = Level.levelOneLava;
                     break;
 
                 case 1:
                     clearLevel();
-                    level2();
-                    end.setLevel(2);
+                    platforms = new ArrayList<Platform>(Level.levelTwoPlatforms);
+                    end = new End(Level.levelTwoEnd);
                     break;
 
                 case 2:
                     clearLevel();
-                    level3();
-                    end.setLevel(3);
+                    platforms = new ArrayList<Platform>(platforms = Level.levelThreePlatforms);
+                    end = new End(Level.levelThreeEnd);
                     break;
             }
+            
+            player.setX(4800);
         }
 
         // a counter for ticks
@@ -773,7 +707,7 @@ public class Game implements Runnable {
                 bullet.render(g);
             }
             bar.render(g);
-            itr = level.iterator();
+            itr = platforms.iterator();
             while (itr.hasNext()) {
                 Platform level = (Platform) itr.next();
                 level.render(g);
