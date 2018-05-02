@@ -139,7 +139,7 @@ public class Game implements Runnable {
     }
 
     /**
-     * returns <int> beta </int> value
+     * returns <int> beat </int> value
      *
      * @return beat
      */
@@ -147,6 +147,24 @@ public class Game implements Runnable {
         return beat;
     }
 
+    /**
+     * sets <int> scoreHelper </int> value
+     * 
+     * @param scoreHelper 
+     */
+    public void setScoreHelper(double scoreHelper) {
+        this.scoreHelper = scoreHelper;
+    }
+
+    /**
+     * returns the value of scoreHelper
+     * 
+     * @return an <code> int </code> with the value of scoreHelper
+     */
+    public double getScoreHelper() {
+        return scoreHelper;
+    }
+    
     /**
      * sets <double> timeBetweenBeat </double> value
      *
@@ -494,7 +512,7 @@ public class Game implements Runnable {
      * Increment score while the player is alive
      */
     public void incrementScore() {
-        scoreHelper += .1;
+        setScoreHelper(getScoreHelper() + .1);
         setScore((int) Math.floor(scoreHelper));
     }
 
@@ -503,6 +521,14 @@ public class Game implements Runnable {
      */
     public void resetPlayer() {
         if (getLives() != 0) {
+            if(getScore() - 300 < 0){
+                setScoreHelper(0);
+                setScore(0);
+            }
+            else{
+                setScoreHelper((int) getScoreHelper() - 300);
+                setScore((int) getScoreHelper());
+            }
             player.setDirection(1);
             player.setDistanceX(0);
             player.setDistanceY(0);
@@ -714,7 +740,7 @@ public class Game implements Runnable {
                     enemies.remove(ene);
                     itr = proyectiles.iterator();
                     itr2 = enemies.iterator();
-                    scoreHelper += 100;
+                    setScoreHelper(getScoreHelper() + 100);
                     Assets.hit.play(); 
                }
             }
@@ -761,7 +787,7 @@ public class Game implements Runnable {
 
             //Score related
             int tmp = player.getX();
-            String s = "Score: "+Integer.toString(score);
+            String s = "Score: "+Integer.toString(getScore());
             Font font = new Font("Serif", Font.BOLD, 32);
             g.setFont(font);
 
